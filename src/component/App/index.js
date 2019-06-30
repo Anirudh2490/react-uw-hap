@@ -32,7 +32,7 @@ import VideoComponent from "../Video_Component";
 import WizardForm5 from "../Appointment_Form_Step_Four/WizardForm";
 import WizardForm4 from "../Appointment_Form_Step_Three/WizardForm";
 import WizardForm3 from "../Appointment_Form_Success/WizardForm";
-
+import AppointmentDetails from '../Appointment_Details'
 class App extends Component {
   render() {
     return (
@@ -57,9 +57,10 @@ class App extends Component {
                 </DrawerProvider>
               </Sticky>
               <Route path={ROUTE.LANDING} exact component={Landing} />
+              <Route path={`${ROUTE.ADMIN}/:docid`} exact component={AppointmentDetails} />
               <Route path={ROUTE.VIDEO_COMPONENT} component={VideoComponent} />
               <Route path={ROUTE.SIGNIN_OPTIONS} component={SignInOptPage} />
-              <Route path={ROUTE.ADMIN} component={Admin} />
+              <Route path={ROUTE.ADMIN}  exact component={Admin} />
               <Route path={ROUTE.ADMIN_SIGNIN} component={Admin_SignIn} />
               <Route path={ROUTE.SIGNIN} component={SignIn} />
               <Route

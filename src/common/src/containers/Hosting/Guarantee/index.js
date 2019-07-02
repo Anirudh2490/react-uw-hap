@@ -10,7 +10,7 @@ import Container from '../../../components/UI/Container';
 
 import GuaranteeImage from '../../../assets/image/hosting/badge.png';
 
-const GuaranteeSection = ({
+const AboutTeam = ({
   sectionWrapper,
   row,
   title,
@@ -45,7 +45,7 @@ const GuaranteeSection = ({
   );
 };
 
-GuaranteeSection.propTypes = {
+AboutTeam.propTypes = {
   sectionWrapper: PropTypes.object,
   row: PropTypes.object,
   title: PropTypes.object,
@@ -55,7 +55,7 @@ GuaranteeSection.propTypes = {
   ImageOne: PropTypes.object,
 };
 
-GuaranteeSection.defaultProps = {
+AboutTeam.defaultProps = {
   sectionWrapper: {
     as: 'section',
     pt: ['0px', '0px', '0px', '80px'],
@@ -94,4 +94,4 @@ GuaranteeSection.defaultProps = {
   },
 };
 
-export default GuaranteeSection;
+export default AboutTeam;

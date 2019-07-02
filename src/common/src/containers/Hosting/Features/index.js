@@ -7,9 +7,7 @@ import Text from '../../../../../elements/Text';
 import Heading from '../../../../../elements/Heading';
 import Container from '../../../components/UI/Container';
 import { FeatureItem } from '../hosting.style';
-
 import { FEATURES_DATA } from '../../../data/Hosting/data';
-
 import ShapeOne from '../../../assets/image/hosting/shape-1.svg';
 import ShapeTwo from '../../../assets/image/hosting/shape-2.svg';
 import ShapeThree from '../../../assets/image/hosting/shape-3.svg';
@@ -40,7 +38,7 @@ const FeatureSection = ({
         </Box>
 
         <Box {...row}>
-          {FEATURES_DATA.map((featureItem, index) => (
+          {FEATURES_DATA? FEATURES_DATA.map((featureItem, index) => (
             <Box {...col} key={`feature-${index}`}>
               {featureItem.animation ? (
                 <Fade bottom delay={index * 120}>
@@ -150,7 +148,7 @@ const FeatureSection = ({
                 />
               )}
             </Box>
-          ))}
+          )): <p></p>}
         </Box>
       </Container>
     </Box>

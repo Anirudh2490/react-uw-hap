@@ -10,6 +10,18 @@ const INITIAL_STATE = {
   error: ""
 };
 
+
+function makeid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
 class AppointmentDetailsBase extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +57,8 @@ class AppointmentDetailsBase extends Component {
 
 
   vetAssignment = (event)=>{
+    console.log(event);
+    
     this.props.firebase.fsdb
     .collection("form-inquiry")
     .doc(this.props.match.params.docid)
@@ -68,6 +82,53 @@ class AppointmentDetailsBase extends Component {
             });
           }
         );
+      })
+    })
+    .then(()=>{
+       //APPI CALL FOR TWILIO MSG
+    fetch("https://hug-a-pet.herokuapp.com/admin/messages", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify({
+        to: event.phone,
+        body: "Hi " + event.name + "! We have assigned " + event.vetName + "to your case, you can join a video session on " + event.date + " " + event.session + "on https://hugapet-de.firebaseapp.com/video-session using this code:" + makeid(5),
+      })
+    })
+      .then(response => {
+        console.log(response);
+        //APPI CALL FOR TWILIO Email
+        fetch("https://hug-a-pet.herokuapp.com/admin/mail", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          redirect: "follow",
+          referrer: "no-referrer",
+          body: JSON.stringify({
+            emailReceiver: event.email,
+            emailSubject: "Hi " + event.name + " We have assigned you a Vet!",
+            emailContent: "Hi " + event.name + "! We have assigned " + event.vetName + " to your case, you can join a video session on " + event.date + " " + event.session + " on https://hugapet-de.firebaseapp.com/video-session using this code:" + makeid(5),
+          })
+        })
+          .then(response => {
+            console.log(response);
+          })
+          .catch(rej => {
+            alert(rej.message);
+          });
+      })
+      .catch(rej => {
+        alert(rej.message);
       });
     })
     .catch( rej =>{
@@ -145,7 +206,14 @@ class AppointmentDetailsBase extends Component {
               <div style={{ textAlign: "left" }}>
                 <label>
                     <input type="text" name="vetName" value={this.state.vetName} onChange={this.onChange}/>
-                    <button onClick={this.vetAssignment}>Assign</button>
+                    <button onClick={()=>this.vetAssignment({
+                      name: appointdata.customerDetails.name,
+                      vetName: appointdata.vetDetails.vetName,
+                      date: moment(appointdata.sessionDetails.Date).format('DD/MM/YYYY'),
+                      session: appointdata.sessionDetails.session,
+                      phone: appointdata.customerDetails.phone,
+                      email: appointdata.customerDetails.email,
+                    })}>Assign</button>
                 </label>
               </div>
             </div>

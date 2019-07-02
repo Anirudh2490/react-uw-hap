@@ -19,10 +19,12 @@ const BannerSection = ({
   description,
   button,
   textArea,
+  data,
   searchArea,
   discountAmount,
   discountText,
 }) => {
+  // console.log(data);
   return (
     <BannerWrapper id="banner_section">
       <ParticlesComponent />
@@ -31,21 +33,20 @@ const BannerSection = ({
           <Box {...textArea}>
             <DiscountWrapper>
               <DiscountLabel>
-                <Text {...discountAmount} content="Free Video Consultation" />
-                <Text {...discountText} content="on every confirmed booking" />
+                <Text {...discountAmount} content={data.fields.boldColorText} />
+                {/* <Text {...discountText} content="on every confirmed booking" /> */}
               </DiscountLabel>
             </DiscountWrapper>
             <Heading
               {...title}
-              content="Book a vet visit for your pet in Berlin!"
+              content={data.fields.h1text}
             />
             <Text
               {...description}
-              content="Our vets will visit your house, so you dont have to deal with the hassle of commuting to a vet clinic! We offer great prices on all services from grooming to general checkups"
-            />
-        <Text
+              content={data.fields.paragraph}/>
+        {/* <Text
               {...description}
-              content="Start your Vet booking from here"/>
+              content="Start your Vet booking from here"/> */}
           </Box>
           <HomeSearch
             searchArea={searchArea}

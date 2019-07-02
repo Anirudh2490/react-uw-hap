@@ -37,7 +37,7 @@ const ServicesSection = ({
             </Fade>
           </Box>
           <Box {...row}>
-            {SERVICES_DATA.map((featureItem, index) => (
+            {SERVICES_DATA? SERVICES_DATA.map((featureItem, index) => (
               <Box {...col} key={`service-${index}`}>
                 <FeatureBlock
                   wrapperStyle={featureBlockStyle}
@@ -58,7 +58,7 @@ const ServicesSection = ({
                   icon={<Image src={featureItem.icon} alt={`icon-${index}`} />}
                 />
               </Box>
-            ))}
+            )): <p></p>}
           </Box>
         </>
       </Container>

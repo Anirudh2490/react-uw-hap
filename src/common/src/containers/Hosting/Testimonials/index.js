@@ -106,7 +106,7 @@ const TestimonialSection = ({
           }
         >
           <>
-            {TESTIMONIALS.map((slideItem, index) => (
+            {TESTIMONIALS? TESTIMONIALS.map((slideItem, index) => (
               <GlideSlide key={`testimonial-slide-${index}`}>
                 <TestimonialItem className="testimonial_item">
                   <Text content={slideItem.review} {...reviewStyle} />
@@ -127,7 +127,7 @@ const TestimonialSection = ({
                   </Box>
                 </TestimonialItem>
               </GlideSlide>
-            ))}
+            )): <p></p>}
           </>
         </GlideCarousel>
       </Container>

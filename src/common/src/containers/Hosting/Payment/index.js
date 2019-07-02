@@ -9,10 +9,7 @@ import Button from '../../../../../elements/Button';
 import Image from '../../../../../elements/Image';
 import Container from '../../../components/UI/Container';
 
-import CardImage from '../../../assets/image/hosting/pay-card.png';
-import PayLogos from '../../../assets/image/hosting/pay-logo.png';
-
-const PaymentSection = ({
+const BlogSection = ({
   sectionWrapper,
   row,
   col,
@@ -22,6 +19,7 @@ const PaymentSection = ({
   textArea,
   imageArea,
   imageOne,
+  data,
   imageTwo,
 }) => {
   return (
@@ -32,11 +30,11 @@ const PaymentSection = ({
             <Fade bottom cascade>
               <Heading
                 {...title}
-                content="We have supported all payment gateways on domain hosting"
+                content={data.fields.headline}
               />
               <Text
                 {...description}
-                content="You can pay your bills with your desired payment system. No pain of using a specific credit card for bill payments"
+                content={data.fields.headline2}
               />
               <Box>
                 <Link href="#">
@@ -49,10 +47,10 @@ const PaymentSection = ({
           </Box>
           <Box {...col} {...imageArea}>
             <Fade right>
-              <Image {...imageOne} src={CardImage} alt="Card Image" />
+              <Image {...imageOne} src={data.fields.images[0].fields.file.url} alt="Card Image" />
             </Fade>
             <Fade bottom>
-              <Image {...imageTwo} src={PayLogos} alt="Payment logos" />
+              <Image {...imageTwo} src={data.fields.images[1].fields.file.url} alt="Payment logos" />
             </Fade>
           </Box>
         </Box>
@@ -61,7 +59,7 @@ const PaymentSection = ({
   );
 };
 
-PaymentSection.propTypes = {
+BlogSection.propTypes = {
   sectionWrapper: PropTypes.object,
   row: PropTypes.object,
   col: PropTypes.object,
@@ -74,7 +72,7 @@ PaymentSection.propTypes = {
   imageTwo: PropTypes.object,
 };
 
-PaymentSection.defaultProps = {
+BlogSection.defaultProps = {
   sectionWrapper: {
     as: 'section',
     pt: ['60px', '80px', '80px', '80px'],
@@ -135,4 +133,4 @@ PaymentSection.defaultProps = {
   },
 };
 
-export default PaymentSection;
+export default BlogSection;

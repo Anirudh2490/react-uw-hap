@@ -11,16 +11,17 @@ import Container from '../../../components/UI/Container';
 
 import Domains from '../../../assets/image/hosting/circle.png';
 
-const DomainSection = ({
+const VetsSection = ({
   sectionWrapper,
   row,
   col,
   title,
+  data,
   description,
   button,
   textArea,
   imageArea,
-}) => {
+}) => { 
   return (
     <Box {...sectionWrapper}>
       <Container>
@@ -32,12 +33,12 @@ const DomainSection = ({
             <Fade bottom cascade>
               <Heading
                 {...title}
-                content="Available domain extension with your custom name"
+                content={data.fields.h1title1}
               />
               <Text
                 {...description}
-                content="You can check the domain avaibility by our domain tool and choose your desired domain without any hagitation if available."
-              />
+                content={data.fields.h3title1}
+                />
               <Box>
                 <Link href="#">
                   <a>
@@ -53,7 +54,7 @@ const DomainSection = ({
   );
 };
 
-DomainSection.propTypes = {
+VetsSection.propTypes = {
   sectionWrapper: PropTypes.object,
   row: PropTypes.object,
   col: PropTypes.object,
@@ -64,7 +65,7 @@ DomainSection.propTypes = {
   imageArea: PropTypes.object,
 };
 
-DomainSection.defaultProps = {
+VetsSection.defaultProps = {
   sectionWrapper: {
     as: 'section',
     pt: ['0', '0', '40px', '80px'],
@@ -116,4 +117,4 @@ DomainSection.defaultProps = {
   },
 };
 
-export default DomainSection;
+export default VetsSection;

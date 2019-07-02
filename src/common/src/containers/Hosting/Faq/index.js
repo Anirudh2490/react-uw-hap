@@ -33,6 +33,7 @@ const FaqSection = ({
   buttonWrapper,
   button,
 }) => {
+  // console.log(data);
   return (
     <Box {...sectionWrapper}>
       <Container>
@@ -44,7 +45,7 @@ const FaqSection = ({
           <Box {...col}>
             <Accordion>
               <>
-                {FAQ_DATA.map((accordionItem, index) => (
+                {FAQ_DATA? FAQ_DATA.map((accordionItem, index) => (
                   <AccordionItem
                     className="accordion_item"
                     key={`accordion-${index}`}
@@ -72,7 +73,7 @@ const FaqSection = ({
                       </AccordionBody>
                     </>
                   </AccordionItem>
-                ))}
+                )): <p></p>}
               </>
             </Accordion>
             <Box {...buttonWrapper}>

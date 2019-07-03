@@ -10,6 +10,10 @@ class Contentful {
 
   getPostfromContentful = () =>
      this.client.getEntries();
+  
+
+  getSingleEnty  = type =>
+    this.client.getEntry(type);
 }
 
 export default Contentful;

@@ -14,6 +14,7 @@ const AboutTeam = ({
   sectionWrapper,
   row,
   title,
+  data,
   description,
   textArea,
   imageArea,
@@ -25,10 +26,10 @@ const AboutTeam = ({
         <Box {...row}>
           <Box {...textArea}>
             <Fade bottom cascade>
-              <Heading {...title} content="30 Days Money Back Guarantee" />
+              <Heading {...title} content={data.fields.mainTitle} />
               <Text
                 {...description}
-                content="We have provided 30 Days Money Back Guarantee in case of dissatisfaction with our product. We care for our customers and their values. "
+                content={data.fields.para}
               />
             </Fade>
           </Box>
@@ -36,7 +37,7 @@ const AboutTeam = ({
         <Box {...row}>
           <Box {...imageArea}>
             <Zoom>
-              <Image {...ImageOne} src={GuaranteeImage} alt="Guarantee" />
+              <Image {...ImageOne} src={data.fields.teampic.fields.file.url} alt="Guarantee" />
             </Zoom>
           </Box>
         </Box>

@@ -1,26 +1,28 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { withFirebase } from "../Firebase";
-import moment  from "moment";
+import moment from "moment";
+import ReactPhoneInput from "react-phone-input-2";
 
 const INITIAL_STATE = {
   vetName: "",
+  vetEmail: "",
+  vetPhone: "",
   appointdata: {},
   dataAvailable: false,
   error: ""
 };
 
-
 function makeid(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
 }
-
 
 class AppointmentDetailsBase extends Component {
   constructor(props) {
@@ -35,76 +37,58 @@ class AppointmentDetailsBase extends Component {
       .get()
       .then(doc => {
         const docData = doc.data();
-       if (docData === undefined) {
-        this.props.history.push('/admin')
-       } else {
-        this.setState(
-          {
-            appointdata: docData
-          },
-          () => {
-            this.setState({
-              dataAvailable: true
-            });
-          }
-        );
-       }
+        if (docData === undefined) {
+          this.props.history.push("/admin");
+        } else {
+          this.setState(
+            {
+              appointdata: docData
+            },
+            () => {
+              this.setState({
+                dataAvailable: true
+              });
+            }
+          );
+        }
       })
-      .catch((rej)=>{
-          console.log(rej);
-      })
+      .catch(rej => {
+        console.log(rej);
+      });
   }
 
-
-  vetAssignment = (event)=>{
+  vetAssignment = (e, event) => {
+    var videoCode = makeid(5);
+    e.preventDefault();
     console.log(event);
-    
     this.props.firebase.fsdb
-    .collection("form-inquiry")
-    .doc(this.props.match.params.docid)
-    .update({
+      .collection("form-inquiry")
+      .doc(this.props.match.params.docid)
+      .update({
         "vetDetails.isVetAssigned": true,
-        "vetDetails.vetName": this.state.vetName,
+        "vetDetails.vetName": this.state.vetName
       })
-    .then( res => {
+      .then(res => {
         this.props.firebase.fsdb
-    .collection("form-inquiry")
-    .doc(this.props.match.params.docid)
-    .onSnapshot(doc => {
-        const docData = doc.data();
-        this.setState(
-          {
-            appointdata: docData
-          },
-          () => {
-            this.setState({
-              dataAvailable: true
-            });
-          }
-        );
+          .collection("form-inquiry")
+          .doc(this.props.match.params.docid)
+          .onSnapshot(doc => {
+            const docData = doc.data();
+            this.setState(
+              {
+                appointdata: docData
+              },
+              () => {
+                this.setState({
+                  dataAvailable: true
+                });
+              }
+            );
+          });
       })
-    })
-    .then(()=>{
-       //APPI CALL FOR TWILIO MSG
-    fetch("https://hug-a-pet.herokuapp.com/admin/messages", {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      redirect: "follow",
-      referrer: "no-referrer",
-      body: JSON.stringify({
-        to: event.phone,
-        body: "Hi " + event.name + "! We have assigned " + event.vetName + "to your case, you can join a video session on " + event.date + " " + event.session + "on https://hugapet-de.firebaseapp.com/video-session using this code:" + makeid(5),
-      })
-    })
-      .then(response => {
-        console.log(response);
-        //APPI CALL FOR TWILIO Email
-        fetch("https://hug-a-pet.herokuapp.com/admin/mail", {
+      .then(() => {
+        //APPI CALL FOR TWILIO MSG
+        fetch("https://hug-a-pet.herokuapp.com/admin/messages", {
           method: "POST",
           mode: "cors",
           cache: "no-cache",
@@ -115,38 +99,145 @@ class AppointmentDetailsBase extends Component {
           redirect: "follow",
           referrer: "no-referrer",
           body: JSON.stringify({
-            emailReceiver: event.email,
-            emailSubject: "Hi " + event.name + " We have assigned you a Vet!",
-            emailContent: "Hi " + event.name + "! We have assigned " + event.vetName + " to your case, you can join a video session on " + event.date + " " + event.session + " on https://hugapet-de.firebaseapp.com/video-session using this code:" + makeid(5),
+            to: event.phone,
+            body:
+              "Hi " +
+              event.name +
+              "! We have assigned " +
+              event.vetName +
+              "to your case, you can join a video session on " +
+              event.date +
+              " " +
+              event.session +
+              "on https://hugapet-de.firebaseapp.com/video-session using this code:" +
+              videoCode
           })
         })
           .then(response => {
-            console.log(response);
+            console.log(response.json());
+            //APPI CALL FOR TWILIO Email
+            fetch("https://hug-a-pet.herokuapp.com/admin/mail", {
+              method: "POST",
+              mode: "cors",
+              cache: "no-cache",
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              redirect: "follow",
+              referrer: "no-referrer",
+              body: JSON.stringify({
+                emailReceiver: event.email,
+                emailSubject:
+                  "Hi " + event.name + " We have assigned you a Vet!",
+                emailContent:
+                  "Hi " +
+                  event.name +
+                  "! We have assigned " +
+                  event.vetName +
+                  " to your case, you can join a video session on " +
+                  event.date +
+                  " " +
+                  event.session +
+                  " on https://hugapet-de.firebaseapp.com/video-session using this code:" +
+                  videoCode
+              })
+            })
+              .then(response => {
+                fetch("https://hug-a-pet.herokuapp.com/vet/messages", {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    to: event.vetPhone,
+                    body:
+                      "Hi " +
+                      event.vetName +
+                      "! We have assigned " +
+                      event.name +
+                      "to your case, you can join a video session on " +
+                      event.date +
+                      " " +
+                      event.session +
+                      "on https://hugapet-de.firebaseapp.com/video-session using this code:" +
+                      videoCode
+                  })
+                })
+                  .then(res => {
+                    fetch("https://hug-a-pet.herokuapp.com/vet/mail", {
+                      method: "POST",
+                      mode: "cors",
+                      cache: "no-cache",
+                      credentials: "same-origin",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      redirect: "follow",
+                      referrer: "no-referrer",
+                      body: JSON.stringify({
+                        emailReceiver: event.vetEmail,
+                        emailSubject:
+                          "Hi " +
+                          event.vetName +
+                          " We have assigned you a case!",
+                        emailContent:
+                          "Hi " +
+                          event.vetName +
+                          "! We have assigned " +
+                          event.name +
+                          " to your case, you can join a video session on " +
+                          event.date +
+                          " " +
+                          event.session +
+                          " on https://hugapet-de.firebaseapp.com/video-session using this code:" +
+                          videoCode
+                      })
+                    })
+                      .then(res => {
+                        console.log(res.json());
+                      })
+                      .catch(rej => {
+                        console.log(rej);
+                      });
+                  })
+                  .catch(rej => {
+                    console.log(rej);
+                  });
+              })
+              .catch(rej => {
+                alert(rej.message);
+              });
           })
           .catch(rej => {
             alert(rej.message);
           });
       })
       .catch(rej => {
-        alert(rej.message);
-      });
-    })
-    .catch( rej =>{
         console.log(rej);
-    })
-  }
+      });
+  };
 
-  onChange = event =>{
-      this.setState({
-          [event.target.name]:event.target.value
-      })
-  }
+  onChangePhone = event => {
+    this.setState({
+      vetPhone: event
+    });
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
 
   render() {
     const { appointdata } = this.state;
-    console.log();
-    
-    if (this.state.dataAvailable){
+    if (this.state.dataAvailable) {
       return (
         <div
           style={{
@@ -171,10 +262,14 @@ class AppointmentDetailsBase extends Component {
             <div>
               <h3>Session Details</h3>
               <div style={{ textAlign: "left" }}>
-                <p>Date: {moment(appointdata.sessionDetails.Date).format('DD/MM/YYYY')}</p>
+                <p>
+                  Date:{" "}
+                  {moment(appointdata.sessionDetails.Date).format("DD/MM/YYYY")}
+                </p>
                 <p>Session:{appointdata.sessionDetails.session}</p>
                 <p>
-                 video Consultation {appointdata.customerDetails.videoconsultation ? "Yes" : ""}
+                  video Consultation{" "}
+                  {appointdata.customerDetails.videoconsultation ? "Yes" : ""}
                 </p>
               </div>
             </div>
@@ -182,7 +277,10 @@ class AppointmentDetailsBase extends Component {
               <h3>Pet Details</h3>
               <div style={{ textAlign: "left" }}>
                 <p>Name: {appointdata.petDetails.petname}</p>
-                <p>DOB: {moment(appointdata.petDetails.petdate).format('DD/MM/YYYY')}</p>
+                <p>
+                  DOB:{" "}
+                  {moment(appointdata.petDetails.petdate).format("DD/MM/YYYY")}
+                </p>
                 <p>Gender: {appointdata.petDetails.gender}</p>
                 <p>Notes: {appointdata.petDetails.notes}</p>
               </div>
@@ -190,38 +288,99 @@ class AppointmentDetailsBase extends Component {
             <div>
               <h3>Vet Details</h3>
               <div style={{ textAlign: "left" }}>
-                <p>Vet assigned: {appointdata.vetDetails.isVetAssigned? 'Assigned': 'Not Assigned'}</p>
-                {appointdata.vetDetails.isVetAssigned? <p>Name: {appointdata.vetDetails.vetName}</p>: <p></p>}
+                <p>
+                  Vet assigned:{" "}
+                  {appointdata.vetDetails.isVetAssigned
+                    ? "Assigned"
+                    : "Not Assigned"}
+                </p>
+                {appointdata.vetDetails.isVetAssigned ? (
+                  <p>Name: {appointdata.vetDetails.vetName}</p>
+                ) : (
+                  <p />
+                )}
               </div>
             </div>
             <div>
               <h3>Status</h3>
               <div style={{ textAlign: "left" }}>
-                <p>Phone Number Status: {appointdata.bookingStatus.phoneVerfication? 'Verified': 'Not Verfied'}</p>
+                <p>
+                  Phone Number Status:{" "}
+                  {appointdata.bookingStatus.phoneVerfication
+                    ? "Verified"
+                    : "Not Verfied"}
+                </p>
                 <p>Status: {appointdata.bookingStatus.status}</p>
               </div>
             </div>
             <div>
               <h3>Assign Vet</h3>
               <div style={{ textAlign: "left" }}>
-                <label>
-                    <input type="text" name="vetName" value={this.state.vetName} onChange={this.onChange}/>
-                    <button onClick={()=>this.vetAssignment({
+                <form
+                  onSubmit={e =>
+                    this.vetAssignment(e, {
+                      vetPhone: this.state.vetPhone,
+                      vetEmail: this.state.vetEmail,
                       name: appointdata.customerDetails.name,
-                      vetName: appointdata.vetDetails.vetName,
-                      date: moment(appointdata.sessionDetails.Date).format('DD/MM/YYYY'),
+                      vetName: this.state.vetName,
+                      date: moment(appointdata.sessionDetails.Date).format(
+                        "DD/MM/YYYY"
+                      ),
                       session: appointdata.sessionDetails.session,
                       phone: appointdata.customerDetails.phone,
-                      email: appointdata.customerDetails.email,
-                    })}>Assign</button>
-                </label>
+                      email: appointdata.customerDetails.email
+                    })
+                  }
+                >
+                  <div>
+                    <label>
+                      <p>Full Name</p>
+                      <input
+                        type="text"
+                        name="vetName"
+                        required
+                        value={this.state.vetName}
+                        onChange={this.onChange}
+                      />
+                    </label>
+                  </div>
+                  <br />
+                  <div>
+                    <label>
+                      <p>Email</p>
+                      <input
+                        type="email"
+                        name="vetEmail"
+                        required
+                        value={this.state.vetEmail}
+                        onChange={this.onChange}
+                      />
+                    </label>
+                  </div>
+                  <br />
+                  <div>
+                    <label>
+                      <p>Phone</p>
+                      <ReactPhoneInput
+                        defaultCountry="de"
+                        required
+                        value={this.state.vetPhone}
+                        onChange={this.onChangePhone}
+                      />
+                    </label>
+                  </div>
+                  <br />
+                  <div>
+                    <button>Assign</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       );
     } else {
-        return null
+      return null;
     }
   }
 }

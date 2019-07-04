@@ -44,6 +44,10 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
+    const showAlert = values["email"] === undefined || values["zipcode"] === undefined || values["session"] === undefined || values["videoconsultation"] === "" ;
+    if (showAlert) {
+      alert('Please fill all fields')
+    } else {
     this.props.firebase.fsdb
       .collection("form-inquiry")
       .doc(window.localStorage.getItem("dbDocID"))
@@ -60,26 +64,14 @@ class WizardBase extends React.Component {
         "sessionDetails.videoconsultation": `${values["videoconsultation"]}`,
       })
       .then(res => {
-        // const stepone = {
-        //   customerDetails: {
-        //     email: values["email"],
-        //     zipcode: values["zipcode"],
-        //   },
-        //    sessionDetails: {
-        //     Date: this.props.date,
-        //     session: `${values["session"]}`,
-        //     videoconsultation: `${values["videoconsultation"]}`,
-        //   },
-        // }
-        // window.localStorage.setItem('stepone', JSON.stringify(stepone))
-        this.props.history.push(`${this.props.match.url}/${values["zipcode"]}`)
+        this.props.history.push(`${this.props.match.url}/${values["zipcode"]}`, [{prevData: this.state.values}])
       })
       .catch(rej => {
         console.log(rej)
         alert(rej)
       })
   }
-
+}
   previous = () => this.props.history.goBack();
 
  
@@ -113,13 +105,17 @@ class WizardBase extends React.Component {
                 onClick={e => {
                   this.handleSubmit(e, values)
                 }}
-                disabled={submitting}
               >
                 Next »
               </button>
             </div>
-
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
+                  <h4>Form Summary</h4>
+            <pre>
+              <p>Email: {this.state.values.email} </p>
+              <p>Session: {this.state.values.session} </p>
+              <p>Videoconsultation: {this.state.values.videoconsultation} </p>
+              <p>Zipcode: {this.state.values.zipcode} </p>
+            </pre>
           </form>
         )}
       </Form>

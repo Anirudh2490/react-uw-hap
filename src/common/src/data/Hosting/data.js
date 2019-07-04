@@ -164,37 +164,31 @@ contentful
 contentful
   .getSingleEnty("1moz7Lh5pi8Hz2AH0tpv18")
   .then(response => {
-    console.log(response);
-    
     TestimonialData = response;
     TESTIMONIALS.push({
       review: TestimonialData.fields.guestName,
       name: TestimonialData.fields.guestReview,
-      designation: TestimonialData.fields.socialMediaLogo.fields.title,
+      designation: TestimonialData.fields.typeOfPetOwner,
       avatar: `${TestimonialData.fields.socialMediaLogo.fields.file.url}`
     });
     contentful
       .getSingleEnty("HueRzeMvF0MhmCOmMF4mg")
       .then(response => {
-    console.log(response);
-
         TestimonialData = response;
         TESTIMONIALS.push({
           review: TestimonialData.fields.guestName,
           name: TestimonialData.fields.guestReview,
-          designation: TestimonialData.fields.socialMediaLogo.fields.title,
+          designation: TestimonialData.fields.typeOfPetOwner,
           avatar: `${TestimonialData.fields.socialMediaLogo.fields.file.url}`
         });
         contentful
           .getSingleEnty("3V7MlNUOcgoPXjbBpFCELI")
           .then(response => {
-    console.log(response);
-
             TestimonialData = response;
             TESTIMONIALS.push({
               review: TestimonialData.fields.guestName,
               name: TestimonialData.fields.guestReview,
-              designation: TestimonialData.fields.socialMediaLogo.fields.title,
+              designation: TestimonialData.fields.typeOfPetOwner,
               avatar: `${
                 TestimonialData.fields.socialMediaLogo.fields.file.url
               }`
@@ -202,14 +196,11 @@ contentful
             contentful
               .getSingleEnty("4qYmaxLjU8EAagYdrhWey4")
               .then(response => {
-    console.log(response);
-
                 TestimonialData = response;
                 TESTIMONIALS.push({
                   review: TestimonialData.fields.guestName,
                   name: TestimonialData.fields.guestReview,
-                  designation:
-                    TestimonialData.fields.socialMediaLogo.fields.title,
+                  designation:TestimonialData.fields.typeOfPetOwner,
                   avatar: `${
                     TestimonialData.fields.socialMediaLogo.fields.file.url
                   }`
@@ -451,13 +442,13 @@ const MENU_ITEMS = [
     offset: "40"
   },
   {
-    label: "Why Us",
-    path: "#feature_section",
+    label: "Our Services",
+    path: "#service_section",
     offset: "40"
   },
   {
-    label: "Our Services",
-    path: "#service_section",
+    label: "Why Us",
+    path: "#feature_section",
     offset: "40"
   },
   {
@@ -473,6 +464,11 @@ const MENU_ITEMS = [
   {
     label: "For Vets",
     path: "#",
+    offset: "70"
+  },
+  {
+    label: "Our Blog",
+    path: "#blog_section",
     offset: "70"
   },
   {

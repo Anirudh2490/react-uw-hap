@@ -111,12 +111,14 @@ const TestimonialSection = ({
                 <TestimonialItem className="testimonial_item">
                   <Text content={slideItem.review} {...reviewStyle} />
                   <Box {...TestimonialMeta}>
+                    <Box>
                     <ImageWrapper>
                       <Image
                         src={slideItem.avatar}
                         alt={`reviewer-image-${index}`}
                       />
                     </ImageWrapper>
+                    </Box>
                     <Box>
                       <Heading content={slideItem.name} {...nameStyle} />
                       <Text

@@ -10,7 +10,8 @@ class WizardBase extends React.Component {
     this.state = {
       page: 0,
       values: props.initialValues || {},
-      docID: ""
+      docID: "",
+      prevData: '',
     };
   }
 
@@ -44,6 +45,10 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
+    const showAlert = values["petname"] === undefined || values["type"] === undefined || values["gender"] === undefined || values["notes"] === "" ;    
+    if (showAlert) {
+      alert("Please fill all the fields")
+    } else{
     this.props.firebase.fsdb
       .collection("form-inquiry")
       .doc(window.localStorage.getItem("dbDocID"))
@@ -62,7 +67,8 @@ class WizardBase extends React.Component {
         console.log(rej);
         alert(rej);
       });
-  };
+  }
+}
 
   previous = (event,values) => {
     event.preventDefault();
@@ -129,7 +135,12 @@ class WizardBase extends React.Component {
               </button>
             </div>
 
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
+            <pre>
+              <p>Gender: {this.state.values.gender} </p>
+              <p>Notes: {this.state.values.notes} </p>
+              <p>Petname: {this.state.values.petname} </p>
+              <p>Type: {this.state.values.type} </p>
+            </pre>
           </form>
         )}
       </Form>

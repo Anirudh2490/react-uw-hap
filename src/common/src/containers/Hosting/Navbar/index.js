@@ -11,7 +11,7 @@ import Box from '../../../../../elements/Box';
 import HamburgMenu from '../../../components/HamburgMenu';
 import Container from '../../../components/UI/Container';
 import { DrawerContext } from '../../../contexts/DrawerContext';
-
+import './index.css'
 import { MENU_ITEMS } from '../../../data/Hosting/data';
 import ScrollSpyMenu from '../../../components/ScrollSpyMenu';
 

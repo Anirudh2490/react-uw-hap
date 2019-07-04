@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from "react";
 import FeatureSection from "../../common/src/containers/Hosting/Features";
-import InfoSection from "../../common/src/containers/Hosting/Info";
+// import InfoSection from "../../common/src/containers/Hosting/Info";
 import VetsSection from "../../common/src/containers/Hosting/Domain";
 import BlogSection from "../../common/src/containers/Hosting/Payment";
 import AboutTeam from "../../common/src/containers/Hosting/Guarantee";
@@ -18,6 +18,7 @@ let BannerData,
   //  AboutTeamData,
   //  TestimonialData,
   // FAQData,
+  AboutSectionData,
   BlogData,
   VetsSectionData;
 //  ContactData;
@@ -41,15 +42,24 @@ class LandingBase extends Component {
           .then(response => {
             BlogData = response;
             this.props.contentful
-              .getSingleEnty("5fH7UWzNqoAsmYWjv0IkYy")
+              .getSingleEnty("cw0D1SIOyaVxIcR1xXYPM")
               .then(response => {
-                VetsSectionData = response;
+                AboutSectionData = response;                
+                this.props.contentful
+                  .getSingleEnty("5fH7UWzNqoAsmYWjv0IkYy")
+                  .then(response => {
+                    VetsSectionData = response;
+                  })
+                  .then(() => {
+                    this.setState({
+                      isDataAvaliable: true
+                    });
+                  })
+                  .catch(rej => {
+                    console.log(rej);
+                  });
               })
-              .then(()=>{
-                this.setState({
-                  isDataAvaliable: true,
-                })
-              })
+
               .catch(rej => {
                 console.log(rej);
               });
@@ -89,13 +99,13 @@ class LandingBase extends Component {
           <BannerSection data={BannerData} />
           <ServicesSection />
           <FeatureSection />
-          <AboutTeam />
+          <AboutTeam data={AboutSectionData}/>
           <TestimonialSection />
           <FaqSection />
           <BlogSection data={BlogData} />
           <VetsSection data={VetsSectionData} />
           <PricingSection />
-          <InfoSection />
+          {/* <InfoSection /> */}
           <ContactSection />
         </Fragment>
       );

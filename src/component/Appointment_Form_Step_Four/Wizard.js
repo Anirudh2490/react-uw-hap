@@ -55,10 +55,7 @@ class WizardBase extends React.Component {
       referrer: "no-referrer",
       body: JSON.stringify({
         to: values.phone,
-        body: `Hi ${
-          values.name
-        }! thankyou for registering at Hug a Pet, you will be notified once a vet is 
-        assigned to your case `
+        body: `Hi ${values.name}! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
       })
     })
       .then(response => {
@@ -136,8 +133,6 @@ class WizardBase extends React.Component {
                 Submit
               </button>
             </div>
-
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
           </form>
         )}
       </Form>

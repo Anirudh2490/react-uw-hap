@@ -74,6 +74,7 @@ BlogSection.propTypes = {
 
 BlogSection.defaultProps = {
   sectionWrapper: {
+    id: 'blog_section',
     as: 'section',
     pt: ['60px', '80px', '80px', '80px'],
     pb: ['40px', '40px', '40px', '80px'],

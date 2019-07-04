@@ -29,10 +29,10 @@ const FeatureSection = ({
       <Container>
         <Box {...secTitleWrapper}>
           <Fade bottom cascade>
-            <Text {...secText} content="WHY US" />
+            <Text {...secText} content="Vorteile" />
             <Heading
               {...secHeading}
-              content="Our mission is to make sure our pets get the best treatment"
+              content="Wir gestalten die Versorgung Ihres Haustiers komfortabel und stressfrei"
             />
           </Fade>
         </Box>

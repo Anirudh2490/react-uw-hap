@@ -87,8 +87,8 @@ const TestimonialSection = ({
     <TestimonialSecWrapper id="testimonial_section">
       <Container fullWidth noGutter>
         <Box {...secTitleWrapper}>
-          <Text {...secText} content="TESTIMONIALS " />
-          <Heading {...secHeading} content="What’s clients say about us" />
+          <Text {...secText} content="Kundenstimmen" />
+          <Heading {...secHeading} content="Das sagen unsere Kunden" />
         </Box>
         <GlideCarousel
           options={carouselOptions}

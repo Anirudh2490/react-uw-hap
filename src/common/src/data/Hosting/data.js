@@ -247,80 +247,57 @@ contentful
 const MONTHLY_PRICING_TABLE = [
   {
     freePlan: true,
-    name: "Clinics Starter Pack",
+    name: "HUG A PET - Vet Connect",
     description:
-      "Digital customer support and reservation management assistance for clinics",
-    price: "€59",
-    priceLabel: "Per Month",
-    buttonLabel: "SIGN UP",
-    url: "#",
+      "Verbinden Sie Ihre Praxis mit uns und genießen Sie die Vorteile unseres Services",
+    price: "",
+    priceLabel: "TBA",
+    buttonLabel: "Jetzt verbinden",
+    url: "/sign-up",
     listItems: [
       {
-        content: "Online Bookings"
+        content: "Hausbesuche in Ihrer Umgebung"
       },
       {
-        content: "Calendar Management"
+        content: "Volle Organisation und Service"
       },
       {
-        content: "Appointment optimization"
+        content: "Persönlicher Ansprechpartner"
       },
       {
-        content: "Customer Data Management"
+        content: "Digitaler Assistent"
       },
       {
-        content: "GDPR Compliant"
+        content: "Freie Zeiteinteilung und volle Kontrolle"
       }
     ]
   },
   {
-    name: "Freelance Vets",
+    name: "HUG A PET - Vet Flexi",
     description:
-      "Work exclusively with Hug A Pet, and earn as per your schedule!",
-    price: "€399",
-    priceLabel: "Per Month, €2000 guaranteed income p.m.",
-    buttonLabel: "SIGN UP",
-    url: "#",
+      "Werden Sie Tierarzt bei uns und entscheiden Sie wann und wieviel Sie arbeiten",
+    price: "",
+    priceLabel: "TBA",
+    buttonLabel: "Anmelden",
+    url: "/sign-in",
     listItems: [
       {
-        content: "Guaranteed Income of €2000 per month"
+        content: "Freie Zeiteinteilung"
       },
       {
-        content: "Schedule based on your availability"
+        content: "Überdurchschnittlicher Verdienst"
       },
       {
-        content: "App-based Business"
+        content: "Digitaler Assistent inklusive"
       },
       {
-        content: "Consult customers from home over video"
+        content: "Eigene app-basierte Praxis"
       },
       {
-        content: "Access to invoicing and payment tools"
-      }
-    ]
-  },
-  {
-    name: "Premium Partner Pack",
-    description:
-      "For larger clinics or group of clinics that handle both mobile vet bookings and normal bookings",
-    price: "On Enquiry",
-    priceLabel: "Per month & subscription yearly",
-    buttonLabel: "SIGN UP",
-    url: "#",
-    listItems: [
-      {
-        content: "Drag & Drop Builder"
+        content: "Community: Austausch- und Weiterbildungsmöglichkeiten"
       },
       {
-        content: "1,000s of Templates Ready"
-      },
-      {
-        content: "Blog Tools"
-      },
-      {
-        content: "eCommerce Store "
-      },
-      {
-        content: "30+ Webmaster Tools"
+        content: "Optional: Bequeme Patienten-Beratung von Zuhause per Video-Chat"
       }
     ]
   }
@@ -437,32 +414,32 @@ const DOMAIN_NAMES = [
 
 const MENU_ITEMS = [
   {
-    label: "Book an Appointment",
+    label: "Hausbesuch anfordern",
     path: "#banner_section",
     offset: "40"
   },
   {
-    label: "Our Services",
+    label: "Services",
     path: "#service_section",
     offset: "40"
   },
   {
-    label: "Why Us",
+    label: "Vorteile",
     path: "#feature_section",
     offset: "40"
   },
   {
-    label: "Testimonial",
+    label: "Kundenstimmen ",
     path: "#testimonial_section",
     offset: "70"
   },
   {
-    label: "FAQ",
+    label: "Häufig gestellte Fragen",
     path: "#faq_section",
     offset: "70"
   },
   {
-    label: "For Vets",
+    label: " Für Tierärzte ",
     path: "#",
     offset: "70"
   },
@@ -472,7 +449,7 @@ const MENU_ITEMS = [
     offset: "70"
   },
   {
-    label: "Contact",
+    label: "Kontakt",
     path: "#contact_section",
     offset: "70"
   }

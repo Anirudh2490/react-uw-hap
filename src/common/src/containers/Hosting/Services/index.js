@@ -29,10 +29,10 @@ const ServicesSection = ({
         <>
           <Box {...secTitleWrapper}>
             <Fade bottom cascade>
-              <Text {...secText} content="OUR SERVICES" />
+              <Text {...secText} content="Unser Leistungsumfang" />
               <Heading
                 {...secHeading}
-                content="What Featured Service that We Provide"
+                content="Folgende Leistungen bieten Ihnen unsere Tierärzte im Hausbesuch"
               />
             </Fade>
           </Box>

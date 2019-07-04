@@ -63,7 +63,7 @@ const PricingSection = ({
 
   const pricingCarouselOptions = {
     type: 'slider',
-    perView: 3,
+    perView: 2,
     gap: 30,
     bound: true,
     breakpoints: {
@@ -108,10 +108,10 @@ const PricingSection = ({
       <Container>
         <Box {...secTitleWrapper}>
           <Fade bottom cascade>
-            <Text {...secText} content="PRICING PLAN" />
+            <Text {...secText} content="Zusammenarbeit starten" />
             <Heading
               {...secHeading}
-              content="What’s our monthly pricing subscription"
+              content="Nutzen Sie Ihre Vorteile als Tierarzt bei HUG A PET"
             />
             <SwitchWrapper>
               <Switch
@@ -129,6 +129,7 @@ const PricingSection = ({
           <GlideCarousel
             carouselSelector="pricing-carousel"
             options={pricingCarouselOptions}
+            
             controls={false}
           >
             {state.toggle === true ? (

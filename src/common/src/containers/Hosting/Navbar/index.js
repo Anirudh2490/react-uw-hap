@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
-import { connect } from "react-redux";
-import { Alert } from "../../../../../store/actions/alerts";
 import PropTypes from 'prop-types';
 import NavbarWrapper from '../../../../../elements/Navbar';
 import Drawer from '../../../../../elements/Drawer';
@@ -43,11 +41,11 @@ const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert })
               menuItems={MENU_ITEMS}
               offset={-70}
             />
-            <Link href="#">
-              <a onClick={()=>{alert({payload:'hello World'})}} className="navbar_button">
-                <Button {...button} title="BUY NOW" />
-              </a>
-            </Link>
+           <Link>
+                <a  href="tel:03023327742" className="navbar_drawer_button">
+                  <Button  {...button} title="Jetzt anrufen" />
+                </a>
+              </Link>
             <Drawer
               width="420px"
               placement="right"
@@ -61,9 +59,9 @@ const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert })
                 drawerClose={true}
                 offset={-100}
               />
-              <Link href="#">
+              <Link href="tel:030 233 277 42">
                 <a className="navbar_drawer_button">
-                  <Button {...button} title="BUY NOW" />
+                  <Button {...button} title="Jetzt anrufen" />
                 </a>
               </Link>
             </Drawer>
@@ -75,13 +73,8 @@ const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert })
 };
 
 
-const mapDispatchToProps = dispatch =>{
-  return {
-      alert: (payload)=> dispatch(Alert.alertClicked(payload)),
-  }
-}
 
-const Navbar = connect(null , mapDispatchToProps)(NavbarBase)
+const Navbar = NavbarBase
 
 NavbarBase.propTypes = {
   navbarStyle: PropTypes.object,

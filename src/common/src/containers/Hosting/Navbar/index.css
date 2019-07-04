@@ -1,6 +1,15 @@
 @media (min-width: 1220px){
 .gzbFsC {
-    max-width: 1202px !important;
+    max-width: 1220px !important;
     width: 100%;
 }
+}
+
+.iummMy .hosting_navbar .main_menu li a {
+    padding: 0px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #343d48 !important;
+    -webkit-transition: 0.15s ease-in-out;
+    transition: 0.15s ease-in-out;
 }

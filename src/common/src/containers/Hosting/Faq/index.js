@@ -38,8 +38,8 @@ const FaqSection = ({
     <Box {...sectionWrapper}>
       <Container>
         <Box {...secTitleWrapper}>
-          <Text {...secText} content="FREQUENTLY ASK QUESTION" />
-          <Heading {...secHeading} content="Want to ask something from us?" />
+          <Text {...secText} content="Häufig gestellte Fragen" />
+          <Heading {...secHeading} content="Möchten Sie uns etwas fragen?" />
         </Box>
         <Box {...row}>
           <Box {...col}>

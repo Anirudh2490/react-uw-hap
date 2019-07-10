@@ -27,13 +27,15 @@ class WizardBase extends React.Component {
         this.setState({
           values: {
            email: doc.data().customerDetails.email, 
-           zipcode: doc.data().customerDetails.zipcode, 
+           phone: doc.data().customerDetails.phone, 
+           name: doc.data().customerDetails.name,
            session: doc.data().sessionDetails.session,
            videoconsultation: doc.data().sessionDetails.videoconsultation,
           }
         }, ()=>{
           if (doc.data().sessionDetails.Date) {
             this.props.setDate(doc.data().sessionDetails.Date)
+            this.props.setNum(doc.data().customerDetails.phone)
           }
         })
       })
@@ -44,7 +46,9 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
-    const showAlert = values["email"] === undefined || values["zipcode"] === undefined || values["session"] === undefined || values["videoconsultation"] === "" ;
+    console.log(values, this.props.number);
+    
+    const showAlert = values["email"] === undefined || this.props.number === "" || values["session"] === undefined || values["videoconsultation"] === "" ;
     if (showAlert) {
       alert('Please fill all fields')
     } else {
@@ -53,7 +57,8 @@ class WizardBase extends React.Component {
       .doc(window.localStorage.getItem("dbDocID"))
       .update({
         "customerDetails.email": values["email"],
-        "customerDetails.zipcode": values["zipcode"],
+        "customerDetails.name": values["name"],
+        "customerDetails.phone":`${this.props.number}` ,
       })
     this.props.firebase.fsdb
       .collection("form-inquiry")
@@ -109,13 +114,13 @@ class WizardBase extends React.Component {
                 Next »
               </button>
             </div>
-                  <h4>Form Summary</h4>
-            <pre>
+                  {/* <h4>Form Summary</h4> */}
+            {/* <pre>
               <p>Email: {this.state.values.email} </p>
               <p>Session: {this.state.values.session} </p>
               <p>Videoconsultation: {this.state.values.videoconsultation} </p>
               <p>Zipcode: {this.state.values.zipcode} </p>
-            </pre>
+            </pre> */}
           </form>
         )}
       </Form>

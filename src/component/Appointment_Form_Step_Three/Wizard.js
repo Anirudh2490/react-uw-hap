@@ -47,7 +47,53 @@ class WizardBase extends React.Component {
        "bookingStatus.status": 'Confirmed',
     })
     .then( ()=> {
-    this.props.history.push(`${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`)
+       //APPI CALL FOR TWILIO MSG
+    fetch("https://hug-a-pet.herokuapp.com/api/messages", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify({
+        to: values.phone,
+        body: `Hi ${values.name}! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
+      })
+    })
+      .then(response => {
+        console.log(response.json());
+        //APPI CALL FOR TWILIO Email
+        fetch("https://hug-a-pet.herokuapp.com/send/mail", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          redirect: "follow",
+          referrer: "no-referrer",
+          body: JSON.stringify({
+            emailReceiver: values.email,
+            emailSubject: "Hi " + values.name + " Thankyou for registering at Hug a Pet!",
+            emailContent: "Hi " + values.name + "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
+          })
+        })
+          .then(response => {
+              this.props.history.push(`${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`)
+            console.log(response.json());
+          })
+          .catch(rej => {
+            alert(rej.message);
+          });
+      })
+      .catch(rej => {
+        alert(rej.message);
+      });
+
     })
     .catch(rej => {
       console.log(rej)

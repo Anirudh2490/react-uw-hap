@@ -60,13 +60,15 @@ class HomeSearchBase extends Component {
   // //  }
   // }
 
-  onChangeName = event => {
+  onChangeZipCode = event => {
     this.setState({
-      name: event,
+      zipcode: event,
     })
   }
 
   onChangePhone = event => {
+    console.log(this.state.phone);
+    
     this.setState({
       phone: event,
     })
@@ -237,9 +239,9 @@ class HomeSearchBase extends Component {
     .add(
       {
         customerDetails: {
-          name: `${this.state.name}`,
-          zipcode: "",
-          phone: `${this.state.phone}`,
+          name: ``,
+          zipcode: `${this.state.zipcode}`,
+          phone: ``,
           email: "",
           service: `${this.state.service.value}`,
         },
@@ -268,9 +270,9 @@ class HomeSearchBase extends Component {
     .then(res => {
       const homeform =  {
         customerDetails: {
-          name: `${this.state.name}`,
-          zipcode: "",
-          phone: `${this.state.phone}`,
+          name: ``,
+          zipcode: `${this.state.zipcode}`,
+          phone: ``,
           email: "",
           service: `${this.state.service.value}`,
         },
@@ -329,6 +331,10 @@ class HomeSearchBase extends Component {
               aria-label="domain_search_input"
             />
           </div>
+          <ReactPhoneInput
+            defaultCountry="de"
+            onChange={this.onChangePhone}
+          />
           <div style={{ marginTop: "5px", marginBottom: "5px" }}>
             <Button
               {...this.props.button}
@@ -345,28 +351,27 @@ class HomeSearchBase extends Component {
   }
 
   render() {
-    const { name , phone, service } = this.state;
+    const { zipcode , service } = this.state;
     const isInvalid =
-    name === '' ||
-    phone === '' ||
+    zipcode === '' ||
     service === '';
 
     return (
       <Box {...this.props.searchArea}>
         <SearchWrapper>
           <Input
-            inputType="text"
-            placeholder="Your name"
-            onChange={this.onChangeName}
+            inputType="number"
+            placeholder="Zip Code"
+            onChange={this.onChangeZipCode}
             iconPosition="right"
             className="domain_search_input"
             aria-label="domain_search_input"
           />
-          <ReactPhoneInput
+          {/* <ReactPhoneInput
             defaultCountry="de"
             value={this.state.phone}
             onChange={this.onChangePhone}
-          />
+          /> */}
           <div style={{marginTop: "10px"}}>
           <Select
             options={this.props.DOMAIN_NAMES}

@@ -1,11 +1,13 @@
-import React, { useState } from "react"
-import Styles from "./Styles"
-import { Field } from "react-final-form"
-import Wizard from "./Wizard"
-import { withFirebase } from "../Firebase"
-import * as ROUTES from "../../constants/routes"
-import moment from "moment"
+import React, { useState } from "react";
+import Styles from "./Styles";
+import { Field } from "react-final-form";
+import Wizard from "./Wizard";
+import { withFirebase } from "../Firebase";
+import * as ROUTES from "../../constants/routes";
+import moment from "moment";
 
+import ReactPhoneInput from "react-phone-input-2";
+import "react-phone-input-2/dist/style.css";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,28 +20,36 @@ const Error = ({ name }) => (
       touched && error ? <span>{error}</span> : null
     }
   />
-)
+);
 
+const required = value => (value ? undefined : "Required");
 
-const required = value => (value ? undefined : "Required")
+const value = [];
 
 const WizardFormBase = props => {
-  const [emailError, setEmailError] = useState("")
-  const [docID, setdocID] = useState("")
-  const [date, setDate] = useState(new Date())
-
+  const [emailError, setEmailError] = useState("");
+  const [docID, setdocID] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [number, setNumber] = useState("");
 
   function errorHandler() {
     setEmailError(
       <p>
         Email already exists please <a href={ROUTES.SIGNIN}>signin</a>
       </p>
-    )
+    );
   }
 
-  function dateUpdate(event){
-      setDate(event)
+  function dateUpdate(event) {
+    setDate(event);
   }
+
+  function updateNumber(e) {
+    console.log(e);
+    setNumber(e);
+    console.log(number);
+  }
+
   return (
     <Styles>
       <h1>Make an appointment with the Vet</h1>
@@ -53,11 +63,12 @@ const WizardFormBase = props => {
         firebase={props.firebase}
         setDate={setDate}
         emailPrompt={errorHandler}
+        number={number}
         date={date}
+        setNum= {setNumber}
         setdocID={setdocID}
-        // onSubmit={onSubmit}
       >
-       <Wizard.Page>
+        <Wizard.Page>
           <div>
             <label>Email</label>
             <Field
@@ -67,15 +78,15 @@ const WizardFormBase = props => {
               placeholder="Email"
               validate={required}
             />
+            <Error name="email" />
           </div>
-          <Error name="email" />
           <div>
-            <label>Zip Code</label>
+            <label>Name</label>
             <Field
-              name="zipcode"
+              name="name"
               component="input"
               type="text"
-              placeholder="Zip Code"
+              placeholder="Name"
               validate={required}
             />
             <Error name="zipcode" />
@@ -85,19 +96,21 @@ const WizardFormBase = props => {
             <Field name="videoconsultation" component="input" type="checkbox" />
             <div align="left">Yes</div>
           </div>
+
+          <div>
+            <label>Phone Number</label>
+            <ReactPhoneInput
+              defaultCountry="de"
+              value={number}
+              onChange={updateNumber}
+            />
+          </div>
+
           <div>
             <label>Date of booking</label>
-            {/* <Field
-              name="Date"
-              component="input"
-              type="date"
-              placeholder="Date"
-            /> */}
-            {/* <DatePicker selected={date}  onChange={(e)=>dateUpdate(e)}  /> */}
-            
             <DatePicker
-              onChange={(e)=>dateUpdate(e)} 
-              value={moment(date).format("DD-MM-YYYY")}  
+              onChange={e => dateUpdate(e)}
+              value={moment(date).format("DD-MM-YYYY")}
             />
             <Error name="email" />
           </div>
@@ -112,8 +125,8 @@ const WizardFormBase = props => {
         </Wizard.Page>
       </Wizard>
     </Styles>
-  )
-}
-const WizardForm = withFirebase(WizardFormBase)
+  );
+};
+const WizardForm = withFirebase(WizardFormBase);
 
-export default WizardForm
+export default WizardForm;

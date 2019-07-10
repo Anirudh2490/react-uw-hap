@@ -1,15 +1,33 @@
-@media (min-width: 1220px){
-.gzbFsC {
+@media (min-width: 1220px) {
+  .gzbFsC {
     max-width: 1220px !important;
     width: 100%;
-}
+  }
 }
 
 .iummMy .hosting_navbar .main_menu li a {
-    padding: 0px !important;
-    font-size: 14px !important;
-    font-weight: 400 !important;
-    color: #343d48 !important;
-    -webkit-transition: 0.15s ease-in-out;
-    transition: 0.15s ease-in-out;
+  padding: 0px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #343d48 !important;
+  -webkit-transition: 0.15s ease-in-out;
+  transition: 0.15s ease-in-out;
+}
+
+@media (min-width: 576px) {
+  .laqufW {
+    margin: auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    width: 80%;
+    display: flex;
+    -webkit-align-items: stretch;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    height: 70px;
+    box-shadow: 0px 6px 15.98px 1.02px rgba(56, 86, 122, 0.1);
+    border-radius: 10px;
+  }
 }

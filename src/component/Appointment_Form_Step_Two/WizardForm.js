@@ -1,12 +1,14 @@
-import React, { useState } from "react"
-import Styles from "./Styles"
-import { Field } from "react-final-form"
-import Wizard from "./Wizard"
-import { withFirebase } from "../Firebase"
-import * as ROUTES from "../../constants/routes"
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import moment from "moment"
+import React, { useState } from "react";
+import Styles from "./Styles";
+import { Field } from "react-final-form";
+import Wizard from "./Wizard";
+import { withFirebase } from "../Firebase";
+import * as ROUTES from "../../constants/routes";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+// import moment from "moment";
+
+import "./styles.css";
 
 const Error = ({ name }) => (
   <Field
@@ -16,17 +18,41 @@ const Error = ({ name }) => (
       touched && error ? <span>{error}</span> : null
     }
   />
-)
+);
 
-const required = value => (value ? undefined : "Required")
+const required = value => (value ? undefined : "Required");
+
+const onSelectStyle = {
+  backgroundColor: "#ff6767"
+}
+
+const petAge = [
+  {
+    age: "0 to 1.5"
+  },
+  {
+    age: "1.5 to 6"
+  },
+  {
+    age: "older than 6"
+  }
+];
 
 const WizardFormBase = props => {
-  const [emailError, setEmailError] = useState("")
-  const [docID, setdocID] = useState("")
-  const [date, setDate] = useState(new Date())
+  const [emailError, setEmailError] = useState("");
+  const [docID, setdocID] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [petage, setPetAge] = useState("");
+  const [styleID, setStyleID] = useState("")
 
   function dateUpdate(event) {
-    setDate(event)
+    setDate(event);
+  }
+
+  function petAgeUpdate(event, id) {
+    // document.getElementById(id).style.backgroundColor = "#ff6767";
+    setStyleID(id)
+    setPetAge(event);
   }
 
   function errorHandler() {
@@ -34,7 +60,7 @@ const WizardFormBase = props => {
       <p>
         Email already exists please <a href={ROUTES.SIGNIN}>signin</a>
       </p>
-    )
+    );
   }
   return (
     <Styles>
@@ -48,6 +74,8 @@ const WizardFormBase = props => {
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
+        petage={petage}
+        setPetAge={setPetAge}
         emailPrompt={errorHandler}
         setdocID={setdocID}
         setDate={setDate}
@@ -55,17 +83,17 @@ const WizardFormBase = props => {
       >
         <Wizard.Page
           validate={values => {
-            const errors = {}
+            const errors = {};
             if (!values.type) {
-              errors.type = "Required"
+              errors.type = "Required";
             }
             if (!values.gender) {
-              errors.gender = "Required"
+              errors.gender = "Required";
             }
             if (!values.petdate) {
-              errors.age = "Required"
+              errors.age = "Required";
             }
-            return errors
+            return errors;
           }}
         >
           <div>
@@ -80,11 +108,23 @@ const WizardFormBase = props => {
             />
           </div>
           <div>
-            <label>What year was your pet born?</label>
-            <DatePicker
-              value={moment(date).format("DD-MM-YYYY")}  
-              onChange={e => dateUpdate(e)}
-            />
+            <label>How old is your pet?</label>
+            <div className="options-container">
+              <ul className="options-list">
+                {petAge &&
+                  petAge.map((item, id) => {
+                    return (
+                      <li id={id} style={styleID === id ? onSelectStyle: null } onClick={() => petAgeUpdate(item.age, id)} className="options-list-item">
+                        <label>
+                          <div className="item-container">
+                          <p>{item.age}</p>
+                          </div>
+                        </label>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
             <Error name="email" />
           </div>
           <div>
@@ -118,8 +158,8 @@ const WizardFormBase = props => {
         </Wizard.Page>
       </Wizard>
     </Styles>
-  )
-}
-const WizardForm2 = withFirebase(WizardFormBase)
+  );
+};
+const WizardForm2 = withFirebase(WizardFormBase);
 
-export default WizardForm2
+export default WizardForm2;

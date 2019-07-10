@@ -53,7 +53,7 @@ class WizardBase extends React.Component {
       .collection("form-inquiry")
       .doc(window.localStorage.getItem("dbDocID"))
       .update({
-        "petDetails.petdate":  `${this.props.date}`,
+        "petDetails.petdate":  `${this.props.petage}`,
         "petDetails.petname": `${values["petname"]}`,
         "petDetails.type": `${values["type"]}`,
         "petDetails.gender": `${values["gender"]}`,
@@ -134,13 +134,13 @@ class WizardBase extends React.Component {
                 Submit
               </button>
             </div>
-
+{/* 
             <pre>
               <p>Gender: {this.state.values.gender} </p>
               <p>Notes: {this.state.values.notes} </p>
               <p>Petname: {this.state.values.petname} </p>
               <p>Type: {this.state.values.type} </p>
-            </pre>
+            </pre> */}
           </form>
         )}
       </Form>

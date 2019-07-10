@@ -7,6 +7,15 @@
     margin-top: 17px !important;
 }
 
+.child-wrapper {
+    padding: 100px 0px;
+}
+
+.isBPPJ h4 {
+    text-align: center;
+    color: #222;
+}
+
 /* @media only screen and (max-width: 728px)
 .marquee-wrapper {
     zoom: 35%;

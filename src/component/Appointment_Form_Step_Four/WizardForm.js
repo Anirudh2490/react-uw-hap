@@ -38,9 +38,6 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
-      <h1>Your Account has been Verfied</h1>
-      <h4>Thanks for confirming the OTP</h4>
-      <h2>We are assigning a vet to your case</h2>
       <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
@@ -59,6 +56,9 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
+          <h1>Your Account has been Verfied</h1>
+          <h4>Thanks for confirming the OTP</h4>
+          <h2>We are assigning a vet to your case</h2>
           <p>
             Is there anything else you would like to update about this case, for
             example, pass some more detailed information to the vet for better

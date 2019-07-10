@@ -57,6 +57,7 @@ class App extends Component {
                 </DrawerProvider>
               </Sticky>
               <Route path={ROUTE.LANDING} exact component={Landing} />
+              <div className="child-wrapper">
               <Route path={`${ROUTE.ADMIN}/:docid`} exact component={AppointmentDetails} />
               <Route path={ROUTE.VIDEO_COMPONENT} component={VideoComponent} />
               <Route path={ROUTE.SIGNIN_OPTIONS} component={SignInOptPage} />
@@ -100,6 +101,7 @@ class App extends Component {
                 exact
                 component={ForgotPassword}
               />
+              </div>
               <Footer />
             </ContentWrapper>
           </ParallaxProvider>

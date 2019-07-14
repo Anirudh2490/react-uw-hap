@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 import * as ROUTE from "../../constants/routes";
 import WizardForm from "../Appointment_Form_Step_One/WizardForm";

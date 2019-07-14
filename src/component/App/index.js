@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withAuthentication } from "../Session";
+import { withAuthenticationCustomer } from "../Customer_Session";
+
 import * as ROUTE from "../../constants/routes";
 import Footer from "../../common/src/containers/Hosting/Footer";
 import { DrawerProvider } from "../../common/src/contexts/DrawerContext";
@@ -19,7 +21,7 @@ import {
 } from "../../common/src/containers/Hosting/hosting.style";
 import { ResetCSS } from "../../common/src/assets/css/style";
 import Navbar from "../../common/src/containers/Hosting/Navbar";
-import Dashboard from "../Dashboard";
+import {CustomerPage} from "../Dashboard";
 import { ForgotPassword } from "../Forgot_Password";
 import Admin from "../Admin";
 import Admin_SignIn from "../Admin_SignIn";
@@ -33,6 +35,10 @@ import WizardForm5 from "../Appointment_Form_Step_Four/WizardForm";
 import WizardForm4 from "../Appointment_Form_Step_Three/WizardForm";
 import WizardForm3 from "../Appointment_Form_Success/WizardForm";
 import AppointmentDetails from '../Appointment_Details'
+
+
+const CustomerPageAuth = withAuthenticationCustomer(CustomerPage)
+
 class App extends Component {
   render() {
     return (
@@ -86,7 +92,7 @@ class App extends Component {
               <Route path={ROUTE.VET_SIGNIN} component={Vet_Sign_In} />
               <Route path={ROUTE.VET_SIGNUP} component={Vet_Sign_Up} />
               <Route path={ROUTE.SIGNUP} component={SignUp} />
-              <Route path={ROUTE.DASHBOARD} component={Dashboard} />
+              <Route path={ROUTE.DASHBOARD} exact component={CustomerPageAuth} />
               <Route
                 path={ROUTE.BOOK_AN_APPOINTMENT}
                 component={BookAnAppointment}

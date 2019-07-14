@@ -1,27 +1,34 @@
-import React, { useContext } from 'react';
-import Link from 'next/link';
-import PropTypes from 'prop-types';
-import NavbarWrapper from '../../../../../elements/Navbar';
-import Drawer from '../../../../../elements/Drawer';
-import Button from '../../../../../elements/Button';
-import Logo from '../../../../../elements/UI/Logo';
-import Box from '../../../../../elements/Box';
-import HamburgMenu from '../../../components/HamburgMenu';
-import Container from '../../../components/UI/Container';
-import { DrawerContext } from '../../../contexts/DrawerContext';
-import './index.css'
-import { MENU_ITEMS } from '../../../data/Hosting/data';
-import ScrollSpyMenu from '../../../components/ScrollSpyMenu';
+import React, { useContext } from "react";
+import Link from "next/link";
+import PropTypes from "prop-types";
+import NavbarWrapper from "../../../../../elements/Navbar";
+import Drawer from "../../../../../elements/Drawer";
+import Button from "../../../../../elements/Button";
+import Logo from "../../../../../elements/UI/Logo";
+import Box from "../../../../../elements/Box";
+import HamburgMenu from "../../../components/HamburgMenu";
+import Container from "../../../components/UI/Container";
+import { DrawerContext } from "../../../contexts/DrawerContext";
+import "./index.css";
+import { MENU_ITEMS } from "../../../data/Hosting/data";
+import ScrollSpyMenu from "../../../components/ScrollSpyMenu";
 
-import LogoImage from '../../../assets/image/hosting/logo.png';
+import LogoImage from "../../../assets/image/hosting/logo.png";
 
-const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert }) => {
+const NavbarBase = ({
+  navbarStyle,
+  logoStyle,
+  button,
+  row,
+  menuWrapper,
+  alert
+}) => {
   const { state, dispatch } = useContext(DrawerContext);
 
   // Toggle drawer
   const toggleHandler = () => {
     dispatch({
-      type: 'TOGGLE',
+      type: "TOGGLE"
     });
   };
 
@@ -41,11 +48,11 @@ const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert })
               menuItems={MENU_ITEMS}
               offset={-70}
             />
-           <Link>
-                <a  href="tel:03023327742" className="navbar_drawer_button">
-                  <Button  {...button} title="Jetzt anrufen" />
-                </a>
-              </Link>
+            <Link href="tel:030 233 277 42">
+              <a href="tel:03023327742" className="navbar_drawer_button">
+                <Button {...button} title="Jetzt anrufen" />
+              </a>
+            </Link>
             <Drawer
               width="420px"
               placement="right"
@@ -72,9 +79,7 @@ const NavbarBase = ({ navbarStyle, logoStyle, button, row, menuWrapper, alert })
   );
 };
 
-
-
-const Navbar = NavbarBase
+const Navbar = NavbarBase;
 
 NavbarBase.propTypes = {
   navbarStyle: PropTypes.object,
@@ -82,40 +87,40 @@ NavbarBase.propTypes = {
   button: PropTypes.object,
   alert: PropTypes.func,
   row: PropTypes.object,
-  menuWrapper: PropTypes.object,
+  menuWrapper: PropTypes.object
 };
 
 NavbarBase.defaultProps = {
   navbarStyle: {
-    className: 'hosting_navbar',
-    minHeight: '70px',
-    display: 'block',
+    className: "hosting_navbar",
+    minHeight: "70px",
+    display: "block"
   },
   row: {
     flexBox: true,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%"
   },
   logoStyle: {
-    maxWidth: ['120px', '130px'],
+    maxWidth: ["120px", "130px"]
   },
   button: {
-    type: 'button',
-    fontSize: '13px',
-    fontWeight: '600',
-    color: 'white',
-    borderRadius: '4px',
-    pl: '15px',
-    pr: '15px',
-    colors: 'primaryWithBg',
-    minHeight: 'auto',
-    height: `${1}`,
+    type: "button",
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "white",
+    borderRadius: "4px",
+    pl: "15px",
+    pr: "15px",
+    colors: "primaryWithBg",
+    minHeight: "auto",
+    height: `${1}`
   },
   menuWrapper: {
     flexBox: true,
-    alignItems: 'center',
-  },
+    alignItems: "center"
+  }
 };
 
 export default Navbar;

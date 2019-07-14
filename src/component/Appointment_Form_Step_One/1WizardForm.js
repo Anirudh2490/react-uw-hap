@@ -3,8 +3,6 @@ import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
-import Modal from "react-awesome-modal";
-import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import moment from "moment";
 
@@ -13,9 +11,6 @@ import "react-phone-input-2/dist/style.css";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-// const ButtonOptions = ["Untersucheng", "Kastration", "Impung", "Der Letze Weg", "Andere"]
 
 const Error = ({ name }) => (
   <Field
@@ -27,41 +22,32 @@ const Error = ({ name }) => (
   />
 );
 
-/* 
-INQUIRY
-1. Step 1 -> name, phone, zip, service
-2. Step 2 -> date, session, online video consultation
-3. Step 3 -> pet details
-4. Summary -> OTP validation, user gets created
-CONFIRMED
-1. Step 1 -> in progress - Video consultation, date is confirmed
-2. Step 2 -> visit complete, summary
-3. Step 3 -> additional visit
-4. Summary
-*/
-
 const required = value => (value ? undefined : "Required");
 
+const value = [];
+
 const WizardFormBase = props => {
+  const [emailError, setEmailError] = useState("");
+  const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
   const [number, setNumber] = useState("");
-  const [visible, setVisibilty] = useState("");
 
+  function errorHandler() {
+    setEmailError(
+      <p>
+        Email already exists please <a href={ROUTES.SIGNIN}>signin</a>
+      </p>
+    );
+  }
 
   function dateUpdate(event) {
     setDate(event);
   }
 
   function updateNumber(e) {
+    console.log(e);
     setNumber(e);
-  }
-
-  function openModal() {
-    setVisibilty(true)
-  }
-
-  function closeModal() {
-    setVisibilty(false)
+    console.log(number);
   }
 
   return (
@@ -69,53 +55,19 @@ const WizardFormBase = props => {
       <h1>Make an appointment with the Vet</h1>
       <h2 />
       <a href="#">Free video consultation on confirmed appointment</a>
-      <p>We can honor the appointment upto one hour after inquiry time.</p>
+      <p style={{ textAlign: "center" }}>
+        We can honor the appointment upto one hour after inquiry time.
+      </p>
       <Wizard
-        // initialValues={{ employed: true, stooge: 'larry' }}
-        // onSubmit={onSubmit}
+        initialValues={{ employed: true, stooge: "larry" }}
         firebase={props.firebase}
         setDate={setDate}
-        openModal={openModal}
-        // emailPrompt={errorHandler}
+        emailPrompt={errorHandler}
         number={number}
-        modalStatus={visible}
         date={date}
-        setNum={setNumber}
-        // setdocID={setdocID}
+        setNum= {setNumber}
+        setdocID={setdocID}
       >
-        <Wizard.Page>
-          <Modal
-            visible={visible}
-            width="400"
-            height="300"
-            effect="fadeInUp"
-            onClickAway={() => closeModal()}
-          >
-            <div>
-              <h1>You have already registered at Hug a Pet</h1>
-              <p>Click Here to <Link to={ROUTES.SIGNIN}>Sign In</Link></p>
-              <p>Or close to continue with booking an appointment</p>
-
-              <a href="javascript:void(0);" onClick={() => closeModal()}>
-                Close
-              </a>
-            </div>
-          </Modal>
-          <h4>What is your phone number</h4>
-          <label>We will need send an OTP to verify you</label>
-          <div>
-            <ReactPhoneInput
-              defaultCountry="de"
-              value={number}
-              inputExtraProps={{
-                name: "phone",
-                required: true,
-                autoFocus: true
-              }}
-              onChange={updateNumber}
-            />
-          </div>
-        </Wizard.Page>
         <Wizard.Page>
           <div>
             <label>Email</label>
@@ -139,20 +91,20 @@ const WizardFormBase = props => {
             />
             <Error name="zipcode" />
           </div>
-          {/* <div>
+          <div>
             <label>Video consultation?</label>
             <Field name="videoconsultation" component="input" type="checkbox" />
             <div align="left">Yes</div>
-          </div> */}
+          </div>
 
-          {/* <div>
+          <div>
             <label>Phone Number</label>
             <ReactPhoneInput
               defaultCountry="de"
               value={number}
               onChange={updateNumber}
             />
-          </div> */}
+          </div>
 
           <div>
             <label>Date of booking</label>
@@ -162,16 +114,14 @@ const WizardFormBase = props => {
             />
             <Error name="email" />
           </div>
-          <div>
-            <label>Session</label>
-            <Field name="session" component="select">
-              <option>Choose time</option>
-              <option value="Morning">Morning</option>
-              <option value="Afternoon">Afternoon</option>
-              <option value="Evening">Evening</option>
-            </Field>
-            <Error name="session" />
-          </div>
+          <label>Session</label>
+          <Field name="session" component="select">
+            <option>Choose time</option>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Evening">Evening</option>
+          </Field>
+          <Error name="session" />
         </Wizard.Page>
       </Wizard>
     </Styles>

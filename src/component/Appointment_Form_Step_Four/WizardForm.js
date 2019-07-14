@@ -64,14 +64,14 @@ const WizardFormBase = props => {
             example, pass some more detailed information to the vet for better
             understanding about the case.
           </p>
-          <div style={{ height: "163px", margin: "0" }}>
+          {/* <div style={{ height: "163px", margin: "0" }}>
             <Field
               name="otpnotes"
               type="text"
               placeholder="My dog is a Golden retriever..."
               component="input"
             />
-          </div>
+          </div> */}
         </Wizard.Page>
       </Wizard>
     </Styles>

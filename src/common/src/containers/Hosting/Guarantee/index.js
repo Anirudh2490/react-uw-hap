@@ -8,7 +8,7 @@ import Heading from '../../../../../elements/Heading';
 import Image from '../../../../../elements/Image';
 import Container from '../../../components/UI/Container';
 
-import GuaranteeImage from '../../../assets/image/hosting/badge.png';
+// import GuaranteeImage from '../../../assets/image/hosting/badge.png';
 
 const AboutTeam = ({
   sectionWrapper,

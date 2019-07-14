@@ -14,41 +14,38 @@ class WizardBase extends React.Component {
     };
   }
 
-  componentDidMount(){
-    if (window.localStorage.getItem("dbDocID") === null ) {
-      this.props.history.push('/', {
-        message : "Register for a vet a visit from here."
-      })
+  componentDidMount() {
+    if (window.localStorage.getItem("dbDocID") === null) {
+      this.props.history.push("/", {
+        message: "Register for a vet a visit from here."
+      });
+    } else {
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .doc(window.localStorage.getItem("dbDocID"))
+        .get()
+        .then(doc => {
+          this.setState({
+            values: {
+              email: doc.data().customerDetails.email,
+              phone: doc.data().customerDetails.phone,
+              name: doc.data().customerDetails.name,
+              zipcode: doc.data().customerDetails.zipcode
+              // videoconsultation: doc.data().sessionDetails.videoconsultation
+            }
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
-    // }else{
-    // this.props.firebase.fsdb
-    //   .collection("form-inquiry")
-    //   .doc(window.localStorage.getItem("dbDocID")).get()
-    //   .then((doc)=>{
-    //     this.setState({
-    //       values: {
-    //         phone: doc.data().customerDetails.phone, 
-    //       }
-    //     })
-    //   })
-    //   .catch((error)=>{
-    //     console.log(error);
-    //   })
-    // }
   }
 
   next = values => {
-    alert('Booking Verfied')
-    this.props.firebase.fsdb
-    .collection("form-inquiry")
-    .doc(window.localStorage.getItem("dbDocID"))
-    .update({
-      "bookingStatus.phoneVerfication": true,
-       "bookingStatus.status": 'Confirmed',
-    })
-    .then( ()=> {
-       //APPI CALL FOR TWILIO MSG
-    fetch("https://hug-a-pet.herokuapp.com/api/messages", {
+    const { token, phone, name, email, zipcode } = values;
+    const twilioVerification = phone.split(" ");
+    // verify-otp
+    fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
@@ -59,50 +56,52 @@ class WizardBase extends React.Component {
       redirect: "follow",
       referrer: "no-referrer",
       body: JSON.stringify({
-        to: values.phone,
-        body: `Hi ${values.name}! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
+        token: token,
+        phoneNumber: twilioVerification[1] + twilioVerification[2]
       })
-    })
-      .then(response => {
-        console.log(response.json());
-        //APPI CALL FOR TWILIO Email
-        fetch("https://hug-a-pet.herokuapp.com/send/mail", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          redirect: "follow",
-          referrer: "no-referrer",
-          body: JSON.stringify({
-            emailReceiver: values.email,
-            emailSubject: "Hi " + values.name + " Thankyou for registering at Hug a Pet!",
-            emailContent: "Hi " + values.name + "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-          })
-        })
-          .then(response => {
-              this.props.history.push(`${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`)
-            console.log(response.json());
-          })
-          .catch(rej => {
-            alert(rej.message);
-          });
-      })
-      .catch(rej => {
-        alert(rej.message);
-      });
+    }).then(res => {
+      //res.status === 400
+      if (false) {
+        alert("Invalid Code");
+      } else {
+        this.props.firebase
+          .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
+          .then(authUser => {
+            const uid = authUser.user.uid;
+            // this.props.firebase.fsdb
+            //   .collection(
+            //     `userCollection/${
+            //       this.props.firebase.auth.currentUser.uid
+            //     }/appointments/`
+            //   )
+            //   .doc(window.localStorage.getItem("dbDocID"))
+            //   .set({
+            //     appointmentID: window.localStorage.getItem("dbDocID")
+            //   })
+            // .then(() => {
+            this.props.firebase.fsdb
+              .collection("form-inquiry")
+              .doc(window.localStorage.getItem("dbDocID"))
+              .update({
+                "bookingStatus.phoneVerfication": true,
+                "bookingStatus.status": "Confirmed",
+                "customerDetails.uid": uid
+              })
 
-    })
-    .catch(rej => {
-      console.log(rej)
-      alert(rej)
-    })
+              .then(() => {
+                // window.localStorage.removeItem("dbDocID");
+                // window.localStorage.removeItem("newUser");
+                this.props.history.push(
+                  `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
+                );
+              });
+          });
+        // });
+      }
+    });
   };
 
-  previous = (event,values) => {
-  }
+  previous = (event, values) => {};
   /**
    * NOTE: Both validate and handleSubmit switching are implemented
    * here because 🏁 Redux Final Form does not accept changes to those
@@ -143,7 +142,6 @@ class WizardBase extends React.Component {
                 Verify OTP
               </button>
             </div>
-
           </form>
         )}
       </Form>

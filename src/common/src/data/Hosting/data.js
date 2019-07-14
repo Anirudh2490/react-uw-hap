@@ -55,8 +55,6 @@ let ServicesData, FeatureData, TestimonialData, FAQData;
 contentful
   .getSingleEnty("5yzRgQj6JNmTvbQHbTEhek")
   .then(response => {
-    console.log(response);
-
     FeatureData = response;
 
     FEATURES_DATA = [

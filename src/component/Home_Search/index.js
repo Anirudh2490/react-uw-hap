@@ -11,7 +11,9 @@ import Button from "../../elements/Button"
 import Input from "../../elements/Input"
 import * as ROUTES from "../../constants/routes"
 import Select from "../../elements/Select"
-import { book, wind,  } from "react-icons-kit/feather/"
+import { book
+  // , wind
+} from "react-icons-kit/feather/"
 import { confirmAlert } from "react-confirm-alert"
 import { withRouter } from "react-router-dom";
 import "react-confirm-alert/src/react-confirm-alert.css"
@@ -244,6 +246,8 @@ class HomeSearchBase extends Component {
           phone: ``,
           email: "",
           service: `${this.state.service.value}`,
+          uid: "",
+          userrole: "customer"
         },
         vetDetails:{
           isVetAssigned: false,
@@ -268,37 +272,37 @@ class HomeSearchBase extends Component {
       }
     )
     .then(res => {
-      const homeform =  {
-        customerDetails: {
-          name: ``,
-          zipcode: `${this.state.zipcode}`,
-          phone: ``,
-          email: "",
-          service: `${this.state.service.value}`,
-        },
-        vetDetails:{
-          isVetAssigned: false,
-          vetName: "",
-        },
-        sessionDetails: {
-          Date: "",
-          session: "",
-          videoconsultation: "",
-        },
-        petDetails: {
-          petdate: "",
-          petname: "",
-          type: "",
-          gender: "",
-          notes: "",
-        },
-        bookingStatus:{
-          phoneVerfication: false,
-          status: "Not confirmed"
-        }
-      };
+      // const homeform =  {
+      //   customerDetails: {
+      //     name: ``,
+      //     zipcode: `${this.state.zipcode}`,
+      //     phone: ``,
+      //     email: "",
+      //     service: `${this.state.service.value}`,
+      //   },
+      //   vetDetails:{
+      //     isVetAssigned: false,
+      //     vetName: "",
+      //   },
+      //   sessionDetails: {
+      //     Date: "",
+      //     session: "",
+      //     videoconsultation: "",
+      //   },
+      //   petDetails: {
+      //     petdate: "",
+      //     petname: "",
+      //     type: "",
+      //     gender: "",
+      //     notes: "",
+      //   },
+      //   bookingStatus:{
+      //     phoneVerfication: false,
+      //     status: "Not confirmed"
+      //   }
+      // };
         window.localStorage.setItem('dbDocID', res.id)
-        window.localStorage.setItem('homeform', JSON.stringify(homeform))
+        // window.localStorage.setItem('homeform', JSON.stringify(homeform))
       })
       .then(()=>{
         // this.props.history.push(`/${this.state.service.value}`)

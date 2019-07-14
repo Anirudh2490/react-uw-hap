@@ -88,8 +88,8 @@ class WizardBase extends React.Component {
     //     alert(rej.message);
     //   });
 
-    window.localStorage.removeItem("dbDocID");
-    this.props.history.push(`${this.props.match.url}${ROUTES.SUCCESS}`);
+    // window.localStorage.removeItem("dbDocID");
+    // this.props.history.push(`${this.props.match.url}${ROUTES.SUCCESS}`);
   };
 
   previous = (event, values) => {};
@@ -125,13 +125,13 @@ class WizardBase extends React.Component {
           <form>
             {activePage}
             <div className="buttons">
-              <button
+              {/* <button
                 type="submit"
                 onClick={e => this.handleSubmit(e, values)}
                 disabled={submitting}
               >
                 Submit
-              </button>
+              </button> */}
             </div>
           </form>
         )}

@@ -24,7 +24,7 @@ const required = value => (value ? undefined : "Required");
 
 const onSelectStyle = {
   backgroundColor: "#ff6767"
-}
+};
 
 const petAge = [
   {
@@ -43,16 +43,26 @@ const WizardFormBase = props => {
   const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
   const [petage, setPetAge] = useState("");
-  const [styleID, setStyleID] = useState("")
+  const [styleID, setStyleID] = useState("");
+  const [selectedPet, setPet] = useState("");
+  const [selectedPetID, setSelectedPetID] = useState("");
 
   function dateUpdate(event) {
     setDate(event);
   }
 
   function petAgeUpdate(event, id) {
-    // document.getElementById(id).style.backgroundColor = "#ff6767";
-    setStyleID(id)
     setPetAge(event);
+    setStyleID(id);
+  }
+
+  // function petAgeUpdate(event) {
+  //   console.log(event);
+  //   // setPet(event.target.value)
+  // }
+
+  function petSelectionChanged(event) {
+    setSelectedPetID(event);
   }
 
   function errorHandler() {
@@ -75,7 +85,12 @@ const WizardFormBase = props => {
         firebase={props.firebase}
         date={date}
         petage={petage}
+        selectedPet={selectedPet}
+        setPet={setPet}
         setPetAge={setPetAge}
+        setStyleID={setStyleID}
+        setSelectedPetID={setSelectedPetID}
+        selectedPetID={selectedPetID}
         emailPrompt={errorHandler}
         setdocID={setdocID}
         setDate={setDate}
@@ -96,6 +111,45 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
+          {selectedPet ? (
+            <div>
+              <label>Select from old Pets</label>
+              <select
+                onChange={event => {
+                  petSelectionChanged(event.target.value);
+                }}
+                style={{
+                  flex: "1",
+                  padding: "3px 5px",
+                  fontSize: "1em",
+                  marginLeft: "15px",
+                  border: "1px solid #ccc",
+                  borderRadius: "3px"
+                }}
+              >
+                <option value=""> Choose Old Pet</option>
+                {selectedPet &&
+                  selectedPet.map(doc => {
+                    if (doc.petDoc.petname !== "") {
+                      return (
+                        <option value={doc.petId}>{doc.petDoc.petname}</option>
+                      );
+                    }
+                  })}
+              </select>
+
+              <Error name="session" />
+              <button
+                onClick={e => {
+                  e.preventDefault();
+                  petSelectionChanged("reset");
+                }}
+              >
+                Reset and Add new Pet
+              </button>
+            </div>
+          ) : null}
+
           <div>
             <label>Name of Pet</label>
             <Field
@@ -114,10 +168,15 @@ const WizardFormBase = props => {
                 {petAge &&
                   petAge.map((item, id) => {
                     return (
-                      <li id={id} style={styleID === id ? onSelectStyle: null } onClick={() => petAgeUpdate(item.age, id)} className="options-list-item">
+                      <li
+                        id={id}
+                        style={petage === item.age ? onSelectStyle : null}
+                        onClick={() => petAgeUpdate(item.age, id)}
+                        className="options-list-item"
+                      >
                         <label>
                           <div className="item-container">
-                          <p>{item.age}</p>
+                            <p>{item.age}</p>
                           </div>
                         </label>
                       </li>
@@ -130,6 +189,7 @@ const WizardFormBase = props => {
           <div>
             <label>Type</label>
             <Field name="type" component="select">
+              <option>Choose Animal</option>
               <option value="dog">Dog</option>
               <option value="cat">🍄 Cat</option>
               <option value="rabbit">🧀 Rabbit</option>
@@ -139,6 +199,7 @@ const WizardFormBase = props => {
             <Error name="type" />
             <label>Gender</label>
             <Field name="gender" component="select">
+              <option>Choose time</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </Field>

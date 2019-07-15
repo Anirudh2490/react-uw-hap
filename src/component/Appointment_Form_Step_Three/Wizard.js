@@ -60,8 +60,8 @@ class WizardBase extends React.Component {
         phoneNumber: twilioVerification[1] + twilioVerification[2]
       })
     }).then(res => {
-      //res.status === 400
-      if (false) {
+      
+      if (res.status === 400) {
         alert("Invalid Code");
       } else {
         this.props.firebase

@@ -24,6 +24,8 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
+          console.log(doc.data());
+          
           this.setState(
             {
               values: {
@@ -77,8 +79,10 @@ class WizardBase extends React.Component {
         "sessionDetails.videoconsultation": `${values["videoconsultation"]}`
       })
       .then(res => {
+        console.log(this.state.values);
+        
         this.props.history.push(
-          `${this.props.match.url}/${values["zipcode"]}`,
+          `${this.props.match.url}/${this.state.values.zipcode}`,
           [{ prevData: this.state.values }]
         );
       })
@@ -137,7 +141,9 @@ class WizardBase extends React.Component {
                   values: {
                     email: doc.data().customerDetails.email,
                     name: doc.data().customerDetails.name,
-                    uid: doc.id
+                    zipcode: doc.data().customerDetails.zipcode,
+                    uid: doc.id,
+                    
                   }
                 });
                 this.props.openModal();

@@ -46,6 +46,8 @@ const WizardFormBase = props => {
   const [styleID, setStyleID] = useState("");
   const [selectedPet, setPet] = useState("");
   const [selectedPetID, setSelectedPetID] = useState("");
+  const [addNewPetEvent, triggerAddNewPetEvent] = useState("");
+
 
   function dateUpdate(event) {
     setDate(event);
@@ -56,12 +58,18 @@ const WizardFormBase = props => {
     setStyleID(id);
   }
 
+  function addNewPet(event) {
+    triggerAddNewPetEvent(event)
+  }
+
   // function petAgeUpdate(event) {
   //   console.log(event);
   //   // setPet(event.target.value)
   // }
 
   function petSelectionChanged(event) {
+    console.log(event);
+
     setSelectedPetID(event);
   }
 
@@ -87,8 +95,10 @@ const WizardFormBase = props => {
         petage={petage}
         selectedPet={selectedPet}
         setPet={setPet}
+        addNewPetEvent={addNewPetEvent}
         setPetAge={setPetAge}
         setStyleID={setStyleID}
+        triggerAddNewPetEvent={triggerAddNewPetEvent}
         setSelectedPetID={setSelectedPetID}
         selectedPetID={selectedPetID}
         emailPrompt={errorHandler}
@@ -96,6 +106,48 @@ const WizardFormBase = props => {
         setDate={setDate}
         // onSubmit={onSubmit}
       >
+        <Wizard.Page>
+          {selectedPet ? (
+            <div>
+              <div>
+                <label>Select from old Pets</label>
+              </div>
+              <ul>
+                {selectedPet &&
+                  selectedPet.map(doc => {
+                    if (doc.petDoc.petname !== "") {
+                      return (
+                        <li
+                          id={doc.petId}
+                          style={
+                            selectedPetID === doc.petId ? onSelectStyle : null
+                          }
+                          onClick={() => {
+                            petSelectionChanged(doc.petId);
+                          }}
+                          className="options-list-item"
+                        >
+                          <label >
+                            <div className="item-container">
+                              <p>{doc.petDoc.petname}</p>
+                            </div>
+                          </label>
+                        </li>
+                      );
+                    }
+                  })}
+                <li className="options-list-item" onClick={()=>addNewPet(true)}>
+                  <label>
+                    <div className="item-container">
+                      <p>Add a new Pet</p>
+                    </div>
+                  </label>
+                </li>
+              </ul>
+              <Error name="session" />
+            </div>
+          ) : null}
+        </Wizard.Page>
         <Wizard.Page
           validate={values => {
             const errors = {};
@@ -111,52 +163,12 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
-          {selectedPet ? (
-            <div>
-              <label>Select from old Pets</label>
-              <select
-                onChange={event => {
-                  petSelectionChanged(event.target.value);
-                }}
-                style={{
-                  flex: "1",
-                  padding: "3px 5px",
-                  fontSize: "1em",
-                  marginLeft: "15px",
-                  border: "1px solid #ccc",
-                  borderRadius: "3px"
-                }}
-              >
-                <option value=""> Choose Old Pet</option>
-                {selectedPet &&
-                  selectedPet.map(doc => {
-                    if (doc.petDoc.petname !== "") {
-                      return (
-                        <option value={doc.petId}>{doc.petDoc.petname}</option>
-                      );
-                    }
-                  })}
-              </select>
-
-              <Error name="session" />
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  petSelectionChanged("reset");
-                }}
-              >
-                Reset and Add new Pet
-              </button>
-            </div>
-          ) : null}
-
           <div>
             <label>Name of Pet</label>
             <Field
               name="petname"
               component="input"
               type="text"
-              date={date}
               placeholder="Tom"
               validate={required}
             />

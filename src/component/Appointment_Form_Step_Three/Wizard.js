@@ -25,13 +25,23 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
+          console.log(doc.data());
+
           this.setState({
             values: {
-              email: doc.data().customerDetails.email,
+              petname: doc.data().petDetails.petname,
+              type: doc.data().petDetails.type,
+              gender: doc.data().petDetails.gender,
+              petdate: doc.data().petDetails.petdate,
+              notes: doc.data().petDetails.notes,
               phone: doc.data().customerDetails.phone,
               name: doc.data().customerDetails.name,
-              zipcode: doc.data().customerDetails.zipcode
-              // videoconsultation: doc.data().sessionDetails.videoconsultation
+              email: doc.data().customerDetails.email,
+              zipcode: doc.data().customerDetails.zipcode,
+              service: doc.data().customerDetails.service,
+              isVetAssigned: doc.data().vetDetails.isVetAssigned,
+              Date: doc.data().sessionDetails.Date,
+              session: doc.data().sessionDetails.session
             }
           });
         })
@@ -60,7 +70,6 @@ class WizardBase extends React.Component {
         phoneNumber: twilioVerification[1] + twilioVerification[2]
       })
     }).then(res => {
-      
       if (res.status === 400) {
         alert("Invalid Code");
       } else {
@@ -91,9 +100,56 @@ class WizardBase extends React.Component {
               .then(() => {
                 // window.localStorage.removeItem("dbDocID");
                 // window.localStorage.removeItem("newUser");
-                this.props.history.push(
-                  `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
-                );
+                fetch("https://hug-a-pet.herokuapp.com/admin/admin-verification-mail", {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    emailReceiver: values.email,
+                    emailSubject:
+                      "Hi " +
+                      values.name +
+                      " Thankyou for registering at Hug a Pet!",
+                    emailContent: {
+                      customerDetails: {
+                        name: this.state.values.name,
+                        zipcode: this.state.values.zipcode,
+                        phone: this.state.values.phone,
+                        email: this.state.values.email,
+                        service: this.state.values.service
+                      },
+                      vetDetails: {
+                        isVetAssigned: false,
+                        vetName: ""
+                      },
+                      sessionDetails: {
+                        Date: this.state.values.Date,
+                        session: this.state.values.session
+                      },
+                      petDetails: {
+                        petdate: values.petdate,
+                        petname: values.petname,
+                        type: values.type,
+                        gender: values.gender,
+                        notes: values.notes
+                      },
+                      bookingStatus: {
+                        phoneVerfication: false,
+                        status: "Not confirmed"
+                      }
+                    }
+                  })
+                }).then(res => {
+                  this.props.history.push(
+                    `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
+                  );
+                });
               });
           });
         // });
@@ -121,6 +177,8 @@ class WizardBase extends React.Component {
   };
 
   render() {
+    console.log(this.state.values);
+
     const { children } = this.props;
     const { page, values } = this.state;
     const activePage = React.Children.toArray(children)[page];

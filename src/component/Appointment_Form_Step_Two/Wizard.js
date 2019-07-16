@@ -111,7 +111,12 @@ class WizardBase extends React.Component {
                 notes: doc.data().petDetails.notes,
                 phone: doc.data().customerDetails.phone,
                 name: doc.data().customerDetails.name,
-                email: doc.data().customerDetails.email
+                email: doc.data().customerDetails.email,
+                zipcode: doc.data().customerDetails.zipcode,
+                service: doc.data().customerDetails.service,
+                isVetAssigned: doc.data().vetDetails.isVetAssigned,
+                Date: doc.data().sessionDetails.Date,
+                session: doc.data().session.Date,
               }
             },
             () => {

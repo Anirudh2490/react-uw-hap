@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import {SignUpForm} from '../Sign_Up_Form';
+import VetsSection from "../../common/src/containers/Hosting/Domain";
+import VetsSectionData from '../Landing_Page'
 
 
 
@@ -70,12 +72,11 @@ class VetSignUpFormBase extends Component {
 
 
   render() {
-   
-
-   
-
     return (
-     <SignUpForm formInputs={this.state} onChange={this.onChange} onSubmit={this.onSubmit} />
+      <div>
+        <VetsSection data={VetsSectionData} />
+        <SignUpForm formInputs={this.state} onChange={this.onChange} onSubmit={this.onSubmit} />
+      </div>
      );
   }
 }

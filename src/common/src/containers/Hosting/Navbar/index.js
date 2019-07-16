@@ -37,7 +37,7 @@ const NavbarBase = ({
       <Container>
         <Box {...row}>
           <Logo
-            href="#"
+            href="/"
             logoSrc={LogoImage}
             title="Agency"
             logoStyle={logoStyle}
@@ -113,7 +113,7 @@ NavbarBase.defaultProps = {
     borderRadius: "4px",
     pl: "15px",
     pr: "15px",
-    colors: "primaryWithBg",
+    colors: "#34888c",
     minHeight: "auto",
     height: `${1}`
   },

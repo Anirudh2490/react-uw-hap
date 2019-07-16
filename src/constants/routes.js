@@ -15,3 +15,10 @@ export const FORGET_PASSWORD = '/forgot-pw';
 export const VIDEO_COMPONENT = '/video-session';
 export const BOOKING_VERIFICATION = '/verify-booking';
 
+export const BLOG = '/blog';
+export const ABOUT = '/about';
+export const FAQ = '/faq';
+export const FORVETS = '/for-vets';
+export const CONTACT = '/contact';
+export const SERVICES = '/services';
+

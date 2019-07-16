@@ -68,8 +68,8 @@ class WizardBase extends React.Component {
                           petList
                         },
                         () => {
-                          console.log(petList);
-                          if (petList[0].petDoc.petname === "") {
+                          // console.log(petList);
+                          if (petList.length === 1) {
                             this.setState(state => ({
                               page: Math.min(
                                 state.page + 1,
@@ -116,7 +116,7 @@ class WizardBase extends React.Component {
                 service: doc.data().customerDetails.service,
                 isVetAssigned: doc.data().vetDetails.isVetAssigned,
                 Date: doc.data().sessionDetails.Date,
-                session: doc.data().session.Date,
+                session: doc.data().sessionDetails.Date,
               }
             },
             () => {

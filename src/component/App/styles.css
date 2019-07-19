@@ -1,0 +1,277 @@
+
+.react-tel-input .form-control{
+    width: 100% !important;
+    height: 60px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    margin-top: 5px !important;
+    color: #000000 !important;
+}
+
+/* .cCecMw form > div > div {
+    margin: 20px !important;
+} */
+
+.react-tel-input{
+    padding-top: 6px;
+    margin: auto !important;
+}
+
+.drcvxM form {
+    text-align: center;
+    max-width: 51% !important;
+    background: #588285;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+.jKjcUs form {
+    text-align: center;
+    max-width: 51% !important;
+    background: #588285;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+.idJHIA {
+    width: 97% !important;
+}
+.cCecMw form {
+    text-align: center;
+    max-width: 51% !important;
+    background: #588285;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+.jKjcUs button[type='submit'] {
+    white-space: nowrap;
+    display: inline-block;
+    height: 53px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-image: none !important;
+    padding: 5px 15px;
+    background-color: #ff6767 !important;
+    font-size: 16px;
+    color: white !important;
+    /* background-image: linear-gradient(#4f93ce,#285f8f); */
+    border: none !important;
+}
+
+.drcvxM button[type='submit'] {
+    white-space: nowrap;
+    display: inline-block;
+    height: 53px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-image: none !important;
+    padding: 5px 15px;
+    background-color: #ff6767 !important;
+    font-size: 16px;
+    color: white !important;
+    /* background-image: linear-gradient(#4f93ce,#285f8f); */
+    border: none !important;
+}
+
+
+.cCecMw button[type='submit'] {
+    white-space: nowrap;
+    display: inline-block;
+    height: 53px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-image: none !important;
+    padding: 5px 15px;
+    background-color: #ff6767 !important;
+    font-size: 16px;
+    color: white !important;
+    /* background-image: linear-gradient(#4f93ce,#285f8f); */
+    border: none !important;
+}
+
+.wizard-form .buttons button[type='button'] {
+    white-space: nowrap;
+    display: inline-block;
+    height: 53px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-image: none !important;
+    padding: 5px 15px;
+    background-color: #ff6767 !important;
+    font-size: 16px;
+    color: white !important;
+    /* background-image: linear-gradient(#4f93ce,#285f8f); */
+    border: none !important;
+}
+
+.jKjcUs form > div > input, .jKjcUs form > div > select, .jKjcUs form > div > textarea{
+    width: 100%;
+    height: 60px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    color: #000000 !important;
+    font-family: acumin-pro, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+
+
+.drcvxM form > div > input, .drcvxM form > div > select, .drcvxM form > div > textarea{
+    width: 100%;
+    height: 60px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    color: #000000 !important;
+    font-family: acumin-pro, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.cCecMw form > div > input, .cCecMw form > div > select, .cCecMw form > div > textarea{
+    width: 100%;
+    height: 60px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    color: #000000 !important;
+    font-family: acumin-pro, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.jKjcUs form > div > label {
+    color: #333 !important;
+    vertical-align: middle !important;
+    width: 110px !important; 
+    margin: 20px -1px !important;
+    color: white !important;
+    min-width: 60px !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    line-height: 32px !important;
+} 
+
+.drcvxM form > div > label {
+    color: #333 !important;
+    vertical-align: middle !important;
+    width: 110px !important; 
+    margin: 20px -1px !important;
+    color: white !important;
+    min-width: 60px !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    line-height: 32px !important;
+} 
+.cCecMw form > div > label {
+    color: #333 !important;
+    vertical-align: middle !important;
+    width: 110px !important; 
+    margin: 20px -1px !important;
+    color: white !important;
+    min-width: 60px !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    line-height: 32px !important;
+} 
+
+
+.wizard-form input.date-picker {
+    height: 60px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    padding-left: 20px !important;
+    width: 100%;
+    padding-right: 20px !important;
+    color: #000000 !important;
+    font-family: acumin-pro, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.wizard-form .buttons button{
+    width: 130px;
+    display: inline-block;
+    background-color: rgb(204, 204, 204);
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.react-tel-input input[type=text], .react-tel-input input[type=tel] {
+    position: relative;
+    font-size: 14px;
+    letter-spacing: .01rem;
+    z-index: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 48px;
+    margin-left: 0;
+    background: #e5e5e5 !important;
+    background: #FFFFFF;
+    border: 1px solid #CACACA;
+    border-radius: 5px;
+    line-height: 25px;
+    height: 35px;
+    width: 300px;
+    outline: none;
+}
+
+.react-tel-input .flag-dropdown {
+    position: absolute;
+    top: 5px !important;
+    bottom: 3px !important;
+    padding: 0;
+    background-color: #eaeaea;
+    border: 1px solid #cacaca;
+    border-radius: 3px 0 0 3px;
+}
+
+.react-datepicker-wrapper {
+    display: inline-block;
+    margin: 21px;
+}
+
+/* drcvxM  */
+@media (max-width: 767px){
+    .cCecMw form {
+        max-width: 95% !important;
+    }
+
+    .drcvxM form {
+        max-width: 95% !important;
+    }
+
+    .jKjcUs form {
+        max-width: 95% !important;
+    }
+
+    .modal-name div:nth-child(1){
+        max-width: 95% !important;
+        margin-left: 8px
+    }
+}

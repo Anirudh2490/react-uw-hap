@@ -44,7 +44,7 @@ class WizardBase extends React.Component {
               },
               () => {
                 const { petList } = this.state;
-
+                this.props.setClientName(doc.data().customerDetails.name)
                 //search phone number in database
                 this.props.firebase.fsdb
                   .collection("form-inquiry")
@@ -386,7 +386,7 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form onSubmit={e => this.handleSubmit(e, values)}>
+          <form   className="wizard-form"  onSubmit={e => this.handleSubmit(e, values)}>
             {activePage}
             <div className="buttons">
               {page > 0 && (
@@ -397,7 +397,7 @@ class WizardBase extends React.Component {
                   « Previous
                 </button>
               )}
-              {!isLastPage && <button type="submit">Next »</button>}
+              {/* {!isLastPage && <button type="submit">Next »</button>} */}
               {isLastPage && (
                 <button type="submit" disabled={submitting}>
                   Submit »

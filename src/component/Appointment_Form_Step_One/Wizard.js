@@ -39,6 +39,7 @@ class WizardBase extends React.Component {
               }
             },
             () => {
+              this.props.setService(doc.data().customerDetails.service)
               if (doc.data().sessionDetails.Date) {
                 this.props.setDate(doc.data().sessionDetails.Date);
                 this.props.setNum(doc.data().customerDetails.phone);
@@ -204,7 +205,7 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form onSubmit={handleSubmit}>
+          <form className="wizard-form" onSubmit={handleSubmit}>
             {activePage}
             <div className="buttons">
               {page > 0 && (

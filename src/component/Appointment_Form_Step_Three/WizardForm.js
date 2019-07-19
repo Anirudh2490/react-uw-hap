@@ -30,6 +30,7 @@ const WizardFormBase = props => {
     <Styles>
       <h1>We are assigning a vet to your case</h1>
       <h2>We have sent an OTP to your phone number</h2>
+      <h2>Step 4 of 4</h2>
       <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}

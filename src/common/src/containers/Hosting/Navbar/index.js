@@ -10,16 +10,19 @@ import HamburgMenu from "../../../components/HamburgMenu";
 import Container from "../../../components/UI/Container";
 import { DrawerContext } from "../../../contexts/DrawerContext";
 import "./index.css";
+import { AuthUserContext } from "../../../../../component/Session/";
 import { MENU_ITEMS } from "../../../data/Hosting/data";
 import ScrollSpyMenu from "../../../components/ScrollSpyMenu";
 
 import LogoImage from "../../../assets/image/hosting/logo.png";
+import { withFirebase } from "../../../../../component/Firebase";
 
 const NavbarBase = ({
   navbarStyle,
   logoStyle,
   button,
   row,
+  firebase,
   menuWrapper,
   alert
 }) => {
@@ -48,11 +51,25 @@ const NavbarBase = ({
               menuItems={MENU_ITEMS}
               offset={-70}
             />
-            <Link href="tel:030 233 277 42">
-              <a href="tel:03023327742" className="navbar_drawer_button">
-                <Button {...button} title="Jetzt anrufen" />
-              </a>
-            </Link>
+            <AuthUserContext.Consumer>
+              {authUser =>
+                authUser ? (
+                    <a
+                      onClick={firebase.doSignOut}
+                      className="navbar_drawer_button"
+                    >
+                      <Button {...button} title="Sign Out" />
+                    </a>
+                ) : (
+                  <Link href="tel:030 233 277 42">
+                    <a href="tel:03023327742" className="navbar_drawer_button">
+                      <Button {...button} title="Jetzt anrufen" />
+                    </a>
+                  </Link>
+                )
+              }
+            </AuthUserContext.Consumer>
+
             <Drawer
               width="420px"
               placement="right"
@@ -79,7 +96,7 @@ const NavbarBase = ({
   );
 };
 
-const Navbar = NavbarBase;
+const Navbar = withFirebase(NavbarBase);
 
 NavbarBase.propTypes = {
   navbarStyle: PropTypes.object,

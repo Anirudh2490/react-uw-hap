@@ -4,7 +4,7 @@
 }
 .react-tel-input input[type=text], .react-tel-input input[type=tel]{
     border: none !important;
-    margin-top: 17px !important;
+    /* margin-top: 17px !important; */
 }
 
 .child-wrapper {

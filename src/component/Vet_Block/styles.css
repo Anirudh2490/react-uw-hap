@@ -1,0 +1,55 @@
+.div-block-33 {
+    display: -webkit-box;
+    width: 53% !important;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    margin: auto !important;
+    display: flex;
+    margin-bottom: 40px;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.heading-5.heading-vorteile.arzt-name {
+    margin-top: -10px;
+    padding-right: 15px;
+    color: white;
+    padding-left: 15px;
+    font-size: 16px !important;
+    text-align: center;
+}
+
+.div-block-12.vorteile-umfang-block.arzt {
+    height: 205px;
+    box-shadow: none;
+    background: #34888c !important;
+}
+
+
+@media (max-width: 479px){
+    .div-block-33 {
+        display: block !important;
+        width: 100% !important;
+        display: -ms-flexbox;
+        margin: 0 !important;
+    }
+    .aerzte-karte {
+        display: inline-block;
+        width: 87%;
+        margin: 20px 0;
+    }
+    .div-block-10.vorteile.arzt.sgbshtbg {
+    height: 148px !important;
+    }
+    .div-block-10.vorteile.arzt.werf {
+        height: 150px;
+    }
+    .div-block-10.vorteile.arzt.slkejhgr {
+        height: 151px;
+    }
+    .div-block-10.vorteile.arzt.wt4gwrtgwrb {
+        height: 150px;
+    }
+}

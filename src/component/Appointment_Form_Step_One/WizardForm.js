@@ -10,10 +10,9 @@ import moment from "moment";
 
 import ReactPhoneInput from "react-phone-input-2";
 import "react-phone-input-2/dist/style.css";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import TestimonialSection from "../../common/src/containers/Hosting/Testimonials";
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 // const ButtonOptions = ["Untersucheng", "Kastration", "Impung", "Der Letze Weg", "Andere"]
 
@@ -46,6 +45,7 @@ const WizardFormBase = props => {
   const [date, setDate] = useState(new Date());
   const [number, setNumber] = useState("");
   const [visible, setVisibilty] = useState("");
+  const [service, setService] = useState("");
 
 
   function dateUpdate(event) {
@@ -57,33 +57,24 @@ const WizardFormBase = props => {
   }
 
   function openModal() {
-    setVisibilty(true)
+    setVisibilty(true);
   }
 
   function closeModal() {
-    setVisibilty(false)
+    setVisibilty(false);
   }
 
   return (
-    <Styles>
-      <h1>Make an appointment with the Vet</h1>
-      <h2 />
-      <a href="#">Free video consultation on confirmed appointment</a>
-      <p>We can honor the appointment upto one hour after inquiry time.</p>
-      <Wizard
-        // initialValues={{ employed: true, stooge: 'larry' }}
-        // onSubmit={onSubmit}
-        firebase={props.firebase}
-        setDate={setDate}
-        openModal={openModal}
-        // emailPrompt={errorHandler}
-        number={number}
-        modalStatus={visible}
-        date={date}
-        setNum={setNumber}
-        // setdocID={setdocID}
-      >
-        <Wizard.Page>
+    <div>
+      <Styles>
+        <div style={{ textAlign: "center" }}>
+          <h1>Great, you are looking for an appointment for {service}</h1>
+          
+          <a href="#">Free video consultation on confirmed appointment</a>
+          <p>We can honor the appointment upto one hour after inquiry time.</p>
+        </div>
+        <h2>Step 2 of 4</h2>
+        <div className="modal-name">
           <Modal
             visible={visible}
             width="400"
@@ -91,61 +82,78 @@ const WizardFormBase = props => {
             effect="fadeInUp"
             onClickAway={() => closeModal()}
           >
-            <div>
+            <div style={{ textAlign: "center" }}>
               <h1>You have already registered at Hug a Pet</h1>
-              <p>Click Here to <Link to={ROUTES.SIGNIN}>Sign In</Link></p>
+              <p>
+                Click Here to <Link to={ROUTES.SIGNIN}>Sign In</Link>
+              </p>
               <p>Or close to continue with booking an appointment</p>
-
-              <a href="javascript:void(0);" onClick={() => closeModal()}>
-                Close
-              </a>
+              <button onClick={() => closeModal()} type="submit">
+                Close »
+              </button> 
             </div>
           </Modal>
-          <h4>What is your phone number</h4>
-          <label>We will need send an OTP to verify you</label>
-          <div>
-            <ReactPhoneInput
-              defaultCountry="de"
-              value={number}
-              inputExtraProps={{
-                name: "phone",
-                required: true,
-                autoFocus: true
-              }}
-              onChange={updateNumber}
-            />
-          </div>
-        </Wizard.Page>
-        <Wizard.Page>
-          <div>
-            <label>Email</label>
-            <Field
-              name="email"
-              component="input"
-              type="email"
-              placeholder="Email"
-              validate={required}
-            />
-            <Error name="email" />
-          </div>
-          <div>
-            <label>Name</label>
-            <Field
-              name="name"
-              component="input"
-              type="text"
-              placeholder="Name"
-              validate={required}
-            />
-            <Error name="zipcode" />
-          </div>
-          {/* <div>
+        </div>
+        <Wizard
+          // initialValues={{ employed: true, stooge: 'larry' }}
+          // onSubmit={onSubmit}
+          firebase={props.firebase}
+          setDate={setDate}
+          openModal={openModal}
+          setService={setService}
+          // emailPrompt={errorHandler}
+          number={number}
+          modalStatus={visible}
+          date={date}
+          setNum={setNumber}
+          // setdocID={setdocID}
+        >
+          <Wizard.Page>
+            <h4>What is your phone number</h4>
+            <label>We will need send an OTP to verify you</label>
+            <div style={{ margin: "25px 10px" }}>
+              <ReactPhoneInput
+                defaultCountry="de"
+                value={number}
+                inputExtraProps={{
+                  name: "phone",
+                  required: true,
+                  autoFocus: true
+                }}
+                onChange={updateNumber}
+              />
+            </div>
+          </Wizard.Page>
+          <Wizard.Page>
+            <div>
+              <label>Email</label>
+              <Field
+                name="email"
+                component="input"
+                type="email"
+                placeholder="Email"
+                validate={required}
+              />
+              <Error name="email" />
+            </div>
+            <div>
+              <label>Name</label>
+              <Field
+                name="name"
+                component="input"
+                type="text"
+                placeholder="Name"
+                validate={required}
+              />
+              <Error name="zipcode" />
+            </div>
+            {/* <div>
             <label>Video consultation?</label>
             <Field name="videoconsultation" component="input" type="checkbox" />
             <div align="left">Yes</div>
           </div> */}
 
-          {/* <div>
+            {/* <div>
             <label>Phone Number</label>
             <ReactPhoneInput
               defaultCountry="de"
@@ -154,27 +162,32 @@ const WizardFormBase = props => {
             />
           </div> */}
 
-          <div>
-            <label>Date of booking</label>
-            <DatePicker
-              onChange={e => dateUpdate(e)}
-              value={moment(date).format("DD-MM-YYYY")}
-            />
-            <Error name="email" />
-          </div>
-          <div>
-            <label>Session</label>
-            <Field name="session" component="select">
-              <option>Choose time</option>
-              <option value="Morning">Morning</option>
-              <option value="Afternoon">Afternoon</option>
-              <option value="Evening">Evening</option>
-            </Field>
-            <Error name="session" />
-          </div>
-        </Wizard.Page>
-      </Wizard>
-    </Styles>
+            <div> 
+              <label>Date</label>
+              <DatePicker
+                minDate={new Date()}
+                className="date-picker"
+                onChange={e => dateUpdate(e)}
+                validate={required}
+                value={moment(date).format("DD-MM-YYYY")}
+              />
+              <Error name="email" />
+            </div>
+            <div>
+              <label>Session</label>
+              <Field name="session" validate={required} component="select">
+                <option>Choose time</option>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+              </Field>
+              <Error name="session" />
+            </div>
+          </Wizard.Page>
+        </Wizard>
+      </Styles>
+      <TestimonialSection />
+    </div>
   );
 };
 const WizardForm = withFirebase(WizardFormBase);

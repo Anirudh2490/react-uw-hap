@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import Scrollspy from 'react-scrollspy';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
-import Link from 'next/link';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import Scrollspy from "react-scrollspy";
+import AnchorLink from "react-anchor-link-smooth-scroll";
+import Link from "next/link";
 
-import { DrawerContext } from '../../contexts/DrawerContext';
+import { DrawerContext } from "../../contexts/DrawerContext";
 
 const ScrollSpyMenu = ({ className, menuItems, drawerClose, ...props }) => {
   const { dispatch } = useContext(DrawerContext);
@@ -17,7 +17,7 @@ const ScrollSpyMenu = ({ className, menuItems, drawerClose, ...props }) => {
   });
 
   // Add all classs to an array
-  const addAllClasses = ['scrollspy__menu'];
+  const addAllClasses = ["scrollspy__menu"];
 
   // className prop checking
   if (className) {
@@ -27,14 +27,14 @@ const ScrollSpyMenu = ({ className, menuItems, drawerClose, ...props }) => {
   // Close drawer when click on menu item
   const toggleDrawer = () => {
     dispatch({
-      type: 'TOGGLE',
+      type: "TOGGLE"
     });
   };
 
   return (
     <Scrollspy
       items={scrollItems}
-      className={addAllClasses.join(' ')}
+      className={addAllClasses.join(" ")}
       drawerClose={drawerClose}
       {...props}
     >
@@ -63,6 +63,11 @@ const ScrollSpyMenu = ({ className, menuItems, drawerClose, ...props }) => {
           )}
         </li>
       ))}
+      <li key="our-blog">
+        <Link href="http://hugapet-de.firebaseapp.com/blog">
+          <a>Our Blog</a>
+        </Link>
+      </li>
     </Scrollspy>
   );
 };
@@ -97,12 +102,12 @@ ScrollSpyMenu.propTypes = {
   /**
    * Function to be executed when the active item has been updated [optional].
    */
-  onUpdate: PropTypes.func,
+  onUpdate: PropTypes.func
 };
 
 ScrollSpyMenu.defaultProps = {
-  componentTag: 'ul',
-  currentClassName: 'is-current',
+  componentTag: "ul",
+  currentClassName: "is-current"
 };
 
 export default ScrollSpyMenu;

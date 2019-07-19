@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withAuthentication } from "../Session";
 import { withAuthenticationCustomer } from "../Customer_Session";
-
+import './styles.css'
 import * as ROUTE from "../../constants/routes";
 import Footer from "../../common/src/containers/Hosting/Footer";
 import { DrawerProvider } from "../../common/src/contexts/DrawerContext";

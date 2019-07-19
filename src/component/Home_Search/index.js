@@ -18,7 +18,7 @@ import { confirmAlert } from "react-confirm-alert"
 import { withRouter } from "react-router-dom";
 import "react-confirm-alert/src/react-confirm-alert.css"
 import ReactPhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/dist/style.css'
+// import 'react-phone-input-2/dist/style.css'
 import './styles.css'
 
 const INITIAL_STATE = {

@@ -426,11 +426,11 @@ const MENU_ITEMS = [
     path: "#feature_section",
     offset: "40"
   },
-  {
-    label: "Kundenstimmen ",
-    path: "#testimonial_section",
-    offset: "70"
-  },
+  // {
+  //   label: "Kundenstimmen ",
+  //   path: "#testimonial_section",
+  //   offset: "70"
+  // },
   {
     label: "Häufig gestellte Fragen",
     path: "#faq_section",
@@ -441,11 +441,11 @@ const MENU_ITEMS = [
     path: "#",
     offset: "70"
   },
-  {
-    label: "Our Blog",
-    path: "#blog_section",
-    offset: "70"
-  },
+  // {
+  //   label: "Our Blog",
+  //   path: "#blog_section",
+  //   offset: "70"
+  // },
   {
     label: "Kontakt",
     path: "#contact_section",
@@ -474,78 +474,94 @@ const DOMAIN_PRICE = [
 
 const FOOTER_WIDGET = [
   {
-    title: "About Us",
+    title: "Unternehmen",
     menuItems: [
       {
         url: "#",
-        text: "Customer Support"
+        text: "Das sind wir"
       },
       {
         url: "#",
-        text: "About Us"
+        text: "Unsere Partner"
       },
       {
         url: "#",
-        text: "Copyright"
+        text: "Presse"
+      },
+      {
+        url: "#",
+        text: "Blog"
+      },
+      {
+        url: "#",
+        text: "Jobs"
+      },
+      {
+        url: "#",
+        text: "Kontakt"
       }
     ]
   },
   {
-    title: "Our Information",
+    title: "Informationen",
     menuItems: [
       {
         url: "#",
-        text: "Privacy Policy"
+        text: "Nutzungsbedingungen"
       },
       {
         url: "#",
-        text: "Terms & Conditions"
+        text: "Cookie-Richtlinien"
       },
       {
         url: "#",
-        text: "Site Map"
+        text: "Datenschutz"
       },
       {
         url: "#",
-        text: "Operational Hours"
+        text: "Impressum"
       }
     ]
   },
   {
-    title: "My Account",
+    title: "Zusammenarbeit",
     menuItems: [
       {
         url: "#",
-        text: "Press inquiries"
+        text: "Als Tierarzt registrieren"
       },
       {
         url: "#",
-        text: "Social media directories"
+        text: "Als Praxis registrieren"
       },
       {
         url: "#",
-        text: "Images & B-roll"
+        text: "Andere Haustierdienstleistung registrieren"
       }
     ]
   },
   {
-    title: "Policy",
+    title: "Verfügbarkeit",
     menuItems: [
       {
         url: "#",
-        text: "Application security"
+        text: "Tierarzt Hausbesuche Berlin"
       },
       {
         url: "#",
-        text: "Software principles"
+        text: "Tierarzt Hausbesuche Hamburg"
       },
       {
         url: "#",
-        text: "Unwanted software policy"
+        text: "Tierarzt Hausbesuche Düsseldorf"
       },
       {
         url: "#",
-        text: "Responsible supply chain"
+        text: "Tierarzt Hausbesuche Münche"
+      },
+      {
+        url: "#",
+        text: "Tierarzt Hausbesuche Frankfurt"
       }
     ]
   }

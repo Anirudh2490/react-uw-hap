@@ -177,8 +177,6 @@ class WizardBase extends React.Component {
   };
 
   render() {
-    console.log(this.state.values);
-
     const { children } = this.props;
     const { page, values } = this.state;
     const activePage = React.Children.toArray(children)[page];
@@ -189,7 +187,7 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form>
+          <form className="wizard-form">
             {activePage}
             <div className="buttons">
               <button

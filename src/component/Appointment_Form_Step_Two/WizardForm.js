@@ -9,6 +9,7 @@ import * as ROUTES from "../../constants/routes";
 // import moment from "moment";
 
 import "./styles.css";
+import { VetBlock } from "../Vet_Block";
 
 const Error = ({ name }) => (
   <Field
@@ -47,7 +48,7 @@ const WizardFormBase = props => {
   const [selectedPet, setPet] = useState("");
   const [selectedPetID, setSelectedPetID] = useState("");
   const [addNewPetEvent, triggerAddNewPetEvent] = useState("");
-
+  const [clientName, setClientName] = useState("");
 
   function dateUpdate(event) {
     setDate(event);
@@ -59,7 +60,7 @@ const WizardFormBase = props => {
   }
 
   function addNewPet(event) {
-    triggerAddNewPetEvent(event)
+    triggerAddNewPetEvent(event);
   }
 
   // function petAgeUpdate(event) {
@@ -82,14 +83,12 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
-      <h1>Make an appointment with the Vet</h1>
-      <h2 />
-      <a href="#">Free video consultation on confirmed appointment</a>
-      <p style={{ textAlign: "center" }}>
-        We can honor the appointment upto one hour after inquiry time.
-      </p>
+      <div>
+        <h1>We are pleased to meet you {clientName}</h1>
+      </div>
+      <h2>Step 3 of 4</h2>
       <Wizard
-        initialValues={{ employed: true, stooge: "larry", date: new Date() }}
+        // initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
         petage={petage}
@@ -98,6 +97,7 @@ const WizardFormBase = props => {
         addNewPetEvent={addNewPetEvent}
         setPetAge={setPetAge}
         setStyleID={setStyleID}
+        setClientName={setClientName}
         triggerAddNewPetEvent={triggerAddNewPetEvent}
         setSelectedPetID={setSelectedPetID}
         selectedPetID={selectedPetID}
@@ -107,11 +107,9 @@ const WizardFormBase = props => {
         // onSubmit={onSubmit}
       >
         <Wizard.Page>
+          <h1 style={{ color: "white" }}>Select from old Pets</h1>
           {selectedPet ? (
             <div>
-              <div>
-                <label>Select from old Pets</label>
-              </div>
               <ul>
                 {selectedPet &&
                   selectedPet.map(doc => {
@@ -127,7 +125,7 @@ const WizardFormBase = props => {
                           }}
                           className="options-list-item"
                         >
-                          <label >
+                          <label>
                             <div className="item-container">
                               <p>{doc.petDoc.petname}</p>
                             </div>
@@ -136,7 +134,10 @@ const WizardFormBase = props => {
                       );
                     }
                   })}
-                <li className="options-list-item" onClick={()=>addNewPet(true)}>
+                <li
+                  className="options-list-item"
+                  onClick={() => addNewPet(true)}
+                >
                   <label>
                     <div className="item-container">
                       <p>Add a new Pet</p>
@@ -209,6 +210,8 @@ const WizardFormBase = props => {
               <option value="other">🍍 Other</option>
             </Field>
             <Error name="type" />
+          </div>
+          <div>
             <label>Gender</label>
             <Field name="gender" component="select">
               <option>Choose time</option>
@@ -217,10 +220,10 @@ const WizardFormBase = props => {
             </Field>
             <Error name="gender" />
           </div>
+          <label>
+            Tell us more about your pet. Her breed, health issues etc.
+          </label>
           <div>
-            <label>
-              Tell us more about your pet. Her breed, health issues etc.
-            </label>
             <Field
               name="notes"
               type="text"
@@ -230,6 +233,7 @@ const WizardFormBase = props => {
           </div>
         </Wizard.Page>
       </Wizard>
+      <VetBlock />
     </Styles>
   );
 };

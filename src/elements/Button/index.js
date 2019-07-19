@@ -98,16 +98,16 @@ Button.propTypes = {
 
   /** primary || secondary || warning || error  change text and border color.
    *  And primaryWithBg || secondaryWithBg || warningWithBg || errorWithBg change text, border and background color */
-  colors: PropTypes.oneOf([
-    'primary',
-    'secondary',
-    'warning',
-    'error',
-    'primaryWithBg',
-    'secondaryWithBg',
-    'warningWithBg',
-    'errorWithBg'
-  ]),
+  // colors: PropTypes.oneOf([
+  //   'primary',
+  //   'secondary',
+  //   'warning',
+  //   'error',
+  //   'primaryWithBg',
+  //   'secondaryWithBg',
+  //   'warningWithBg',
+  //   'errorWithBg'
+  // ]),
 
   /**
    * Gets called when the user clicks on the button

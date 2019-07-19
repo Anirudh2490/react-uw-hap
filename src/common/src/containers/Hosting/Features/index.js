@@ -14,6 +14,24 @@ import ShapeThree from '../../../assets/image/hosting/shape-3.svg';
 import ShapeFour from '../../../assets/image/hosting/shape-4.svg';
 import ShapeFive from '../../../assets/image/hosting/shape-5.svg';
 
+import ReadMoreAndLess from 'react-read-more-less';
+ 
+// class ReadMoreAndLessText extends Component {
+//     render() {
+//         return (
+//             <ReadMoreAndLess
+//                 ref={this.ReadMore}
+//                 className="read-more-content"
+//                 charLimit={150}
+//                 readMoreText="Read more"
+//                 readLessText="Read less"
+//             >
+//                 {Paragraph}
+//             </ReadMoreAndLess>
+//         );
+//     }
+// }
+
 const FeatureSection = ({
   sectionWrapper,
   row,
@@ -28,20 +46,20 @@ const FeatureSection = ({
     <Box {...sectionWrapper}>
       <Container>
         <Box {...secTitleWrapper}>
-          <Fade bottom cascade>
+          {/* <Fade bottom cascade> */}
             <Text {...secText} content="Vorteile" />
             <Heading
               {...secHeading}
               content="Wir gestalten die Versorgung Ihres Haustiers komfortabel und stressfrei"
             />
-          </Fade>
+          {/* </Fade> */}
         </Box>
 
         <Box {...row}>
           {FEATURES_DATA? FEATURES_DATA.map((featureItem, index) => (
             <Box {...col} key={`feature-${index}`}>
               {featureItem.animation ? (
-                <Fade bottom delay={index * 120}>
+                // <Fade bottom delay={index * 120}>
                   <FeatureItem
                     title={
                       <Heading
@@ -50,6 +68,7 @@ const FeatureSection = ({
                       />
                     }
                     description={
+                      
                       <Text
                         {...featureItemDes}
                         content={featureItem.description}
@@ -93,7 +112,7 @@ const FeatureSection = ({
                       </Link>
                     }
                   />
-                </Fade>
+                // </Fade>
               ) : (
                 <FeatureItem
                   title={
@@ -104,7 +123,7 @@ const FeatureSection = ({
                   }
                   description={
                     <Text
-                      {...featureItemDes}
+                      
                       content={featureItem.description}
                     />
                   }
@@ -139,7 +158,7 @@ const FeatureSection = ({
                     </>
                   }
                   button={
-                    <Link href="#">
+                    <Link href="/about">
                       <a aria-label={`link-${index}`}>
                         <i className="flaticon-next" />
                       </a>
@@ -174,7 +193,7 @@ FeatureSection.defaultProps = {
     id: 'feature_section',
   },
   secTitleWrapper: {
-    mb: ['50px', '60px'],
+    mb: ['25px', '30px'],
   },
   secText: {
     as: 'span',
@@ -183,7 +202,7 @@ FeatureSection.defaultProps = {
     fontSize: '14px',
     letterSpacing: '0.15em',
     fontWeight: '700',
-    color: '#eb4d4b',
+    color: '#34888C',
     mb: '10px',
   },
   secHeading: {
@@ -205,12 +224,12 @@ FeatureSection.defaultProps = {
     width: [1, 1 / 2, 1 / 3, 1 / 3],
     pr: '15px',
     pl: '15px',
-    mb: '30px',
+    mb: '80px',
   },
   featureItemHeading: {
     fontSize: ['18px', '18px', '16px', '20px'],
     fontWeight: '400',
-    color: '#0f2137',
+    color: '#34888C',
     lineHeight: '1.5',
     mb: ['10px', '10px', '10px', '10px'],
     letterSpacing: '-0.020em',

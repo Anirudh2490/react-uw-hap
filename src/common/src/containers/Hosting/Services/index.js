@@ -84,8 +84,8 @@ ServicesSection.defaultProps = {
   sectionWrapper: {
     // id: 'service_section',
     as: 'section',
-    pt: ['60px', '80px', '80px', '80px'],
-    pb: ['60px', '80px', '80px', '100px'],
+    pt: ['40px', '60px', '60px', '60px'],
+    pb: ['40px', '60px', '60px', '80px'],
     className: 'service_section',
     id: 'service_section',
   },
@@ -99,7 +99,7 @@ ServicesSection.defaultProps = {
     fontSize: '14px',
     letterSpacing: '0.15em',
     fontWeight: '700',
-    color: '#eb4d4b',
+    color: '#34888C',
     mb: '10px',
   },
   secHeading: {
@@ -115,7 +115,7 @@ ServicesSection.defaultProps = {
     flexWrap: 'wrap',
   },
   col: {
-    width: [1, 1 / 2, 1 / 2, 1 / 3],
+    width: [1/2, 1 / 2, 1 / 2, 1 / 3],
     className: 'service_col',
     bg: '#fff',
   },
@@ -127,7 +127,7 @@ ServicesSection.defaultProps = {
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'center',
-    mb: '45px',
+    mb: '15px',
   },
   contentStyle: {
     textAlign: 'center',
@@ -135,14 +135,14 @@ ServicesSection.defaultProps = {
   featureItemHeading: {
     fontSize: ['18px', '20px'],
     fontWeight: '400',
-    color: '#0f2137',
+    color: '#34888C',
     lineHeight: '1.5',
-    mb: '20px',
+    mb: '8px',
     letterSpacing: '-0.020em',
   },
   featureItemDes: {
     fontSize: '15px',
-    lineHeight: '1.84',
+    // lineHeight: '1.84',
     color: '#343d48cc',
     mb: '0',
   },

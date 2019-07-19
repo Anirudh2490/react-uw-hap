@@ -36,6 +36,7 @@ import WizardForm4 from "../Appointment_Form_Step_Three/WizardForm";
 import WizardForm3 from "../Appointment_Form_Success/WizardForm";
 import AppointmentDetails from '../Appointment_Details'
 
+import ChatBot from '../ChatBot/PostBooking'
 
 const CustomerPageAuth = withAuthenticationCustomer(CustomerPage)
 
@@ -46,7 +47,7 @@ class App extends Component {
         <ThemeProvider theme={hostingTheme}>
           <ParallaxProvider>
             <Head>
-              <title>Hosting | A react next landing page</title>
+              <title> Hug A Pet | Mobiler Tierarzt </title>
               <meta name="Description" content="React next landing page" />
               <meta name="theme-color" content="#eb4d4b" />
               <link
@@ -107,6 +108,12 @@ class App extends Component {
                 exact
                 component={ForgotPassword}
               />
+              <Route path={ROUTE.ABOUT} component={ChatBot}/>
+              <Route path={ROUTE.BLOG} />
+              <Route path={ROUTE.FAQ} />
+              <Route path={ROUTE.FORVETS} />
+              <Route path={ROUTE.SERVICES} />
+
               </div>
               <Footer />
             </ContentWrapper>

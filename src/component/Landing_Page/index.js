@@ -118,3 +118,4 @@ class LandingBase extends Component {
 const Landing = withContentFul(LandingBase);
 
 export default Landing;
+

@@ -33,7 +33,7 @@ const BannerSection = ({
           <Box {...textArea}>
             <DiscountWrapper>
               <DiscountLabel>
-                <Text {...discountAmount} content={data.fields.boldColorText} />
+                {/* <Text {...discountAmount} content={data.fields.boldColorText} /> */}
                 {/* <Text {...discountText} content="on every confirmed booking" /> */}
               </DiscountLabel>
             </DiscountWrapper>
@@ -102,14 +102,14 @@ BannerSection.defaultProps = {
     textAlign: "center",
   },
   button: {
-    title: "Book Appointment",
+    title: "Start Booking",
     type: "button",
     fontSize: "12px",
     fontWeight: "500",
     color: "#fff",
     pl: "22px",
     pr: "22px",
-    colors: "primaryWithBg",
+    colors: "#34888C",
     iconPosition: "left",
   },
   searchArea: {
@@ -120,7 +120,7 @@ BannerSection.defaultProps = {
   discountAmount: {
     fontSize: ["13px", "14px", "14px", "14px", "14px"],
     fontWeight: "600",
-    color: "#eb4d4b",
+    color: "#34888C",
     mb: 0,
     as: "span",
     mr: "0.4em",
@@ -128,7 +128,7 @@ BannerSection.defaultProps = {
   discountText: {
     fontSize: ["13px", "14px", "14px", "14px", "14px"],
     fontWeight: "400",
-    color: "#0f2137",
+    color: "#34888C",
     mb: 0,
     as: "span",
   },

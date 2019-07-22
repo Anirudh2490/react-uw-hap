@@ -99,14 +99,14 @@ class LandingBase extends Component {
           <BannerSection data={BannerData} />
           <ServicesSection />
           <FeatureSection />
-          <AboutTeam data={AboutSectionData}/>
+          {/* <AboutTeam data={AboutSectionData}/> */}
           {/* <TestimonialSection /> */}
           <FaqSection />
           {/* <BlogSection data={BlogData} /> */}
           {/* <VetsSection data={VetsSectionData} />
           <PricingSection /> */}
           {/* <InfoSection /> */}
-          <ContactSection />
+          {/* <ContactSection /> */}
         </Fragment>
       );
     } else {

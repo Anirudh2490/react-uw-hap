@@ -236,42 +236,42 @@ class HomeSearchBase extends Component {
     //     window.recaptchaVerifier.clear();
     //   })
 
-    this.props.firebase.fsdb
-    .collection("form-inquiry")
-    .add(
-      {
-        customerDetails: {
-          name: ``,
-          zipcode: `${this.state.zipcode}`,
-          phone: ``,
-          email: "",
-          service: `${this.state.service.value}`,
-          uid: "",
-          userrole: "customer"
-        },
-        vetDetails:{
-          isVetAssigned: false,
-          vetName: "",
-        },
-        sessionDetails: {
-          Date: "",
-          session: "",
-          videoconsultation: "",
-        },
-        petDetails: {
-          petdate: "",
-          petname: "",
-          type: "",
-          gender: "",
-          notes: "",
-        },
-        bookingStatus:{
-          phoneVerfication: false,
-          status: "Not confirmed"
-        }
-      }
-    )
-    .then(res => {
+    // this.props.firebase.fsdb
+    // .collection("form-inquiry")
+    // .add(
+    //   {
+    //     customerDetails: {
+    //       name: ``,
+    //       zipcode: `${this.state.zipcode}`,
+    //       phone: ``,
+    //       email: "",
+    //       service: `${this.state.service.value}`,
+    //       uid: "",
+    //       userrole: "customer"
+    //     },
+    //     vetDetails:{
+    //       isVetAssigned: false,
+    //       vetName: "",
+    //     },
+    //     sessionDetails: {
+    //       Date: "",
+    //       session: "",
+    //       videoconsultation: "",
+    //     },
+    //     petDetails: {
+    //       petdate: "",
+    //       petname: "",
+    //       type: "",
+    //       gender: "",
+    //       notes: "",
+    //     },
+    //     bookingStatus:{
+    //       phoneVerfication: false,
+    //       status: "Not confirmed"
+    //     }
+    //   }
+    // )
+    // .then(res => {
       // const homeform =  {
       //   customerDetails: {
       //     name: ``,
@@ -301,18 +301,18 @@ class HomeSearchBase extends Component {
       //     status: "Not confirmed"
       //   }
       // };
-        window.localStorage.setItem('dbDocID', res.id)
+        // window.localStorage.setItem('dbDocID', res.id)
         // window.localStorage.setItem('homeform', JSON.stringify(homeform))
-      })
-      .then(()=>{
-        // this.props.history.push(`/${this.state.service.value}`)
+      // })
+      // .then(()=>{
+      //   // this.props.history.push(`/${this.state.service.value}`)
         this.props.history.push(`${ROUTES.BOOK_AN_APPOINTMENT}/${this.state.service.value}`)
 
-      })
-      .catch(rej => {
-        console.log(rej)
-        alert(rej)
-      })
+      // })
+      // .catch(rej => {
+      //   console.log(rej)
+      //   alert(rej)
+      // })
 
   }
 

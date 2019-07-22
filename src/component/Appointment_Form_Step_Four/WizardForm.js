@@ -7,6 +7,7 @@ import * as ROUTES from "../../constants/routes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import Chat from '../ChatBot/PostBooking'
 
 const Error = ({ name }) => (
   <Field
@@ -74,6 +75,7 @@ const WizardFormBase = props => {
           </div> */}
         </Wizard.Page>
       </Wizard>
+      <div><Chat/></div>
     </Styles>
   );
 };

@@ -113,7 +113,7 @@ const PricingSection = ({
               {...secHeading}
               content="Nutzen Sie Ihre Vorteile als Tierarzt bei HUG A PET"
             />
-            <SwitchWrapper>
+            {/* <SwitchWrapper>
               <Switch
                 labelPosition="bottom"
                 switchColor="#f0f0f0"
@@ -122,7 +122,7 @@ const PricingSection = ({
                 // labelPosition="left"
                 onChange={dataHandle}
               />
-            </SwitchWrapper>
+            </SwitchWrapper> */}
           </Fade>
         </Box>
         <Box {...row}>
@@ -154,7 +154,7 @@ const PricingSection = ({
                           {...priceLabelStyle}
                         />
                       </PricingPrice>
-                      <PricingButton>
+                      <PricingButton className="price-button" >
                         <Link href={pricingTable.url}>
                           <a>
                             {pricingTable.freePlan ? (
@@ -271,6 +271,7 @@ PricingSection.propTypes = {
 
 PricingSection.defaultProps = {
   sectionWrapper: {
+    id: 'pricing-section',
     as: 'section',
     pt: ['60px', '80px', '80px', '80px', '150px'],
     pb: ['40px', '40px', '40px', '40px'],

@@ -25,25 +25,31 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
-          console.log(doc.data());
-
-          this.setState({
-            values: {
-              petname: doc.data().petDetails.petname,
-              type: doc.data().petDetails.type,
-              gender: doc.data().petDetails.gender,
-              petdate: doc.data().petDetails.petdate,
-              notes: doc.data().petDetails.notes,
-              phone: doc.data().customerDetails.phone,
-              name: doc.data().customerDetails.name,
-              email: doc.data().customerDetails.email,
-              zipcode: doc.data().customerDetails.zipcode,
-              service: doc.data().customerDetails.service,
-              isVetAssigned: doc.data().vetDetails.isVetAssigned,
-              Date: doc.data().sessionDetails.Date,
-              session: doc.data().sessionDetails.session
-            }
-          });
+          if (doc.data().bookingStatus.status === "Confirmed") {
+            window.localStorage.removeItem("dbDocID");
+            this.props.history.push(
+              `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
+            );
+          } else {
+            console.log('esle block');
+            this.setState({
+              values: {
+                petname: doc.data().petDetails.petname,
+                type: doc.data().petDetails.type,
+                gender: doc.data().petDetails.gender,
+                petdate: doc.data().petDetails.petdate,
+                notes: doc.data().petDetails.notes,
+                phone: doc.data().customerDetails.phone,
+                name: doc.data().customerDetails.name,
+                email: doc.data().customerDetails.email,
+                zipcode: doc.data().customerDetails.zipcode,
+                service: doc.data().customerDetails.service,
+                isVetAssigned: doc.data().vetDetails.isVetAssigned,
+                Date: doc.data().sessionDetails.Date,
+                session: doc.data().sessionDetails.session
+              }
+            });
+          }
         })
         .catch(error => {
           console.log(error);
@@ -52,7 +58,9 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
-    const { token, phone, name, email, zipcode } = values;
+    console.log(this.state.values);
+    
+    const { token, phone, name, email, zipcode } = this.state.values;
     const twilioVerification = phone.split(" ");
     // verify-otp
     fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
@@ -73,9 +81,10 @@ class WizardBase extends React.Component {
       if (res.status === 400) {
         alert("Invalid Code");
       } else {
+        // let code = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU2Mzc1Mzg5NiwiZXhwIjoxNTYzNzU3NDk2LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1zbm9vb0BodWdhcGV0LWRlLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstc25vb29AaHVnYXBldC1kZS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6InN3ZWV0LXRvb3RoIn0.kl9KG7mZ3fWuI60XGpOntvcDvNQfRXuhNAB0yvvadLIuHGGqO4W4TCjx2hrPVZXTOEKFEoHLQNJXOX5ttCtH9oIIi_zrtqrKBtC85-en3daZeXkxFXyTrXqnuFewzCvF37l6-BjlJ47l4xAeXouLpBI9JHqQxF8BO0SQwbtn0cybhRawsidOLm7IlfaJhRpjjrnRaXf8EoBHPbjCcwPQKb-_o2bhJ0peUrKwtXfGIW2f2KNpGw-_jT6xfyrOrPTEOMLMLbALF23_JNSf7crUGATbU1Bq4Gzi2kZPZhgXuBwJvULlcdR8Rvg0UsQSJdWUMfOxCoOk2WQA7ZE2RUjmYQ"
         this.props.firebase
           .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
-          .then(authUser => {
+                    .then(authUser => {
             const uid = authUser.user.uid;
             // this.props.firebase.fsdb
             //   .collection(
@@ -100,52 +109,56 @@ class WizardBase extends React.Component {
               .then(() => {
                 // window.localStorage.removeItem("dbDocID");
                 // window.localStorage.removeItem("newUser");
-                fetch("https://hug-a-pet.herokuapp.com/admin/admin-verification-mail", {
-                  method: "POST",
-                  mode: "cors",
-                  cache: "no-cache",
-                  credentials: "same-origin",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  redirect: "follow",
-                  referrer: "no-referrer",
-                  body: JSON.stringify({
-                    emailReceiver: values.email,
-                    emailSubject:
-                      "Hi " +
-                      values.name +
-                      " Thankyou for registering at Hug a Pet!",
-                    emailContent: {
-                      customerDetails: {
-                        name: this.state.values.name,
-                        zipcode: this.state.values.zipcode,
-                        phone: this.state.values.phone,
-                        email: this.state.values.email,
-                        service: this.state.values.service
-                      },
-                      vetDetails: {
-                        isVetAssigned: false,
-                        vetName: ""
-                      },
-                      sessionDetails: {
-                        Date: this.state.values.Date,
-                        session: this.state.values.session
-                      },
-                      petDetails: {
-                        petdate: values.petdate,
-                        petname: values.petname,
-                        type: values.type,
-                        gender: values.gender,
-                        notes: values.notes
-                      },
-                      bookingStatus: {
-                        phoneVerfication: false,
-                        status: "Not confirmed"
+                fetch(
+                  "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
+                  {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    credentials: "same-origin",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    redirect: "follow",
+                    referrer: "no-referrer",
+                    body: JSON.stringify({
+                      emailReceiver: values.email,
+                      emailSubject:
+                        "Hi " +
+                        values.name +
+                        " Thankyou for registering at Hug a Pet!",
+                      emailContent: {
+                        customerDetails: {
+                          name: this.state.values.name,
+                          zipcode: this.state.values.zipcode,
+                          phone: this.state.values.phone,
+                          email: this.state.values.email,
+                          service: this.state.values.service
+                        },
+                        vetDetails: {
+                          isVetAssigned: false,
+                          vetName: ""
+                        },
+                        sessionDetails: {
+                          Date: this.state.values.Date,
+                          session: this.state.values.session
+                        },
+                        petDetails: {
+                          petdate: values.petdate,
+                          petname: values.petname,
+                          type: values.type,
+                          gender: values.gender,
+                          notes: values.notes
+                        },
+                        bookingStatus: {
+                          phoneVerfication: false,
+                          status: "Not confirmed"
+                        }
                       }
-                    }
-                  })
-                }).then(res => {
+                    })
+                  }
+                ).then(res => {
+                  window.localStorage.removeItem("dbDocID");
                   this.props.history.push(
                     `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
                   );

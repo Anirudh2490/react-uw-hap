@@ -67,6 +67,7 @@ VetsSection.propTypes = {
 
 VetsSection.defaultProps = {
   sectionWrapper: {
+    id: "vet-section",
     as: 'section',
     pt: ['0', '0', '40px', '80px'],
     pb: ['40px', '40px', '80px', '80px'],

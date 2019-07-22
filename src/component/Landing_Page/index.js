@@ -103,8 +103,8 @@ class LandingBase extends Component {
           {/* <TestimonialSection /> */}
           <FaqSection />
           {/* <BlogSection data={BlogData} /> */}
-          <VetsSection data={VetsSectionData} />
-          <PricingSection />
+          {/* <VetsSection data={VetsSectionData} />
+          <PricingSection /> */}
           {/* <InfoSection /> */}
           <ContactSection />
         </Fragment>

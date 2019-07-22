@@ -115,7 +115,7 @@ ServicesSection.defaultProps = {
     flexWrap: 'wrap',
   },
   col: {
-    width: [1/2, 1 / 2, 1 / 2, 1 / 3],
+    width: [1, 1 / 2, 1 / 2, 1 / 3],
     className: 'service_col',
     bg: '#fff',
   },

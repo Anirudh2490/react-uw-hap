@@ -15,30 +15,30 @@ class WizardBase extends React.Component {
   }
 
   componentDidMount() {
-    if (window.localStorage.getItem("dbDocID") === null) {
-      this.props.history.push("/", {
-        message: "Register for a vet a visit from here."
-      });
-    } else {
-      this.props.firebase.fsdb
-        .collection("form-inquiry")
-        .doc(window.localStorage.getItem("dbDocID"))
-        .get()
-        .then(doc => {
-          this.setState({
-            values: {
-              phone: doc.data().customerDetails.phone,
-              name: doc.data().customerDetails.name,
-              email: doc.data().customerDetails.email,
-              zipcode: doc.data().customerDetails.zipcode,
-              petname: doc.data().petDetails.petname
-            }
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    // if (window.localStorage.getItem("dbDocID") === null) {
+    //   this.props.history.push("/", {
+    //     message: "Register for a vet a visit from here."
+    //   });
+    // } else {
+    //   this.props.firebase.fsdb
+    //     .collection("form-inquiry")
+    //     .doc(window.localStorage.getItem("dbDocID"))
+    //     .get()
+    //     .then(doc => {
+    //       this.setState({
+    //         values: {
+    //           phone: doc.data().customerDetails.phone,
+    //           name: doc.data().customerDetails.name,
+    //           email: doc.data().customerDetails.email,
+    //           zipcode: doc.data().customerDetails.zipcode,
+    //           petname: doc.data().petDetails.petname
+    //         }
+    //       });
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // }
   }
 
   next = values => {

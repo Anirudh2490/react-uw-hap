@@ -37,6 +37,7 @@ import WizardForm3 from "../Appointment_Form_Success/WizardForm";
 import AppointmentDetails from '../Appointment_Details'
 
 import ChatBot from '../ChatBot/PostBooking'
+import VetPage from "../Vet_Page";
 
 const CustomerPageAuth = withAuthenticationCustomer(CustomerPage)
 
@@ -64,13 +65,13 @@ class App extends Component {
                 </DrawerProvider>
               </Sticky>
               <Route path={ROUTE.LANDING} exact component={Landing} />
-              <div className="child-wrapper">
               <Route path={`${ROUTE.ADMIN}/:docid`} exact component={AppointmentDetails} />
               <Route path={ROUTE.VIDEO_COMPONENT} component={VideoComponent} />
               <Route path={ROUTE.SIGNIN_OPTIONS} component={SignInOptPage} />
               <Route path={ROUTE.ADMIN}  exact component={Admin} />
               <Route path={ROUTE.ADMIN_SIGNIN} component={Admin_SignIn} />
               <Route path={ROUTE.SIGNIN} component={SignIn} />
+              <Route path={ROUTE.VET_PAGE} component={VetPage} />
               <Route
                 exact
                 path={ROUTE.BOOKING_VERIFICATION}
@@ -109,12 +110,10 @@ class App extends Component {
                 component={ForgotPassword}
               />
               <Route path={ROUTE.ABOUT} component={ChatBot}/>
-              <Route path={ROUTE.BLOG} />
+              {/* <Route path={ROUTE.BLOG} />
               <Route path={ROUTE.FAQ} />
               <Route path={ROUTE.FORVETS} />
-              <Route path={ROUTE.SERVICES} />
-
-              </div>
+              <Route path={ROUTE.SERVICES} /> */}
               <Footer />
             </ContentWrapper>
           </ParallaxProvider>

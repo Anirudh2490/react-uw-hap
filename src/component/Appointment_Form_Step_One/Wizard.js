@@ -25,7 +25,7 @@ class WizardBase extends React.Component {
         .get()
         .then(doc => {
           console.log(doc.data());
-          
+
           this.setState(
             {
               values: {
@@ -39,7 +39,7 @@ class WizardBase extends React.Component {
               }
             },
             () => {
-              this.props.setService(doc.data().customerDetails.service)
+              this.props.setService(doc.data().customerDetails.service);
               if (doc.data().sessionDetails.Date) {
                 this.props.setDate(doc.data().sessionDetails.Date);
                 this.props.setNum(doc.data().customerDetails.phone);
@@ -54,10 +54,105 @@ class WizardBase extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, previousProps) {
-    if (nextProps.modalStatus === false) {
-      this.setState(state => ({
-        page: Math.min(state.page + 1, this.props.children.length - 1)
-      }));
+    // if (nextProps.modalStatus === false) {
+    //   // this.setState(state => ({
+    //   //   page: Math.min(state.page + 1, this.props.children.length - 1)
+    //   // }));
+    // }
+    // console.log(nextProps.checkOtp);
+
+    if (nextProps.checkOtp === true) {
+      console.log("otp check initiated");
+      const { token } = this.state.values;
+      const { number } = this.props;
+      const twilioVerification = number.split(" ");
+      console.log(twilioVerification[1] + twilioVerification[2]);
+
+      fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify({
+          token: token,
+          phoneNumber: twilioVerification[1] + twilioVerification[2]
+        })
+      }).then(res => {
+        if (res.status === 400) {
+          alert("Invalid Code");
+          // this.props.setCheckOtp(false);
+        } else {
+      this.props.firebase
+        .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
+        .then(authUser => {
+          this.props.setCheckOtp(false);
+          const uid = authUser.user.uid;
+          this.props.firebase.fsdb
+            .collection("form-inquiry")
+            .doc(window.localStorage.getItem("dbDocID"))
+            .update({
+              "bookingStatus.phoneVerfication": true,
+              "bookingStatus.status": "Confirmed",
+              "customerDetails.uid": uid
+            });
+        })
+        .then(() => {
+          this.props.firebase.fsdb
+            .collection("form-inquiry")
+            .doc(window.localStorage.getItem("user"))
+            .get()
+            .then(doc => {
+              this.setState({
+                values: {
+                  email: doc.data().customerDetails.email,
+                  name: doc.data().customerDetails.name,
+                  zipcode: doc.data().customerDetails.zipcode,
+                  uid: doc.id
+                }
+              });
+            });
+        })
+        .then(() => {
+          this.setState(
+            state => ({
+              page: Math.min(state.page + 1, this.props.children.length - 1)
+            }),
+            () => {
+              this.props.setVisibilty(false);
+            }
+          );
+        });
+      }
+
+      if (nextProps.resendOtp === true) {
+        fetch("https://hug-a-pet.herokuapp.com/verification/start/send-otp", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          redirect: "follow",
+          referrer: "no-referrer",
+          body: JSON.stringify({
+            countryCode: twilioVerification[0],
+            phoneNumber: twilioVerification[1] + twilioVerification[2]
+          })
+        }).then(res => {
+          res.json().then(res => {
+            console.log(res);
+            window.localStorage.setItem("newUser", res);
+            this.props.setresendOtp(false);
+          });
+        });
+      }
+      });
     }
   }
 
@@ -81,7 +176,7 @@ class WizardBase extends React.Component {
       })
       .then(res => {
         console.log(this.state.values);
-        
+
         this.props.history.push(
           `${this.props.match.url}/${this.state.values.zipcode}`,
           [{ prevData: this.state.values }]
@@ -94,8 +189,10 @@ class WizardBase extends React.Component {
   };
 
   next = values => {
-    console.log("Check Initiated");
-
+    this.props.setisLoading(true)
+    console.log("check Initiated");
+    let userDoc = null;
+    let docID = null;
     const { number } = this.props;
     const twilioVerification = number.split(" ");
     fetch(
@@ -119,8 +216,13 @@ class WizardBase extends React.Component {
       console.log("Response Recieved");
 
       if (res.status === 400) {
+       this.props.setisLoading(false)
         alert("Invalid Number");
       } else {
+        // if () {
+
+        // }
+
         //search phone number in database
         this.props.firebase.fsdb
           .collection("form-inquiry")
@@ -136,32 +238,76 @@ class WizardBase extends React.Component {
             } else {
               querySnapshot.forEach(doc => {
                 console.log(doc.data());
-                
+                userDoc = doc.data();
+                docID = doc.id;
                 window.localStorage.setItem("user", doc.id);
-                this.setState({
-                  values: {
-                    email: doc.data().customerDetails.email,
-                    name: doc.data().customerDetails.name,
-                    zipcode: doc.data().customerDetails.zipcode,
-                    uid: doc.id,
-                    
-                  }
-                });
-                this.props.openModal();
+                console.log(this.props.firebase.auth.currentUser);
+                
               });
+              if (this.props.firebase.auth.currentUser === null) {
+                fetch(
+                  "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
+                  {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    credentials: "same-origin",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    redirect: "follow",
+                    referrer: "no-referrer",
+                    body: JSON.stringify({
+                      countryCode: twilioVerification[0],
+                      phoneNumber: twilioVerification[1] + twilioVerification[2]
+                    })
+                  }
+                ).then(res => {
+                  res.json().then(res => {
+                    console.log(res);
+                    window.localStorage.setItem("newUser", res);
+                  })
+                  .then(()=>{
+               this.props.setisLoading(false)
+                this.props.openModal();
+                    })
+                  });
+                // } else{
+              } else {
+                this.props.firebase.fsdb
+                  .collection("form-inquiry")
+                  .doc(window.localStorage.getItem("dbDocID"))
+                  .update({
+                    "bookingStatus.phoneVerfication": true,
+                    "bookingStatus.status": "Confirmed",
+                    "customerDetails.uid": docID
+                  })
+                  .then(() => {
+                    this.setState(
+                      {
+                        values: {
+                          email: userDoc.customerDetails.email,
+                          name: userDoc.customerDetails.name,
+                          zipcode: userDoc.customerDetails.zipcode,
+                          uid: docID
+                        }
+                      },
+                      () => {
+                     this.props.setisLoading(false)
+                        this.setState(state => ({
+                          page: Math.min(
+                            state.page + 1,
+                            this.props.children.length - 1
+                          )
+                        }));
+                      }
+                    );
+                  });
+              }
             }
           });
       }
     });
-
-    // .doc(window.localStorage.getItem("dbDocID"))
-    // .update({
-    //   "customerDetails.email": values["email"],
-    //   "customerDetails.name": values["name"],
-    //   "customerDetails.phone": `${this.props.number}`
-    // });
-
-    // this.props.firebase
   };
 
   previous = () =>
@@ -182,7 +328,9 @@ class WizardBase extends React.Component {
     return activePage.props.validate ? activePage.props.validate(values) : {};
   };
 
-  handleSubmit = values => {
+  handleSubmit = (e, values) => {
+    console.log("Hello");
+    e.preventDefault();
     const { children, onSubmit } = this.props;
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
@@ -205,7 +353,7 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form className="wizard-form" onSubmit={handleSubmit}>
+          <form className="wizard-form">
             {activePage}
             <div className="buttons">
               {page > 0 && (
@@ -213,9 +361,20 @@ class WizardBase extends React.Component {
                   « Previous
                 </button>
               )}
-              {!isLastPage && <button type="submit">Next »</button>}
+              {!isLastPage && (
+                <button
+                  onClick={e => this.handleSubmit(e, values)}
+                  type="submit"
+                >
+                  Next »
+                </button>
+              )}
               {isLastPage && (
-                <button type="submit" disabled={submitting}>
+                <button
+                  onClick={e => this.handleSubmit(e, values)}
+                  type="submit"
+                  disabled={submitting}
+                >
                   Next »
                 </button>
               )}

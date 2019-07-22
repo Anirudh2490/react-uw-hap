@@ -115,6 +115,8 @@ contentful
   .getSingleEnty("5AvHwtNclSNaBXcyEonUqH")
   .then(response => {
     ServicesData = response;
+    console.log(ServicesData);
+    
     // Service Section Content
     SERVICES_DATA = [
       {

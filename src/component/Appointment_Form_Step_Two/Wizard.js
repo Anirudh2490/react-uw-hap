@@ -46,42 +46,56 @@ class WizardBase extends React.Component {
                 const { petList } = this.state;
                 this.props.setClientName(doc.data().customerDetails.name);
                 //search phone number in database
-                this.props.firebase.fsdb
-                  .collection("form-inquiry")
-                  .where(
-                    "customerDetails.phone",
-                    "==",
-                    `${this.state.values.phone}`
-                  )
-                  .get()
-                  .then(querySnapshot => {
-                    if (querySnapshot.empty) {
-                    } else {
-                      querySnapshot.forEach(doc => {
-                        petList.push({
-                          petId: doc.id,
-                          petDoc: doc.data().petDetails
+                if (window.localStorage.getItem("contWithOutLogin")  === "true") {
+                    console.log('getting petlist');
+                    this.setState(
+                      state => ({
+                        page: Math.min(state.page + 1, this.props.children.length - 1),
+                      }));
+                }else{                
+                  this.props.firebase.fsdb
+                    .collection("form-inquiry")
+                    .where(
+                      "customerDetails.phone",
+                      "==",
+                      `${this.state.values.phone}`
+                    )
+                    .get()
+                    .then(querySnapshot => {
+                      console.log(querySnapshot);
+                      
+                      if (querySnapshot.empty) {
+                        this.setState(
+                          state => ({
+                            page: Math.min(state.page + 1, this.props.children.length - 1),
+                          }));
+                        } else {
+                        querySnapshot.forEach(doc => {
+                          petList.push({
+                            petId: doc.id,
+                            petDoc: doc.data().petDetails
+                          });
                         });
-                      });
-                      this.setState(
-                        {
-                          petList
-                        },
-                        () => {
-                          // console.log(petList);
-                          if (petList.length === 1) {
-                            this.setState(state => ({
-                              page: Math.min(
-                                state.page + 1,
-                                this.props.children.length - 1
-                              )
-                            }));
+                        this.setState(
+                          {
+                            petList
+                          },
+                          () => {
+                            // console.log(petList);
+                            if (petList.length === 1) {
+                              this.setState(state => ({
+                                page: Math.min(
+                                  state.page + 1,
+                                  this.props.children.length - 1
+                                )
+                              }));
+                            }
+                            this.props.setPet(petList);
                           }
-                          this.props.setPet(petList);
-                        }
-                      );
-                    }
-                  });
+                        );
+                      }
+                    });
+                }
               }
             );
           })
@@ -212,7 +226,26 @@ class WizardBase extends React.Component {
                 });
               }
               //APPI CALL FOR TWILIO MSG
-              fetch("https://hug-a-pet.herokuapp.com/api/messages", {
+              // fetch("https://hug-a-pet.herokuapp.com/api/messages", {
+              //   method: "POST",
+              //   mode: "cors",
+              //   cache: "no-cache",
+              //   credentials: "same-origin",
+              //   headers: {
+              //     "Content-Type": "application/json"
+              //   },
+              //   redirect: "follow",
+              //   referrer: "no-referrer",
+              //   body: JSON.stringify({
+              //     to: values.phone,
+              //     body: `Hi ${
+              //       values.name
+              //     }! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
+              //   })
+              // });
+              // .then(() => {
+              //APPI CALL FOR TWILIO Email
+              fetch("https://hug-a-pet.herokuapp.com/send/mail", {
                 method: "POST",
                 mode: "cors",
                 cache: "no-cache",
@@ -223,36 +256,17 @@ class WizardBase extends React.Component {
                 redirect: "follow",
                 referrer: "no-referrer",
                 body: JSON.stringify({
-                  to: values.phone,
-                  body: `Hi ${
-                    values.name
-                  }! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
+                  emailReceiver: values.email,
+                  emailSubject:
+                    "Hi " +
+                    values.name +
+                    " Thankyou for registering at Hug a Pet!",
+                  emailContent:
+                    "Hi " +
+                    values.name +
+                    "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
                 })
               })
-                // .then(() => {
-                  //APPI CALL FOR TWILIO Email
-                  fetch("https://hug-a-pet.herokuapp.com/send/mail", {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    redirect: "follow",
-                    referrer: "no-referrer",
-                    body: JSON.stringify({
-                      emailReceiver: values.email,
-                      emailSubject:
-                        "Hi " +
-                        values.name +
-                        " Thankyou for registering at Hug a Pet!",
-                      emailContent:
-                        "Hi " +
-                        values.name +
-                        "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                    })
-                  })
                 // })
                 .then(() => {
                   this.props.history.push(ROUTES.BOOKING_VERIFICATION);

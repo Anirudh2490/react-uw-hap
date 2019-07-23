@@ -54,76 +54,26 @@ class WizardBase extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, previousProps) {
-    var uid;
     console.log(nextProps);
-    if (nextProps.checkOtp === true) {
-      console.log("otp check initiated");
-      const { number, token } = this.props;
-      console.log(token, number);
-      var twilioVerification = number.split(" ");
-      console.log(twilioVerification[1] + twilioVerification[2]);
-      fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        redirect: "follow",
-        referrer: "no-referrer",
-        body: JSON.stringify({
-          token: token,
-          phoneNumber: twilioVerification[1] + twilioVerification[2]
-        })
-      }).then(res => {
-        if (res.status === 400) {
-          alert("Invalid Code");
-          // this.props.setCheckOtp(false);
-        } else {
-          this.props.firebase
-            .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
-            .then(authUser => {
-              this.props.setCheckOtp(false);
-              uid = authUser.user.uid;
-              this.props.firebase.fsdb
-                .collection("form-inquiry")
-                .doc(window.localStorage.getItem("dbDocID"))
-                .update({
-                  "bookingStatus.phoneVerfication": true,
-                  "bookingStatus.status": "Confirmed",
-                  "customerDetails.uid": uid
-                });
-            })
-            .then(() => {
-              this.props.firebase.fsdb
-                .collection("form-inquiry")
-                .doc(window.localStorage.getItem("user"))
-                .get()
-                .then(doc => {
-                  this.setState({
-                    values: {
-                      email: doc.data().customerDetails.email,
-                      name: doc.data().customerDetails.name,
-                      zipcode: doc.data().customerDetails.zipcode,
-                      uid: uid
-                    }
-                  });
-                });
-            })
-            .then(() => {
-              this.setState(
-                state => ({
-                  page: Math.min(state.page + 1, this.props.children.length - 1)
-                }),
-                () => {
-                  this.props.setVisibilty(false);
-                }
-              );
-            });
-        }
+    
+
+    if (nextProps.withOutLogin === true) {
+      console.log('without login');
+      
+      window.localStorage.setItem('contWithOutLogin', true)
+      this.setState({
+        values: {}
+      },()=>{
+        this.setState(state => ({
+          page: Math.min(
+            state.page + 1,
+            this.props.children.length - 1
+          )
+        }));
       });
     }
+
+    console.log(this.state.page);
 
     if (nextProps.resendOtp === true) {
       console.log("resend otp");
@@ -187,6 +137,93 @@ class WizardBase extends React.Component {
   };
 
   next = values => {
+    console.log(this.state.page);
+    var uid;
+    
+    if (this.state.page === 1) {
+      console.log("otp check initiated");
+      const { number, token } = this.props;
+      console.log(token, number);
+      var twilioVerification = number.split(" ");
+      console.log(twilioVerification[1] + twilioVerification[2]);
+      fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify({
+          token: token,
+          phoneNumber: twilioVerification[1] + twilioVerification[2]
+        })
+      }).then(res => {
+        if (res.status === 400) {
+          alert("Invalid Code");
+          // this.props.setCheckOtp(false);
+        } else {
+          this.props.firebase
+            .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
+            .then(authUser => {
+              this.props.setCheckOtp(false);
+              uid = authUser.user.uid;
+              this.props.firebase.fsdb
+                .collection("form-inquiry")
+                .doc(window.localStorage.getItem("dbDocID"))
+                .update({
+                  "bookingStatus.phoneVerfication": true,
+                  "bookingStatus.status": "Confirmed",
+                  "customerDetails.uid": uid
+                })
+
+
+                this.props.firebase.fsdb
+                .collection("userCollection")
+                .doc(uid)
+                .set({
+                  name: this.state.values.name,
+                  email: this.state.values.email,
+                  phone: this.state.values.phone,
+                  uid: uid,
+                  userrole: "customer"
+                },{merge: true})
+
+            })
+            .then(() => {
+              this.props.firebase.fsdb
+                .collection("form-inquiry")
+                .doc(window.localStorage.getItem("user"))
+                .get()
+                .then(doc => {
+                  this.setState({
+                    values: {
+                      email: doc.data().customerDetails.email,
+                      name: doc.data().customerDetails.name,
+                      zipcode: doc.data().customerDetails.zipcode,
+                      uid: uid
+                    }
+                  });
+                });
+            })
+            .then(() => {
+              this.setState(
+                state => ({
+                  page: Math.min(state.page + 1, this.props.children.length - 1)
+                }),
+                () => {
+                  this.props.setVisibilty(false);
+                }
+              );
+            });
+        }
+      });
+    }else{
+
+
+
     this.props.setisLoading(true);
     console.log("check Initiated");
     let userDoc = null;
@@ -285,7 +322,7 @@ class WizardBase extends React.Component {
                         this.props.setisLoading(false);
                         this.setState(state => ({
                           page: Math.min(
-                            state.page + 1,
+                            state.page + 2,
                             this.props.children.length - 1
                           )
                         }));
@@ -416,6 +453,7 @@ class WizardBase extends React.Component {
       //   }
       // });
     }
+  }
   };
 
   previous = () =>

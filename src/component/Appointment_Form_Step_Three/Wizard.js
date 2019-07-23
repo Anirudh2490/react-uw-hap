@@ -25,62 +25,66 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
-          if (doc.data().bookingStatus.status === "Confirmed") {
-
-            fetch(
-              "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
-              {
-                method: "POST",
-                mode: "cors",
-                cache: "no-cache",
-                credentials: "same-origin",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                redirect: "follow",
-                referrer: "no-referrer",
-                body: JSON.stringify({
-                  emailReceiver: doc.data().customerDetails.email,
-                  emailSubject:
-                    "Hi " +
-                    doc.data().customerDetails.name +
-                    " Thankyou for registering at Hug a Pet!",
-                  emailContent: {
-                    customerDetails: {
-                      name: doc.data().customerDetails.name,
-                      zipcode: doc.data().customerDetails.zipcode,
-                      phone: doc.data().customerDetails.phone,
-                      email: doc.data().customerDetails.email,
-                      service: doc.data().customerDetails.service
-                    },
-                    vetDetails: {
-                      isVetAssigned: false,
-                      vetName: ""
-                    },
-                    sessionDetails: {
-                      Date: doc.data().sessionDetails.Date,
-                      session: doc.data().sessionDetails.session
-                    },
-                    petDetails: {
-                      petdate: doc.data().petDetails.petdate,
-                      petname: doc.data().petDetails.petname,
-                      type: doc.data().petDetails.type,
-                      gender: doc.data().petDetails.gender,
-                      notes: doc.data().petDetails.notes
-                    },
-                    bookingStatus: {
-                      phoneVerfication: false,
-                      status: "Not confirmed"
+          console.log(doc.data().bookingStatus.status === "Confirmed");
+          
+          if (doc.data().bookingStatus.status === "Confirmed" || window.localStorage.getItem("contWithOutLogin") === "true") {
+          
+            if (true) {
+              fetch(
+                "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
+                {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    emailReceiver: doc.data().customerDetails.email,
+                    emailSubject:
+                      "Hi " +
+                      doc.data().customerDetails.name +
+                      " Thankyou for registering at Hug a Pet!",
+                    emailContent: {
+                      customerDetails: {
+                        name: doc.data().customerDetails.name,
+                        zipcode: doc.data().customerDetails.zipcode,
+                        phone: doc.data().customerDetails.phone,
+                        email: doc.data().customerDetails.email,
+                        service: doc.data().customerDetails.service
+                      },
+                      vetDetails: {
+                        isVetAssigned: false,
+                        vetName: ""
+                      },
+                      sessionDetails: {
+                        Date: doc.data().sessionDetails.Date,
+                        session: doc.data().sessionDetails.session
+                      },
+                      petDetails: {
+                        petdate: doc.data().petDetails.petdate,
+                        petname: doc.data().petDetails.petname,
+                        type: doc.data().petDetails.type,
+                        gender: doc.data().petDetails.gender,
+                        notes: doc.data().petDetails.notes
+                      },
+                      bookingStatus: {
+                        phoneVerfication: false,
+                        status: "Not confirmed"
+                      }
                     }
-                  }
-                })
-              }
-            ).then(res => {
-              window.localStorage.removeItem("dbDocID");
-              this.props.history.push(
-                `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
-              );
-            });
+                  })
+                }
+              ).then(res => {
+                window.localStorage.removeItem("dbDocID");
+                this.props.history.push(
+                  `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
+                );
+              });
+            }
           } else {
             console.log('esle block');
             this.setState({
@@ -161,7 +165,16 @@ class WizardBase extends React.Component {
                 "bookingStatus.status": "Confirmed",
                 "customerDetails.uid": uid
               })
-
+              this.props.firebase.fsdb
+              .collection("userCollection")
+              .doc(uid)
+              .set({
+                name: this.state.values.name,
+                email: this.state.values.email,
+                phone: this.state.values.phone,
+                uid: uid,
+                userrole: "customer"
+              },{merge: true})
               .then(() => {
                 // window.localStorage.removeItem("dbDocID");
                 // window.localStorage.removeItem("newUser");

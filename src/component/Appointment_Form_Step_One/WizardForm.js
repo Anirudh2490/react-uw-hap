@@ -35,6 +35,7 @@ const WizardFormBase = props => {
   const [isLoading, setisLoading] = useState(false);
   const [token, setToken] = useState(false);
   const [timer, setTimer] = useState("");
+  const [withOutLogin, setwithOutLogin] = useState("");
 
 
 
@@ -55,6 +56,13 @@ const WizardFormBase = props => {
 
   function openModal() {
     setVisibilty(true);
+  }
+
+  
+  
+
+  function continueWithoutLogin() {
+    setwithOutLogin(true)
   }
 
   function validateOtp() {
@@ -246,11 +254,13 @@ const WizardFormBase = props => {
           modalStatus={visible}
           setVisibilty={setVisibilty}
           checkOtp={checkOtp}
+          withOutLogin={withOutLogin}
           setisLoading={setisLoading}
           resendOtp={resendOtp}
           setresendOtp={setresendOtp}
           date={date}
           token={token}
+          setwithOutLogin={setwithOutLogin}
           setTimer={setTimer}
           setNum={setNumber}
         >
@@ -266,7 +276,6 @@ const WizardFormBase = props => {
               </div>
             ) : (
               <Fragment>
-                {" "}
                 <h4>What is your phone number</h4>
                 <label>We will need send an OTP to verify you</label>
                 <div style={{ margin: "25px 10px" }}>
@@ -335,7 +344,7 @@ const WizardFormBase = props => {
                       </div>
                     </div>
                     <div>
-                      <div id="pop-button-two">
+                      {/* <div id="pop-button-two">
                         <button
                           style={{ width: "100%", margin: "10px 0 0 0" }}
                           type="button"
@@ -346,6 +355,19 @@ const WizardFormBase = props => {
                           onClick={() => validateOtp()}
                         >
                           <span className="btn-text">Submit</span>
+                        </button>
+                      </div> */}
+                      <div id="pop-button-two">
+                        <button
+                          style={{ width: "100%", margin: "10px 0 0 0" }}
+                          type="button"
+                          // className="reusecore__button pop-button"
+                          fontSize="2"
+                          fontWeight="600"
+                          height="4"
+                          onClick={() => continueWithoutLogin()}
+                        >
+                          <span className="btn-text">Continue Without Login</span>
                         </button>
                       </div>
                       <div id="pop-button-two">

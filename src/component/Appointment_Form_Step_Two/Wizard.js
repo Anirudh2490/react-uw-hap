@@ -2,6 +2,11 @@ import React from "react";
 import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+
+const pets = JSON.parse('[{"petId":"0cufgXsqFWrbtISI9Rg3","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}},{"petId":"2P6kfFo60t5zVp4g9tL9","petDoc":{"gender":"female","notes":"Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets ","petdate":"older than 6","petname":"sd","type":"cat"}},{"petId":"MVfwCZq5BDEwxjZcgv4C","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}},{"petId":"c11FWgu99tT5tTmvAh4r","petDoc":{"gender":"female","notes":"Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets ","petdate":"older than 6","petname":"sd","type":"cat"}},{"petId":"gsbRiwSLMfra5OOpGOsP","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}},{"petId":"liSyIg2OYw1VT9cxU5yS","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}},{"petId":"rOqeavNY4vebc0dZYg1q","petDoc":{"gender":"female","notes":"Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets Tets ","petdate":"older than 6","petname":"sd","type":"cat"}},{"petId":"tDyaRHbFEwttumTAA9IT","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}},{"petId":"wqfUiq2UO9HK2dmM1CKI","petDoc":{"gender":"","notes":"","petdate":"","petname":"","type":""}}]')
+
+
+
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
 
@@ -19,16 +24,16 @@ class WizardBase extends React.Component {
 
   componentWillMount() {
     const petList = []
-    this.props.firebase.fsdb
-          .collection("form-inquiry")
-          .get()
-          .then(querySnapshot => {
-              if (querySnapshot.empty) {
-              } else {
-                querySnapshot.forEach(doc => {
+    // this.props.firebase.fsdb
+    //       .collection("form-inquiry")
+    //       .get()
+    //       .then(querySnapshot => {
+    //           if (querySnapshot.empty) {
+    //           } else {
+                pets.forEach(doc => {
                   petList.push({
-                    petId: doc.id,
-                    petDoc: doc.data().petDetails
+                    petId: doc.petId,
+                    petDoc: doc.petDoc
                   });
                 });
                 this.setState(
@@ -46,10 +51,12 @@ class WizardBase extends React.Component {
                       }));
                     }
                     this.props.setPet(petList);
+                    const petString = JSON.stringify(petList)
+                    window.localStorage.setItem('petlist', petString)
                   }
                 );
-              }
-            });
+            //   }
+            // });
 
 
     // if (window.localStorage.getItem("dbDocID") === null) {

@@ -113,6 +113,8 @@ const WizardFormBase = props => {
               <ul>
                 {selectedPet &&
                   selectedPet.map(doc => {
+                    console.log(doc);
+                    
                     if (doc.petDoc.petname !== "") {
                       return (
                         <li

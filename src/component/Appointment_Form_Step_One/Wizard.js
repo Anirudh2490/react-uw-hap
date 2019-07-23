@@ -54,20 +54,14 @@ class WizardBase extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, previousProps) {
-    // if (nextProps.modalStatus === false) {
-    //   // this.setState(state => ({
-    //   //   page: Math.min(state.page + 1, this.props.children.length - 1)
-    //   // }));
-    // }
-    // console.log(nextProps.checkOtp);
-
+    var uid;
+    console.log(nextProps);
     if (nextProps.checkOtp === true) {
       console.log("otp check initiated");
-      const { token } = this.state.values;
-      const { number } = this.props;
-      const twilioVerification = number.split(" ");
+      const { number, token } = this.props;
+      console.log(token, number);
+      var twilioVerification = number.split(" ");
       console.log(twilioVerification[1] + twilioVerification[2]);
-
       fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
         method: "POST",
         mode: "cors",
@@ -91,7 +85,7 @@ class WizardBase extends React.Component {
             .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
             .then(authUser => {
               this.props.setCheckOtp(false);
-              const uid = authUser.user.uid;
+              uid = authUser.user.uid;
               this.props.firebase.fsdb
                 .collection("form-inquiry")
                 .doc(window.localStorage.getItem("dbDocID"))
@@ -112,7 +106,7 @@ class WizardBase extends React.Component {
                       email: doc.data().customerDetails.email,
                       name: doc.data().customerDetails.name,
                       zipcode: doc.data().customerDetails.zipcode,
-                      uid: doc.id
+                      uid: uid
                     }
                   });
                 });
@@ -128,30 +122,34 @@ class WizardBase extends React.Component {
               );
             });
         }
+      });
+    }
 
-        if (nextProps.resendOtp === true) {
-          fetch("https://hug-a-pet.herokuapp.com/verification/start/send-otp", {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            redirect: "follow",
-            referrer: "no-referrer",
-            body: JSON.stringify({
-              countryCode: twilioVerification[0],
-              phoneNumber: twilioVerification[1] + twilioVerification[2]
-            })
-          }).then(res => {
-            res.json().then(res => {
-              console.log(res);
-              window.localStorage.setItem("newUser", res);
-              this.props.setresendOtp(false);
-            });
-          });
-        }
+    if (nextProps.resendOtp === true) {
+      console.log("resend otp");
+      const { number, token } = this.props;
+      console.log(token, number);
+      var twilioVerification = number.split(" ");
+      fetch("https://hug-a-pet.herokuapp.com/verification/start/send-otp", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify({
+          countryCode: twilioVerification[0],
+          phoneNumber: twilioVerification[1] + twilioVerification[2]
+        })
+      }).then(res => {
+        res.json().then(res => {
+          console.log(res);
+          window.localStorage.setItem("newUser", res);
+          this.props.setresendOtp(false);
+        });
       });
     }
   }
@@ -194,239 +192,230 @@ class WizardBase extends React.Component {
     let userDoc = null;
     let docID = null;
     const { number } = this.props;
-    const twilioVerification = number.split(" ");
+    if (!number) {
+      this.props.setisLoading(false);
+      alert("Please Enter phone number");
+    } else {
+      const twilioVerification = number.split(" ");
 
-    //search phone number in database
-    this.props.firebase.fsdb
-      .collection("form-inquiry")
-      .where("customerDetails.phone", "==", `${number}`)
-      .limit(1)
-      .get()
-      .then(querySnapshot => {
-        if (querySnapshot.empty) {
-          fetch(
-            "https://hug-a-pet.herokuapp.com/verification/start/check-valid-number",
-            {
-              method: "POST",
-              mode: "cors",
-              cache: "no-cache",
-              credentials: "same-origin",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              redirect: "follow",
-              referrer: "no-referrer",
-              body: JSON.stringify({
-                countryCode: twilioVerification[0],
-                phoneNumber: twilioVerification[1] + twilioVerification[2]
-              })
-            }
-          ).then(res => {
-            console.log("Response Recieved");
-            if (res.status === 400) {
-              this.props.setisLoading(false);
-              alert("Invalid Number");
-            } else {
-              this.setState(state => ({
-                page: Math.min(state.page + 1, this.props.children.length - 1),
-                values
-              }));
-            }
-          });
-        } else {
-          querySnapshot.forEach(doc => {
-            console.log(doc.data());
-            userDoc = doc.data();
-            docID = doc.id;
-            window.localStorage.setItem("user", doc.id);
-            console.log(this.props.firebase.auth.currentUser);
-          });
-          if (this.props.firebase.auth.currentUser === null) {
-            fetch(
-              "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
-              {
-                method: "POST",
-                mode: "cors",
-                cache: "no-cache",
-                credentials: "same-origin",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                redirect: "follow",
-                referrer: "no-referrer",
-                body: JSON.stringify({
-                  countryCode: twilioVerification[0],
-                  phoneNumber: twilioVerification[1] + twilioVerification[2]
-                })
-              }
-            ).then(res => {
-              res
-                .json()
-                .then(res => {
-                  console.log(res);
-                  window.localStorage.setItem("newUser", res);
-                })
-                .then(() => {
-                  this.props.setisLoading(false);
-                  this.props.openModal();
-                });
-            });
-            // } else{
+      //search phone number in database
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .where("customerDetails.phone", "==", `${number}`)
+        .limit(1)
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            this.props.setisLoading(false);
+            this.setState(state => ({
+              page: Math.min(state.page + 2, this.props.children.length - 1),
+              values
+            }));
           } else {
-            if (
-              userDoc.customerDetails.uid ===
-              this.props.firebase.auth.currentUser.uid
-            ) {
-              this.props.firebase.fsdb
-                .collection("form-inquiry")
-                .doc(window.localStorage.getItem("dbDocID"))
-                .update({
-                  "bookingStatus.phoneVerfication": true,
-                  "bookingStatus.status": "Confirmed",
-                  "customerDetails.uid": this.props.firebase.auth.currentUser
-                    .uid
-                })
-                .then(() => {
-                  this.setState(
-                    {
-                      values: {
-                        email: userDoc.customerDetails.email,
-                        name: userDoc.customerDetails.name,
-                        zipcode: userDoc.customerDetails.zipcode,
-                        uid: this.props.firebase.auth.currentUser.uid
-                      }
-                    },
-                    () => {
-                      this.props.setisLoading(false);
-                      this.setState(state => ({
-                        page: Math.min(
-                          state.page + 1,
-                          this.props.children.length - 1
-                        )
-                      }));
-                    }
-                  );
-                });
+            querySnapshot.forEach(doc => {
+              console.log(doc.data());
+              userDoc = doc.data();
+              docID = doc.id;
+              window.localStorage.setItem("user", doc.id);
+              console.log(this.props.firebase.auth.currentUser);
+            });
+            if (this.props.firebase.auth.currentUser === null) {
+              fetch(
+                "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
+                {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    countryCode: twilioVerification[0],
+                    phoneNumber: twilioVerification[1] + twilioVerification[2]
+                  })
+                }
+              ).then(res => {
+                res
+                  .json()
+                  .then(res => {
+                    console.log(res);
+                    window.localStorage.setItem("newUser", res);
+                  })
+                  .then(() => {
+                    this.props.setisLoading(false);
+                    this.props.setTimer(Date.now() + 30000);
+                    // this.props.openModal();
+                    this.setState(state => ({
+                      page: Math.min(
+                        state.page + 1,
+                        this.props.children.length - 1
+                      )
+                    }));
+                  });
+              });
+              // } else{
             } else {
-              alert("You are not authorized to use this number");
+              if (
+                userDoc.customerDetails.uid ===
+                this.props.firebase.auth.currentUser.uid
+              ) {
+                this.props.firebase.fsdb
+                  .collection("form-inquiry")
+                  .doc(window.localStorage.getItem("dbDocID"))
+                  .update({
+                    "bookingStatus.phoneVerfication": true,
+                    "bookingStatus.status": "Confirmed",
+                    "customerDetails.uid": this.props.firebase.auth.currentUser
+                      .uid
+                  })
+                  .then(() => {
+                    this.setState(
+                      {
+                        values: {
+                          email: userDoc.customerDetails.email,
+                          name: userDoc.customerDetails.name,
+                          zipcode: userDoc.customerDetails.zipcode,
+                          uid: this.props.firebase.auth.currentUser.uid
+                        }
+                      },
+                      () => {
+                        this.props.setisLoading(false);
+                        this.setState(state => ({
+                          page: Math.min(
+                            state.page + 1,
+                            this.props.children.length - 1
+                          )
+                        }));
+                      }
+                    );
+                  });
+              } else {
+                this.props.setisLoading(false);
+                alert(
+                  "This number is not associated with the logged in account."
+                );
+              }
             }
           }
-        }
-      });
+        });
 
-    // fetch(
-    //   "https://hug-a-pet.herokuapp.com/verification/start/check-valid-number",
-    //   {
-    //     method: "POST",
-    //     mode: "cors",
-    //     cache: "no-cache",
-    //     credentials: "same-origin",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     redirect: "follow",
-    //     referrer: "no-referrer",
-    //     body: JSON.stringify({
-    //       countryCode: twilioVerification[0],
-    //       phoneNumber: twilioVerification[1] + twilioVerification[2]
-    //     })
-    //   }
-    // ).then(res => {
-    //   console.log("Response Recieved");
+      // fetch(
+      //   "https://hug-a-pet.herokuapp.com/verification/start/check-valid-number",
+      //   {
+      //     method: "POST",
+      //     mode: "cors",
+      //     cache: "no-cache",
+      //     credentials: "same-origin",
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     },
+      //     redirect: "follow",
+      //     referrer: "no-referrer",
+      //     body: JSON.stringify({
+      //       countryCode: twilioVerification[0],
+      //       phoneNumber: twilioVerification[1] + twilioVerification[2]
+      //     })
+      //   }
+      // ).then(res => {
+      //   console.log("Response Recieved");
 
-    //   if (res.status === 400) {
-    //    this.props.setisLoading(false)
-    //     alert("Invalid Number");
-    //   } else {
-    //     // if () {
+      //   if (res.status === 400) {
+      //    this.props.setisLoading(false)
+      //     alert("Invalid Number");
+      //   } else {
+      //     // if () {
 
-    //     // }
+      //     // }
 
-    //     //search phone number in database
-    //     this.props.firebase.fsdb
-    //       .collection("form-inquiry")
-    //       .where("customerDetails.phone", "==", `${number}`)
-    //       .limit(1)
-    //       .get()
-    //       .then(querySnapshot => {
-    //         if (querySnapshot.empty) {
-    //           this.setState(state => ({
-    //             page: Math.min(state.page + 1, this.props.children.length - 1),
-    //             values
-    //           }));
-    //         } else {
-    //           querySnapshot.forEach(doc => {
-    //             console.log(doc.data());
-    //             userDoc = doc.data();
-    //             docID = doc.id;
-    //             window.localStorage.setItem("user", doc.id);
-    //             console.log(this.props.firebase.auth.currentUser);
+      //     //search phone number in database
+      //     this.props.firebase.fsdb
+      //       .collection("form-inquiry")
+      //       .where("customerDetails.phone", "==", `${number}`)
+      //       .limit(1)
+      //       .get()
+      //       .then(querySnapshot => {
+      //         if (querySnapshot.empty) {
+      //           this.setState(state => ({
+      //             page: Math.min(state.page + 1, this.props.children.length - 1),
+      //             values
+      //           }));
+      //         } else {
+      //           querySnapshot.forEach(doc => {
+      //             console.log(doc.data());
+      //             userDoc = doc.data();
+      //             docID = doc.id;
+      //             window.localStorage.setItem("user", doc.id);
+      //             console.log(this.props.firebase.auth.currentUser);
 
-    //           });
-    //           if (this.props.firebase.auth.currentUser === null) {
-    //             fetch(
-    //               "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
-    //               {
-    //                 method: "POST",
-    //                 mode: "cors",
-    //                 cache: "no-cache",
-    //                 credentials: "same-origin",
-    //                 headers: {
-    //                   "Content-Type": "application/json"
-    //                 },
-    //                 redirect: "follow",
-    //                 referrer: "no-referrer",
-    //                 body: JSON.stringify({
-    //                   countryCode: twilioVerification[0],
-    //                   phoneNumber: twilioVerification[1] + twilioVerification[2]
-    //                 })
-    //               }
-    //             ).then(res => {
-    //               res.json().then(res => {
-    //                 console.log(res);
-    //                 window.localStorage.setItem("newUser", res);
-    //               })
-    //               .then(()=>{
-    //            this.props.setisLoading(false)
-    //             this.props.openModal();
-    //                 })
-    //               });
-    //             // } else{
-    //           } else {
-    //             this.props.firebase.fsdb
-    //               .collection("form-inquiry")
-    //               .doc(window.localStorage.getItem("dbDocID"))
-    //               .update({
-    //                 "bookingStatus.phoneVerfication": true,
-    //                 "bookingStatus.status": "Confirmed",
-    //                 "customerDetails.uid": docID
-    //               })
-    //               .then(() => {
-    //                 this.setState(
-    //                   {
-    //                     values: {
-    //                       email: userDoc.customerDetails.email,
-    //                       name: userDoc.customerDetails.name,
-    //                       zipcode: userDoc.customerDetails.zipcode,
-    //                       uid: docID
-    //                     }
-    //                   },
-    //                   () => {
-    //                  this.props.setisLoading(false)
-    //                     this.setState(state => ({
-    //                       page: Math.min(
-    //                         state.page + 1,
-    //                         this.props.children.length - 1
-    //                       )
-    //                     }));
-    //                   }
-    //                 );
-    //               });
-    //           }
-    //         }
-    //       });
-    //   }
-    // });
+      //           });
+      //           if (this.props.firebase.auth.currentUser === null) {
+      //             fetch(
+      //               "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
+      //               {
+      //                 method: "POST",
+      //                 mode: "cors",
+      //                 cache: "no-cache",
+      //                 credentials: "same-origin",
+      //                 headers: {
+      //                   "Content-Type": "application/json"
+      //                 },
+      //                 redirect: "follow",
+      //                 referrer: "no-referrer",
+      //                 body: JSON.stringify({
+      //                   countryCode: twilioVerification[0],
+      //                   phoneNumber: twilioVerification[1] + twilioVerification[2]
+      //                 })
+      //               }
+      //             ).then(res => {
+      //               res.json().then(res => {
+      //                 console.log(res);
+      //                 window.localStorage.setItem("newUser", res);
+      //               })
+      //               .then(()=>{
+      //            this.props.setisLoading(false)
+      //             this.props.openModal();
+      //                 })
+      //               });
+      //             // } else{
+      //           } else {
+      //             this.props.firebase.fsdb
+      //               .collection("form-inquiry")
+      //               .doc(window.localStorage.getItem("dbDocID"))
+      //               .update({
+      //                 "bookingStatus.phoneVerfication": true,
+      //                 "bookingStatus.status": "Confirmed",
+      //                 "customerDetails.uid": docID
+      //               })
+      //               .then(() => {
+      //                 this.setState(
+      //                   {
+      //                     values: {
+      //                       email: userDoc.customerDetails.email,
+      //                       name: userDoc.customerDetails.name,
+      //                       zipcode: userDoc.customerDetails.zipcode,
+      //                       uid: docID
+      //                     }
+      //                   },
+      //                   () => {
+      //                  this.props.setisLoading(false)
+      //                     this.setState(state => ({
+      //                       page: Math.min(
+      //                         state.page + 1,
+      //                         this.props.children.length - 1
+      //                       )
+      //                     }));
+      //                   }
+      //                 );
+      //               });
+      //           }
+      //         }
+      //       });
+      //   }
+      // });
+    }
   };
 
   previous = () =>

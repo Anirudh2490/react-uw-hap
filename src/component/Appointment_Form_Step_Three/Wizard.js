@@ -14,7 +14,7 @@ class WizardBase extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (window.localStorage.getItem("dbDocID") === null) {
       this.props.history.push("/", {
         message: "Register for a vet a visit from here."
@@ -26,10 +26,61 @@ class WizardBase extends React.Component {
         .get()
         .then(doc => {
           if (doc.data().bookingStatus.status === "Confirmed") {
-            window.localStorage.removeItem("dbDocID");
-            this.props.history.push(
-              `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
-            );
+
+            fetch(
+              "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
+              {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                redirect: "follow",
+                referrer: "no-referrer",
+                body: JSON.stringify({
+                  emailReceiver: doc.data().customerDetails.email,
+                  emailSubject:
+                    "Hi " +
+                    doc.data().customerDetails.name +
+                    " Thankyou for registering at Hug a Pet!",
+                  emailContent: {
+                    customerDetails: {
+                      name: doc.data().customerDetails.name,
+                      zipcode: doc.data().customerDetails.zipcode,
+                      phone: doc.data().customerDetails.phone,
+                      email: doc.data().customerDetails.email,
+                      service: doc.data().customerDetails.service
+                    },
+                    vetDetails: {
+                      isVetAssigned: false,
+                      vetName: ""
+                    },
+                    sessionDetails: {
+                      Date: doc.data().sessionDetails.Date,
+                      session: doc.data().sessionDetails.session
+                    },
+                    petDetails: {
+                      petdate: doc.data().petDetails.petdate,
+                      petname: doc.data().petDetails.petname,
+                      type: doc.data().petDetails.type,
+                      gender: doc.data().petDetails.gender,
+                      notes: doc.data().petDetails.notes
+                    },
+                    bookingStatus: {
+                      phoneVerfication: false,
+                      status: "Not confirmed"
+                    }
+                  }
+                })
+              }
+            ).then(res => {
+              window.localStorage.removeItem("dbDocID");
+              this.props.history.push(
+                `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
+              );
+            });
           } else {
             console.log('esle block');
             this.setState({
@@ -59,9 +110,12 @@ class WizardBase extends React.Component {
 
   next = values => {
     console.log(this.state.values);
+    const {  token } = this.props;
     
-    const { token, phone, name, email, zipcode } = this.state.values;
+    const { phone } = this.state.values;
     const twilioVerification = phone.split(" ");
+    console.log(token);
+    
     // verify-otp
     fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
       method: "POST",
@@ -79,6 +133,8 @@ class WizardBase extends React.Component {
       })
     }).then(res => {
       if (res.status === 400) {
+        console.log(res);
+        
         alert("Invalid Code");
       } else {
         // let code = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU2Mzc1Mzg5NiwiZXhwIjoxNTYzNzU3NDk2LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1zbm9vb0BodWdhcGV0LWRlLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstc25vb29AaHVnYXBldC1kZS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6InN3ZWV0LXRvb3RoIn0.kl9KG7mZ3fWuI60XGpOntvcDvNQfRXuhNAB0yvvadLIuHGGqO4W4TCjx2hrPVZXTOEKFEoHLQNJXOX5ttCtH9oIIi_zrtqrKBtC85-en3daZeXkxFXyTrXqnuFewzCvF37l6-BjlJ47l4xAeXouLpBI9JHqQxF8BO0SQwbtn0cybhRawsidOLm7IlfaJhRpjjrnRaXf8EoBHPbjCcwPQKb-_o2bhJ0peUrKwtXfGIW2f2KNpGw-_jT6xfyrOrPTEOMLMLbALF23_JNSf7crUGATbU1Bq4Gzi2kZPZhgXuBwJvULlcdR8Rvg0UsQSJdWUMfOxCoOk2WQA7ZE2RUjmYQ"

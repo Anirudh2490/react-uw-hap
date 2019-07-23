@@ -20,6 +20,16 @@ const WizardFormBase = props => {
   // const [emailError, setEmailError] = useState("");
   // const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
+  const [token, setToken] = useState("");
+
+  
+  function updateOtp(e) {
+    console.log(e.target.value);
+    
+    setToken(e.target.value)
+    console.log(token);
+    
+  }
 
   function dateUpdate(event) {
     setDate(event);
@@ -35,6 +45,7 @@ const WizardFormBase = props => {
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
+        token={token}
         setDate={setDate}
       >
         <Wizard.Page
@@ -48,13 +59,14 @@ const WizardFormBase = props => {
         >
           <div>
             <label>OTP CODE</label>
-            <Field
+            {/* <Field
               name="token"
               component="input"
               type="text"
               placeholder="otp code"
               validate={required}
-            />
+            /> */}
+            <input name="token"  onChange={(e)=>{updateOtp(e)}} type="text" placeholder="otp code" value={token}/>
           </div>
 
           <p>

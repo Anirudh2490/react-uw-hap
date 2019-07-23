@@ -30,7 +30,7 @@ class WizardBase extends React.Component {
     //       .then(querySnapshot => {
     //           if (querySnapshot.empty) {
     //           } else {
-                pets.forEach(doc => {
+                pets.forEach(doc  => {
                   petList.push({
                     petId: doc.petId,
                     petDoc: doc.petDoc

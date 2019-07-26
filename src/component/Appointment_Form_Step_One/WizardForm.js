@@ -3,9 +3,6 @@ import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
-// import Modal from "react-awesome-modal";
-// import { Link } from "react-router-dom";
-// import * as ROUTES from "../../constants/routes";
 import moment from "moment";
 import ReactPhoneInput from "react-phone-input-2";
 import "react-phone-input-2/dist/style.css";
@@ -13,7 +10,6 @@ import DatePicker from "react-datepicker";
 import "./index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Countdown from "react-countdown-now";
-// import TestimonialSection from "../../common/src/containers/Hosting/Testimonials";
 const Error = ({ name }) => (
   <Field
     name={name}
@@ -36,10 +32,11 @@ const WizardFormBase = props => {
   const [token, setToken] = useState(false);
   const [timer, setTimer] = useState("");
   const [withOutLogin, setwithOutLogin] = useState("");
-
-
-
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [dateAvail, setdateAvail] = useState(false)
+  
   function dateUpdate(event) {
+    setdateAvail(true)
     setDate(event);
   }
 
@@ -58,11 +55,8 @@ const WizardFormBase = props => {
     setVisibilty(true);
   }
 
-  
-  
-
   function continueWithoutLogin() {
-    setwithOutLogin(true)
+    setwithOutLogin(true);
   }
 
   function validateOtp() {
@@ -75,7 +69,7 @@ const WizardFormBase = props => {
   }
 
   function triggerresendOtp() {
-    setTimer(Date.now() + 30000)
+    setTimer(Date.now() + 30000);
     setresendOtp(true);
   }
 
@@ -127,123 +121,6 @@ const WizardFormBase = props => {
           <p>We can honor the appointment upto one hour after inquiry time.</p>
         </div>
         <h2>Step 2 of 4</h2>
-        <div>
-          {/* <Modal
-            visible={visible}
-            width="400"
-            height="300"
-            effect="fadeInUp"
-            // onClickAway={() => closeModal()}
-          >
-            <section id="contact_section" className="sc-bdVaJa gfSVMY">
-              <div className="container sc-EHOje gzbFsC">
-                <div
-                  style={{ marginBottom: "25px" }}
-                  className="sc-bdVaJa hbDlSm"
-                >
-                  <h2
-                    fontSize="6,8"
-                    fontWeight="400"
-                    color="headingColor"
-                    letterSpacing="-0.025em"
-                    className="sc-htpNat kpHkZI"
-                  >
-                    Welcome back to HugAPet!
-                  </h2>
-                  <span
-                    display="block"
-                    fontSize="2"
-                    letterSpacing="0.15em"
-                    fontWeight="6"
-                    color="primary"
-                    className="sc-bwzfXH gdhEJB"
-                  >
-                    We've sent you a passcode on your phone. Please enter to
-                    login
-                  </span>
-                </div>
-                <div className="sc-bdVaJa kQXApq">
-                  <div
-                    width="80%"
-                    style={{ width: "80%" }}
-                    className="sc-bdVaJa iqngkO"
-                  >
-                    <div
-                      style={{ width: "100%", margin: "auto" }}
-                      className="reusecore__input email_input  sc-kpOJdX gaENIB"
-                    >
-                      <div className="field-wrapper">
-                        <input
-                          name="token"
-                          component="input"
-                          type="text"
-                          onChange={(e)=>{updateOtp(e)}}
-                          placeholder="otp code"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div id="pop-button-two">
-                        <button
-                          style={{ width: "100%", margin: "10px 0 0 0" }}
-                          type="button"
-                          // className="reusecore__button pop-button"
-                          fontSize="2"
-                          fontWeight="600"
-                          height="4"
-                          onClick={() => validateOtp()}
-                        >
-                          <span className="btn-text">Submit</span>
-                        </button>
-                      </div>
-                      <div id="pop-button-two">
-                        <button
-                          style={{ width: "100%", margin: "10px 0 0 0" }}
-                          type="button"
-                          // className="reusecore__button pop-button"
-                          fontSize="2"
-                          fontWeight="600"
-                          height="4"
-                          onClick={() => triggerresendOtp()}
-                        >
-                          <span className="btn-text">Resend OTP</span>
-                        </button>
-                      </div>
-                      <div id="pop-button-one">
-                        <button
-                          style={{ width: "100%", margin: "10px 0 0px 0" }}
-                          type="button"
-                          // className="reusecore__button pop-button"
-                          fontSize="2"
-                          fontWeight="600"
-                          height="4"
-                          onClick={() => closeModal()}
-                        >
-                          <span className="btn-text">Close</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section> */}
-          {/* <div style={{ textAlign: "center" }}>
-              <h1 />
-
-              <div>
-                <label>OTP CODE</label>
-                <input
-                  name="token"
-                  component="input"
-                  type="text"
-                  placeholder="otp code"
-                />
-              </div>
-              <button onClick={() => validateOtp()}>Submit</button>
-              <button onClick={() => closeModal()}>Close</button>
-            </div> */}
-          {/* </Modal> */}
-        </div>
         <Wizard
           firebase={props.firebase}
           setDate={setDate}
@@ -259,6 +136,9 @@ const WizardFormBase = props => {
           resendOtp={resendOtp}
           setresendOtp={setresendOtp}
           date={date}
+          setdateAvail={setdateAvail}
+          dateAvail={dateAvail}
+          setIsDisabled={setIsDisabled}
           token={token}
           setwithOutLogin={setwithOutLogin}
           setTimer={setTimer}
@@ -268,7 +148,7 @@ const WizardFormBase = props => {
             {isLoading ? (
               <div style={{ height: "200px" }}>
                 <div style={{ display: "inline-block", margin: "auto" }}>
-                  <div class="loader" />
+                  <div className="loader" />
                   <div>
                     <p>Searching number in database</p>
                   </div>
@@ -282,6 +162,7 @@ const WizardFormBase = props => {
                   <ReactPhoneInput
                     defaultCountry="de"
                     value={number}
+                    disabled={isDisabled}
                     inputExtraProps={{
                       name: "phone",
                       required: true,
@@ -294,6 +175,17 @@ const WizardFormBase = props => {
             )}
           </Wizard.Page>
           <Wizard.Page>
+          {isLoading ? (
+              <div style={{ height: "200px" }}>
+                <div style={{ display: "inline-block", margin: "auto" }}>
+                  <div className="loader" />
+                  <div>
+                    <p>Searching number in database</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Fragment>
             <section id="contact_section" className="sc-bdVaJa gfSVMY">
               <div className="container sc-EHOje gzbFsC">
                 <div
@@ -310,12 +202,6 @@ const WizardFormBase = props => {
                     Welcome back to HugAPet!
                   </h2>
                   <span
-                    display="block"
-                    fontSize="2"
-                    letterSpacing="0.15em"
-                    fontWeight="6"
-                    color="primary"
-                    className="sc-bwzfXH gdhEJB"
                   >
                     We've sent you a passcode on your phone. Please enter to
                     login
@@ -327,21 +213,15 @@ const WizardFormBase = props => {
                     style={{ width: "80%", margin: "auto" }}
                     className="sc-bdVaJa iqngkO"
                   >
-                    <div
-                      style={{ width: "100%", margin: "auto" }}
-                      className="reusecore__input email_input  sc-kpOJdX gaENIB"
-                    >
-                      <div className="field-wrapper">
-                        <input
-                          name="token"
-                          component="input"
-                          type="text"
-                          onChange={e => {
-                            updateOtp(e);
-                          }}
-                          placeholder="otp code"
-                        />
-                      </div>
+                    <div id="otp-feild">
+                      <Field
+                        name="token"
+                        component="input"
+                        type="text"
+                        placeholder="otp code"
+                        validate={required}
+                      />
+                      <Error name="email" />
                     </div>
                     <div>
                       {/* <div id="pop-button-two">
@@ -367,7 +247,9 @@ const WizardFormBase = props => {
                           height="4"
                           onClick={() => continueWithoutLogin()}
                         >
-                          <span className="btn-text">Continue Without Login</span>
+                          <span className="btn-text">
+                            Continue Without Login
+                          </span>
                         </button>
                       </div>
                       <div id="pop-button-two">
@@ -403,6 +285,8 @@ const WizardFormBase = props => {
                 </div>
               </div>
             </section>
+            </Fragment>
+            )}
           </Wizard.Page>
           <Wizard.Page>
             <div>

@@ -25,7 +25,7 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
-          console.log(doc.data().bookingStatus.status === "Confirmed");
+          console.log(doc);
           
           if (doc.data().bookingStatus.status === "Confirmed" || window.localStorage.getItem("contWithOutLogin") === "true") {
           
@@ -80,13 +80,14 @@ class WizardBase extends React.Component {
                 }
               ).then(res => {
                 window.localStorage.removeItem("dbDocID");
+                window.localStorage.removeItem("contWithOutLogin");
+                window.localStorage.removeItem("newUser");
                 this.props.history.push(
                   `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
                 );
               });
             }
           } else {
-            console.log('esle block');
             this.setState({
               values: {
                 petname: doc.data().petDetails.petname,
@@ -113,12 +114,11 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
-    console.log(this.state.values);
+    this.props.setisLoading(true);
     const {  token } = this.props;
-    
     const { phone } = this.state.values;
     const twilioVerification = phone.split(" ");
-    console.log(token);
+    console.log(twilioVerification, token);
     
     // verify-otp
     fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
@@ -136,27 +136,15 @@ class WizardBase extends React.Component {
         phoneNumber: twilioVerification[1] + twilioVerification[2]
       })
     }).then(res => {
+    this.props.setisLoading(false);
       if (res.status === 400) {
-        console.log(res);
-        
         alert("Invalid Code");
       } else {
-        // let code = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU2Mzc1Mzg5NiwiZXhwIjoxNTYzNzU3NDk2LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1zbm9vb0BodWdhcGV0LWRlLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstc25vb29AaHVnYXBldC1kZS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6InN3ZWV0LXRvb3RoIn0.kl9KG7mZ3fWuI60XGpOntvcDvNQfRXuhNAB0yvvadLIuHGGqO4W4TCjx2hrPVZXTOEKFEoHLQNJXOX5ttCtH9oIIi_zrtqrKBtC85-en3daZeXkxFXyTrXqnuFewzCvF37l6-BjlJ47l4xAeXouLpBI9JHqQxF8BO0SQwbtn0cybhRawsidOLm7IlfaJhRpjjrnRaXf8EoBHPbjCcwPQKb-_o2bhJ0peUrKwtXfGIW2f2KNpGw-_jT6xfyrOrPTEOMLMLbALF23_JNSf7crUGATbU1Bq4Gzi2kZPZhgXuBwJvULlcdR8Rvg0UsQSJdWUMfOxCoOk2WQA7ZE2RUjmYQ"
+      
         this.props.firebase
           .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
                     .then(authUser => {
             const uid = authUser.user.uid;
-            // this.props.firebase.fsdb
-            //   .collection(
-            //     `userCollection/${
-            //       this.props.firebase.auth.currentUser.uid
-            //     }/appointments/`
-            //   )
-            //   .doc(window.localStorage.getItem("dbDocID"))
-            //   .set({
-            //     appointmentID: window.localStorage.getItem("dbDocID")
-            //   })
-            // .then(() => {
             this.props.firebase.fsdb
               .collection("form-inquiry")
               .doc(window.localStorage.getItem("dbDocID"))
@@ -176,8 +164,8 @@ class WizardBase extends React.Component {
                 userrole: "customer"
               },{merge: true})
               .then(() => {
-                // window.localStorage.removeItem("dbDocID");
-                // window.localStorage.removeItem("newUser");
+                  console.log(this.state);
+                  
                 fetch(
                   "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
                   {
@@ -228,6 +216,8 @@ class WizardBase extends React.Component {
                   }
                 ).then(res => {
                   window.localStorage.removeItem("dbDocID");
+                  window.localStorage.removeItem("contWithOutLogin");
+                  window.localStorage.removeItem("newUser");
                   this.props.history.push(
                     `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
                   );

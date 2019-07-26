@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , Fragment } from "react";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
@@ -21,6 +21,7 @@ const WizardFormBase = props => {
   // const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
   const [token, setToken] = useState("");
+  const [isLoading, setisLoading] = useState(false);
 
   
   function updateOtp(e) {
@@ -37,6 +38,7 @@ const WizardFormBase = props => {
 
   
   return (
+    <div  id="wizard-step-three">
     <Styles>
       <h1>We are assigning a vet to your case</h1>
       <h2>We have sent an OTP to your phone number</h2>
@@ -45,6 +47,8 @@ const WizardFormBase = props => {
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
+        isLoading={isLoading}
+        setisLoading={setisLoading}
         token={token}
         setDate={setDate}
       >
@@ -56,7 +60,17 @@ const WizardFormBase = props => {
             }
             return errors;
           }}
-        >
+        >{isLoading ? (
+          <div style={{ height: "200px" }}>
+            <div style={{ display: "inline-block", margin: "auto" }}>
+              <div className="loader" />
+              <div>
+                <p>Verifying Code</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Fragment>
           <div>
             <label>OTP CODE</label>
             {/* <Field
@@ -74,11 +88,11 @@ const WizardFormBase = props => {
             example, pass some more detailed information to the vet for better
             understanding about the case.
           </p>
-
-        
+          </Fragment>)}
         </Wizard.Page>
       </Wizard>
     </Styles>
+    </div>
   );
 };
 const WizardForm4 = withFirebase(WizardFormBase);

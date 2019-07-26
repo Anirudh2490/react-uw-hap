@@ -29,6 +29,8 @@ class WizardBase extends React.Component {
           .doc(window.localStorage.getItem("dbDocID"))
           .get()
           .then(doc => {
+            console.log(doc.data().customerDetails.phone);
+
             this.setState(
               {
                 values: {
@@ -43,16 +45,21 @@ class WizardBase extends React.Component {
                 }
               },
               () => {
+                this.props.setPetAge(doc.data().petDetails.petdate)
                 const { petList } = this.state;
                 this.props.setClientName(doc.data().customerDetails.name);
                 //search phone number in database
-                if (window.localStorage.getItem("contWithOutLogin")  === "true") {
-                    console.log('getting petlist');
-                    this.setState(
-                      state => ({
-                        page: Math.min(state.page + 1, this.props.children.length - 1),
-                      }));
-                }else{                
+                if (
+                  window.localStorage.getItem("contWithOutLogin") === "true"
+                ) {
+                  console.log("getting petlist");
+                  this.setState(state => ({
+                    page: Math.min(
+                      state.page + 1,
+                      this.props.children.length - 1
+                    )
+                  }));
+                } else {
                   this.props.firebase.fsdb
                     .collection("form-inquiry")
                     .where(
@@ -63,13 +70,17 @@ class WizardBase extends React.Component {
                     .get()
                     .then(querySnapshot => {
                       console.log(querySnapshot);
-                      
+
                       if (querySnapshot.empty) {
-                        this.setState(
-                          state => ({
-                            page: Math.min(state.page + 1, this.props.children.length - 1),
-                          }));
-                        } else {
+                        this.setState(state => ({
+                          page: Math.min(
+                            state.page + 1,
+                            this.props.children.length - 1
+                          )
+                        }));
+                      } else {
+                        console.log(querySnapshot);
+
                         querySnapshot.forEach(doc => {
                           petList.push({
                             petId: doc.id,
@@ -108,6 +119,19 @@ class WizardBase extends React.Component {
 
   componentWillReceiveProps(nextprops) {
     console.log(nextprops);
+
+    if (nextprops.validNum === true) {
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .doc(window.localStorage.getItem("dbDocID"))
+        .update({
+          "customerDetails.phone": `${this.props.number}`
+        })
+        .then(() => {
+          this.props.setvalidNum(false);
+          this.props.closeModal();
+        });
+    }
 
     if (nextprops.selectedPetID !== "") {
       this.props.firebase.fsdb
@@ -168,12 +192,14 @@ class WizardBase extends React.Component {
   }
 
   onSubmit = values => {
+    this.props.setisLoading(true);
     console.log(values);
     const showAlert =
       values["petname"] === undefined ||
       values["type"] === undefined ||
       values["gender"] === undefined ||
       values["notes"] === "";
+
     var phone;
     // if (phone === undefined) {
     this.props.firebase.fsdb
@@ -187,6 +213,7 @@ class WizardBase extends React.Component {
         const twilioVerification = phone.split(" ");
 
         if (showAlert) {
+          this.props.setisLoading(false);
           alert("Please fill all the fields");
         } else {
           this.props.firebase.fsdb
@@ -200,7 +227,9 @@ class WizardBase extends React.Component {
               "petDetails.notes": `${values["notes"]}`
             })
             .then(res => {
-              if (this.props.firebase.auth.currentUser === null) {
+              if (
+                this.props.firebase.auth.currentUser === null && window.localStorage.getItem("contWithOutLogin") === null
+              ) {
                 fetch(
                   "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
                   {
@@ -219,12 +248,79 @@ class WizardBase extends React.Component {
                     })
                   }
                 ).then(res => {
-                  res.json().then(res => {
-                    console.log(res);
-                    window.localStorage.setItem("newUser", res);
-                  });
+                  if (res.status === 400) {
+                    this.props.setisLoading(false);
+                    this.props.openModal();
+                  } else {
+                    res
+                      .json()
+                      .then(res => {
+                        console.log("code sent", res);
+                        window.localStorage.setItem("newUser", res);
+                      })
+                      .then(() => {
+                        //APPI CALL FOR TWILIO Email
+                        fetch("https://hug-a-pet.herokuapp.com/send/mail", {
+                          method: "POST",
+                          mode: "cors",
+                          cache: "no-cache",
+                          credentials: "same-origin",
+                          headers: {
+                            "Content-Type": "application/json"
+                          },
+                          redirect: "follow",
+                          referrer: "no-referrer",
+                          body: JSON.stringify({
+                            emailReceiver: this.state.values.email,
+                            emailSubject:
+                              "Hi " +
+                              this.state.values.name +
+                              " Thankyou for registering at Hug a Pet!",
+                            emailContent:
+                              "Hi " +
+                              this.state.values.name +
+                              "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
+                          })
+                        })
+                          // })
+                          .then(() => {
+                            this.props.history.push(
+                              ROUTES.BOOKING_VERIFICATION
+                            );
+                          });
+                      });
+                  }
                 });
+              } else {
+                //APPI CALL FOR TWILIO Email
+                fetch("https://hug-a-pet.herokuapp.com/send/mail", {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    emailReceiver: this.state.values.email,
+                    emailSubject:
+                      "Hi " +
+                      this.state.values.name +
+                      " Thankyou for registering at Hug a Pet!",
+                    emailContent:
+                      "Hi " +
+                      this.state.values.name +
+                      "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
+                  })
+                })
+                  // })
+                  .then(() => {
+                    this.props.history.push(ROUTES.BOOKING_VERIFICATION);
+                  });
               }
+
               //APPI CALL FOR TWILIO MSG
               // fetch("https://hug-a-pet.herokuapp.com/api/messages", {
               //   method: "POST",
@@ -244,35 +340,9 @@ class WizardBase extends React.Component {
               //   })
               // });
               // .then(() => {
-              //APPI CALL FOR TWILIO Email
-              fetch("https://hug-a-pet.herokuapp.com/send/mail", {
-                method: "POST",
-                mode: "cors",
-                cache: "no-cache",
-                credentials: "same-origin",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                redirect: "follow",
-                referrer: "no-referrer",
-                body: JSON.stringify({
-                  emailReceiver: values.email,
-                  emailSubject:
-                    "Hi " +
-                    values.name +
-                    " Thankyou for registering at Hug a Pet!",
-                  emailContent:
-                    "Hi " +
-                    values.name +
-                    "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                })
-              })
-                // })
-                .then(() => {
-                  this.props.history.push(ROUTES.BOOKING_VERIFICATION);
-                });
             })
             .catch(rej => {
+              this.props.setisLoading(false);
               alert("There is some error");
             });
         }
@@ -384,6 +454,7 @@ class WizardBase extends React.Component {
     const { page, values } = this.state;
     const activePage = React.Children.toArray(children)[page];
     const isLastPage = page === React.Children.count(children) - 1;
+    console.log(this.state);
     return (
       <Form
         initialValues={values}
@@ -407,7 +478,10 @@ class WizardBase extends React.Component {
               )}
               {/* {!isLastPage && <button type="submit">Next »</button>} */}
               {isLastPage && (
-                <button type="submit" disabled={submitting}>
+                <button
+                  type="submit"
+                  disabled={this.props.isLoading ? true : false}
+                >
                   Submit »
                 </button>
               )}

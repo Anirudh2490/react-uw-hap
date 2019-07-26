@@ -64,7 +64,7 @@ const ScrollSpyMenu = ({ className, menuItems, drawerClose, ...props }) => {
         </li>
       ))}
       <li key="our-blog">
-        <Link href="http://hugapet-de.firebaseapp.com/blog">
+        <Link href="https://vibrant-banach-47c0e4.netlify.com/">
           <a>Our Blog</a>
         </Link>
       </li>

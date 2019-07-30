@@ -47,6 +47,11 @@
     border-color: #028489 !important;
 }
 
+.stepper {
+    margin: 0px auto;
+    max-width: 1400px;
+}
+
 /* .reusecore__button {
     background-color: #ffffff  !important ;
     color: #028489  !important;
@@ -518,6 +523,10 @@ section#service_section {
 
 .jZqBhq:hover {
     background-color: #028489 !important;
+}
+
+.jZqBhq p {
+    display: contents;
 }
 
 /* drcvxM  */

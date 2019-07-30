@@ -5,6 +5,7 @@ import FeatureBlockWrapper, {
   ContentWrapper,
   ButtonWrapper,
 } from './featureBlock.style';
+import { DescriptionSection } from './descriptionSection';
 
 const FeatureBlock = ({
   className,
@@ -39,10 +40,9 @@ const FeatureBlock = ({
       {icon}
     </IconWrapper>
   );
-
   return (
     <FeatureBlockWrapper
-      className={addAllClasses.join(' ')}
+      className={addAllClasses.join(" ")}
       {...wrapperStyle}
       {...props}
     >
@@ -52,7 +52,7 @@ const FeatureBlock = ({
         <Fragment>
           <ContentWrapper className="content__wrapper" {...contentStyle}>
             {title}
-            {description}
+            {description && <DescriptionSection description={description} />}
             {button && (
               <ButtonWrapper className="button__wrapper" {...btnWrapperStyle}>
                 {button}
@@ -62,7 +62,7 @@ const FeatureBlock = ({
           {additionalContent}
         </Fragment>
       ) : (
-        ''
+        ""
       )}
     </FeatureBlockWrapper>
   );

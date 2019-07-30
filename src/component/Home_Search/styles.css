@@ -11,12 +11,29 @@
     padding: 100px 0px;
 }
 
-.isBPPJ h4 {
+.isBPPJ h2, .isBPPJ h4  {
     text-align: center;
-    color: #222;
+    color: white;
 }
 
-/* @media only screen and (max-width: 728px)
-.marquee-wrapper {
-    zoom: 35%;
-} */
+.isBPPJ form {
+    text-align: center;
+    max-width: 51% !important;
+    background: #588285;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+@media only screen and (max-width: 728px) {
+    /* .marquee-wrapper {
+        zoom: 35%;
+    } */
+    .isBPPJ form {
+        max-width: 100% !important;
+    }
+}

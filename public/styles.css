@@ -2353,9 +2353,7 @@
    }
    
    .column {
-     padding-top: 10px;
-     padding-right: 10px;
-     padding-bottom: 10px;
+     padding: 5px;
    }
    
    .html-embed-9 {

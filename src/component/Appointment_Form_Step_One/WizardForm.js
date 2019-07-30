@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
+import Stepper from "react-stepper-horizontal";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import Modal from "react-awesome-modal";
@@ -62,11 +63,23 @@ const WizardFormBase = props => {
     <div id="wizard-step-one">
       <Styles>
         <div style={{ textAlign: "center" }}>
+          <div className="stepper">
+            <Stepper
+              steps={[
+                { title: "CUSTOMER DETAILS" },
+                { title: "PET INFO" },
+                { title: "CONFIRM BOOKING" }
+              ]}
+              activeStep={0}
+              className="stepper"
+            />
+          </div>
           <h1>Great, you are looking for an appointment for {service}</h1>
           <a href="#">Free video consultation on confirmed appointment</a>
-          <p>We can honor the appointment upto one hour after inquiry time.</p>
+          <p>
+            We can honor the appointment upto one hour after inquiry time.
+          </p>
         </div>
-        <h2>Step 2 of 4</h2>
         <div>
           <Modal
             visible={visible}

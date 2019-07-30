@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Stepper from "react-stepper-horizontal";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
@@ -7,7 +8,8 @@ import * as ROUTES from "../../constants/routes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import Chat from '../ChatBot/PostBooking'
+import Chat from '../ChatBot/PostBooking';
+import './index.css';
 
 const Error = ({ name }) => (
   <Field
@@ -39,6 +41,17 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
+      <div className="stepper">
+        <Stepper
+          steps={[
+            { title: "CUSTOMER DETAILS" },
+            { title: "PET INFO" },
+            { title: "CONFIRM BOOKING" }
+          ]}
+          activeStep={2}
+        />
+      </div>
+      <h1>Your Account has been Verfied</h1>
       <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
@@ -46,7 +59,6 @@ const WizardFormBase = props => {
         emailPrompt={errorHandler}
         setdocID={setdocID}
         setDate={setDate}
-        // onSubmit={onSubmit}
       >
         <Wizard.Page
           validate={values => {
@@ -57,25 +69,18 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
-          <h1>Your Account has been Verfied</h1>
           <h4>Thanks for confirming the OTP</h4>
           <h2>We are assigning a vet to your case</h2>
           <p>
-            Is there anything else you would like to update about this case, for
-            example, pass some more detailed information to the vet for better
-            understanding about the case.
+            Is there anything else you would like to update about this case,
+            for example, pass some more detailed information to the vet for
+            better understanding about the case.
           </p>
-          {/* <div style={{ height: "163px", margin: "0" }}>
-            <Field
-              name="otpnotes"
-              type="text"
-              placeholder="My dog is a Golden retriever..."
-              component="input"
-            />
-          </div> */}
         </Wizard.Page>
       </Wizard>
-      <div><Chat/></div>
+      <div>
+        <Chat />
+      </div>
     </Styles>
   );
 };

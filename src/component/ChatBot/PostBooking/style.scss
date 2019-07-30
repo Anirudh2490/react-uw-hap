@@ -1,16 +1,23 @@
 
-// html, 
-// body {
-//   background: rgb(52,136,140);
-//   font-family: 'Montserrat', sans-serif;
-// }
-
-// h1, h2, h3, h4, h5 {
-//   color: white !important;
-// }
-
-
-// pre.user {
-//   background: rgb(33, 52, 70);
-//   color: white;
-// }
+.chat {
+  text-align: center;
+  max-width: 51% !important;
+  margin: 10px auto;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  border-radius: 3px;
+  position: relative;
+  height: 700px;
+}
+.chat-frame {
+    border-radius: 3px;
+    border: none;
+    height: 99%;
+    width: 100%;
+}
+@media only screen and (max-width: 728px) {
+  .chat {
+    max-width: 100% !important;
+    margin: 10px;
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Stepper from "react-stepper-horizontal";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
@@ -28,9 +29,19 @@ const WizardFormBase = props => {
   
   return (
     <Styles>
+      <div className="stepper">
+        <Stepper
+          steps={[
+            { title: "CUSTOMER DETAILS" },
+            { title: "PET INFO" },
+            { title: "CONFIRM BOOKING" }
+          ]}
+          activeStep={2}
+          className="stepper"
+        />
+      </div>
       <h1>We are assigning a vet to your case</h1>
       <h2>We have sent an OTP to your phone number</h2>
-      <h2>Step 4 of 4</h2>
       <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
@@ -58,12 +69,10 @@ const WizardFormBase = props => {
           </div>
 
           <p>
-            Is there anything else you would like to update about this case, for
-            example, pass some more detailed information to the vet for better
-            understanding about the case.
+            Is there anything else you would like to update about this case,
+            for example, pass some more detailed information to the vet for
+            better understanding about the case.
           </p>
-
-        
         </Wizard.Page>
       </Wizard>
     </Styles>

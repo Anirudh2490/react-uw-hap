@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import * as ROUTE from "../../constants/routes";
 import WizardForm from "../Appointment_Form_Step_One/WizardForm";
 import WizardForm2 from "../Appointment_Form_Step_Two/WizardForm";
+
 const BookAnAppointment = props => {
   return (
     <div>

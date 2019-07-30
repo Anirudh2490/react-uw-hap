@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Stepper from "react-stepper-horizontal";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
@@ -83,10 +84,19 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
+      <div className="stepper">
+        <Stepper
+          steps={[
+            { title: "CUSTOMER DETAILS" },
+            { title: "PET INFO" },
+            { title: "CONFIRM BOOKING" }
+          ]}
+          activeStep={1}
+        />
+      </div>
       <div>
         <h1>We are pleased to meet you {clientName}</h1>
       </div>
-      <h2>Step 3 of 4</h2>
       <Wizard
         // initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
@@ -114,7 +124,7 @@ const WizardFormBase = props => {
                 {selectedPet &&
                   selectedPet.map(doc => {
                     console.log(doc);
-                    
+
                     if (doc.petDoc.petname !== "") {
                       return (
                         <li

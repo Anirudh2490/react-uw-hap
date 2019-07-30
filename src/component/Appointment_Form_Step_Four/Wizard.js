@@ -122,18 +122,7 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form>
-            {activePage}
-            <div className="buttons">
-              {/* <button
-                type="submit"
-                onClick={e => this.handleSubmit(e, values)}
-                disabled={submitting}
-              >
-                Submit
-              </button> */}
-            </div>
-          </form>
+          <form>{activePage}</form>
         )}
       </Form>
     );

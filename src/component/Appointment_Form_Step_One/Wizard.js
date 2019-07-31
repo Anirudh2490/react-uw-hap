@@ -14,12 +14,14 @@ class WizardBase extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.firebase.auth.getUid());
     if (window.localStorage.getItem("dbDocID") === null) {
-      this.props.history.push("/", {
-        message: "Register for a vet a visit from here."
-      });
-    } else  {
+      this.props.history.push("/");
+    } else {
+      if (this.props.location.state !== undefined) {
+        this.setState({
+          page: this.props.location.state[0].pageNumber || 0
+        });
+      }
       this.props.firebase.fsdb
         .collection("form-inquiry")
         .doc(window.localStorage.getItem("dbDocID"))
@@ -34,11 +36,9 @@ class WizardBase extends React.Component {
                 zipcode: doc.data().customerDetails.zipcode,
                 session: doc.data().sessionDetails.session,
                 uid: doc.data().customerDetails.uid
-                // videoconsultation: doc.data().sessionDetails.videoconsultation
               }
             },
             () => {
-              
               this.props.setService(doc.data().customerDetails.service);
               if (doc.data().sessionDetails.Date) {
                 this.props.setDate(doc.data().sessionDetails.Date);
@@ -67,43 +67,37 @@ class WizardBase extends React.Component {
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             if (doc.data().customerDetails.phone !== "") {
-              userDoc = doc.data()
+              userDoc = doc.data();
             }
-           
           });
           this.props.firebase.fsdb
-          .collection("form-inquiry")
-          .doc(window.localStorage.getItem("dbDocID"))
-          .update({
-            "bookingStatus.phoneVerfication": true,
-            "bookingStatus.status": "Confirmed",
-            "customerDetails.uid": this.props.firebase.auth.currentUser.uid
-          })
-          .then(() => {
-            this.setState(
-              {
-                values: {
-                  email: userDoc.customerDetails.email,
-                  name: userDoc.customerDetails.name,
-                  zipcode: userDoc.customerDetails.zipcode,
-                  uid: this.props.firebase.auth.currentUser.uid
+            .collection("form-inquiry")
+            .doc(window.localStorage.getItem("dbDocID"))
+            .update({
+              "bookingStatus.phoneVerfication": true,
+              "bookingStatus.status": "Confirmed",
+              "customerDetails.uid": this.props.firebase.auth.currentUser.uid
+            })
+            .then(() => {
+              this.setState(
+                {
+                  values: {
+                    email: userDoc.customerDetails.email,
+                    name: userDoc.customerDetails.name,
+                    zipcode: userDoc.customerDetails.zipcode,
+                    uid: this.props.firebase.auth.currentUser.uid
+                  }
+                },
+                () => {
+                   this.props.setNum(userDoc.customerDetails.phone);
+                   this.props.setisLoading(false);
+                   this.props.setIsDisabled(true);
                 }
-              },
-              () => {
-                console.log(userDoc.customerDetails.phone);
-                
-                this.props.setNum(userDoc.customerDetails.phone);
-                this.props.setisLoading(false);
-                this.props.setIsDisabled(true);
-              }
-            );
-          });
+              );
+            });
         });
-    } 
-    console.log(nextProps);
+    }
     if (nextProps.withOutLogin === true) {
-      console.log("without login");
-
       window.localStorage.setItem("contWithOutLogin", true);
       this.setState(
         {
@@ -117,8 +111,6 @@ class WizardBase extends React.Component {
         }
       );
     }
-
-    console.log(this.state.page);
 
     if (nextProps.resendOtp === true) {
       console.log("resend otp");
@@ -140,32 +132,33 @@ class WizardBase extends React.Component {
           phoneNumber: twilioVerification[1] + twilioVerification[2]
         })
       }).then(res => {
-          if (res.status === 400) {
+        if (res.status === 400) {
           this.props.setresendOtp(false);
-            alert("Invalid Number");
-          } else {
-            res.json().then(res => {
-              console.log(res);
-              window.localStorage.setItem("newUser", res);
-              this.props.setresendOtp(false);
-            });
-          }
-        });
+          alert("Invalid Number");
+        } else {
+          res.json().then(res => {
+            window.localStorage.setItem("newUser", res);
+            this.props.setresendOtp(false);
+          });
+        }
+      });
     }
   }
 
   onSubmit = values => {
-    console.log(values);
-    const showAlert =
-      this.props.dateAvail === false ||
-      values["session"] === "" ||
-      values === {} ||
-      values.name === "" ||
-      values.email === "";
-    console.log(showAlert);
-
-    if (showAlert) {
-      alert("Please fill all fields");
+    console.log("form submitted");
+    if (values.email === undefined || values.email === "") {
+      this.props.setEmailError({
+        emailError: true
+      });
+    }else if (values.name === undefined || values.name ===  "") {
+      this.props.setNameError({
+        nameError: true
+      });
+    }else if (values.session === undefined || values.session === "") {
+      this.props.setSessionError({
+        sessionError: true
+      });
     } else {
       this.props.firebase.fsdb
         .collection("form-inquiry")
@@ -187,12 +180,11 @@ class WizardBase extends React.Component {
           console.log(this.state.values);
 
           this.props.history.push(
-            `${this.props.match.url}/${this.state.values.zipcode}`,
-            [{ prevData: this.state.values }]
+            `${this.props.match.url}/${this.state.values.zipcode}`
           );
         })
         .catch(rej => {
-          this.props.setdateAvail(false)
+          this.props.setdateAvail(false);
           console.log(rej);
           alert(rej);
         });
@@ -226,10 +218,7 @@ class WizardBase extends React.Component {
       }).then(res => {
         if (res.status === 400) {
           this.props.setCheckOtp(false);
-          alert("Invalid Number, please confirm Number");
-          this.setState(state => ({
-            page: Math.max(state.page - 1, 0)
-          }));
+          alert("Invalid Code");
         } else {
           this.props.firebase
             .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
@@ -268,7 +257,6 @@ class WizardBase extends React.Component {
                 }),
                 () => {
                   this.props.setCheckOtp(false);
-                  this.props.setVisibilty(false);
                 }
               );
             });
@@ -323,13 +311,13 @@ class WizardBase extends React.Component {
                         }
                       },
                       () => {
-                        this.props.setisLoading(false);
                         this.setState(state => ({
                           page: Math.min(
                             state.page + 2,
                             this.props.children.length - 1
                           )
                         }));
+                        this.props.setisLoading(false);                      
                       }
                     );
                   });
@@ -378,18 +366,22 @@ class WizardBase extends React.Component {
                   }
                 ).then(res => {
                   if (res.status === 400) {
+                    alert("Invalid Number");
+                    this.props.setNum("");
+                    this.props.setisLoading(false);
                     this.props.setresendOtp(false);
-                      alert("Invalid Number");
-                    } else {
-                      res.json().then(res => {
+                  } else {
+                    res
+                      .json()
+                      .then(res => {
                         console.log(res);
                         window.localStorage.setItem("newUser", res);
                         this.props.setresendOtp(false);
+                        this.props.setisLoading(false);
                       })
                       .then(() => {
                         this.props.setisLoading(false);
                         this.props.setTimer(Date.now() + 30000);
-                        // this.props.openModal();
                         this.setState(state => ({
                           page: Math.min(
                             state.page + 1,
@@ -397,8 +389,8 @@ class WizardBase extends React.Component {
                           )
                         }));
                       });
-                    }
-                })
+                  }
+                });
               }
             }
           });
@@ -438,9 +430,6 @@ class WizardBase extends React.Component {
 
   render() {
     const { children } = this.props;
-    console.log(this.props.date);
-    
-    
     const { page, values } = this.state;
     const activePage = React.Children.toArray(children)[page];
     const isLastPage = page === React.Children.count(children) - 1;
@@ -451,7 +440,10 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form className="wizard-form">
+          <form
+            onSubmit={e => this.handleSubmit(e, values)}
+            className="wizard-form"
+          >
             {activePage}
             <div className="buttons">
               {page > 0 && (
@@ -462,18 +454,13 @@ class WizardBase extends React.Component {
               {!isLastPage && (
                 <button
                   disabled={this.props.isLoading ? true : false}
-                  onClick={e => this.handleSubmit(e, values)}
                   type="submit"
                 >
                   Next »
                 </button>
               )}
               {isLastPage && (
-                <button
-                  onClick={e => this.handleSubmit(e, values)}
-                  type="submit"
-                  disabled={submitting}
-                >
+                <button type="submit" disabled={submitting}>
                   Next »
                 </button>
               )}

@@ -57,14 +57,9 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
-          <h1>Your Account has been Verfied</h1>
-          <h4>Thanks for confirming the OTP</h4>
-          <h2>We are assigning a vet to your case</h2>
-          <p>
-            Is there anything else you would like to update about this case, for
-            example, pass some more detailed information to the vet for better
-            understanding about the case.
-          </p>
+          <h1>Your Appointment was Booked Successfully</h1>
+          <h4>Thanks for booking at HUGAPET</h4>
+          <h2>We will soon assign a vet to your case</h2>
           {/* <div style={{ height: "163px", margin: "0" }}>
             <Field
               name="otpnotes"

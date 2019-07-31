@@ -14,11 +14,11 @@ class WizardBase extends React.Component {
     };
   }
 
+
+
   componentWillMount() {
     if (window.localStorage.getItem("dbDocID") === null) {
-      this.props.history.push("/", {
-        message: "Register for a vet a visit from here."
-      });
+      this.props.history.push("/");
     } else {
       this.props.firebase.fsdb
         .collection("form-inquiry")
@@ -26,10 +26,14 @@ class WizardBase extends React.Component {
         .get()
         .then(doc => {
           console.log(doc);
-          
-          if (doc.data().bookingStatus.status === "Confirmed" || window.localStorage.getItem("contWithOutLogin") === "true") {
-          
-            if (true) {
+          let userData = doc.data()          
+          console.log('My data', userData);
+          return userData;
+        })
+        .then((userData)=>{
+          if (userData.bookingStatus.status === "Confirmed") {
+            console.log("email sent out");
+            
               fetch(
                 "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
                 {
@@ -43,33 +47,33 @@ class WizardBase extends React.Component {
                   redirect: "follow",
                   referrer: "no-referrer",
                   body: JSON.stringify({
-                    emailReceiver: doc.data().customerDetails.email,
+                    emailReceiver: userData.customerDetails.email,
                     emailSubject:
                       "Hi " +
-                      doc.data().customerDetails.name +
+                      userData.customerDetails.name +
                       " Thankyou for registering at Hug a Pet!",
                     emailContent: {
                       customerDetails: {
-                        name: doc.data().customerDetails.name,
-                        zipcode: doc.data().customerDetails.zipcode,
-                        phone: doc.data().customerDetails.phone,
-                        email: doc.data().customerDetails.email,
-                        service: doc.data().customerDetails.service
+                        name: userData.customerDetails.name,
+                        zipcode: userData.customerDetails.zipcode,
+                        phone: userData.customerDetails.phone,
+                        email: userData.customerDetails.email,
+                        service: userData.customerDetails.service
                       },
                       vetDetails: {
                         isVetAssigned: false,
                         vetName: ""
                       },
                       sessionDetails: {
-                        Date: doc.data().sessionDetails.Date,
-                        session: doc.data().sessionDetails.session
+                        Date: userData.sessionDetails.Date,
+                        session: userData.sessionDetails.session
                       },
                       petDetails: {
-                        petdate: doc.data().petDetails.petdate,
-                        petname: doc.data().petDetails.petname,
-                        type: doc.data().petDetails.type,
-                        gender: doc.data().petDetails.gender,
-                        notes: doc.data().petDetails.notes
+                        petdate: userData.petDetails.petdate,
+                        petname: userData.petDetails.petname,
+                        type: userData.petDetails.type,
+                        gender: userData.petDetails.gender,
+                        notes: userData.petDetails.notes
                       },
                       bookingStatus: {
                         phoneVerfication: false,
@@ -79,30 +83,38 @@ class WizardBase extends React.Component {
                   })
                 }
               ).then(res => {
+                
+                res.json().then((res)=>{
+                    console.log(res);
+                    
+                });
+                
                 window.localStorage.removeItem("dbDocID");
                 window.localStorage.removeItem("contWithOutLogin");
                 window.localStorage.removeItem("newUser");
+              })
+              .then(()=>{
                 this.props.history.push(
                   `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
                 );
-              });
-            }
+              })
           } else {
+            window.localStorage.removeItem("contWithOutLogin");
             this.setState({
               values: {
-                petname: doc.data().petDetails.petname,
-                type: doc.data().petDetails.type,
-                gender: doc.data().petDetails.gender,
-                petdate: doc.data().petDetails.petdate,
-                notes: doc.data().petDetails.notes,
-                phone: doc.data().customerDetails.phone,
-                name: doc.data().customerDetails.name,
-                email: doc.data().customerDetails.email,
-                zipcode: doc.data().customerDetails.zipcode,
-                service: doc.data().customerDetails.service,
-                isVetAssigned: doc.data().vetDetails.isVetAssigned,
-                Date: doc.data().sessionDetails.Date,
-                session: doc.data().sessionDetails.session
+                petname: userData.petDetails.petname,
+                type: userData.petDetails.type,
+                gender: userData.petDetails.gender,
+                petdate: userData.petDetails.petdate,
+                notes: userData.petDetails.notes,
+                phone: userData.customerDetails.phone,
+                name: userData.customerDetails.name,
+                email: userData.customerDetails.email,
+                zipcode: userData.customerDetails.zipcode,
+                service: userData.customerDetails.service,
+                isVetAssigned: userData.vetDetails.isVetAssigned,
+                Date: userData.sessionDetails.Date,
+                session: userData.sessionDetails.session
               }
             });
           }
@@ -113,13 +125,56 @@ class WizardBase extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    var phone;
+    if (nextProps.resendOtp === true) {
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .doc(window.localStorage.getItem("dbDocID"))
+        .get()
+        .then(doc => {
+          phone = doc.data().customerDetails.phone;
+          console.log(phone);
+
+          var twilioVerification = phone.split(" ");
+          fetch("https://hug-a-pet.herokuapp.com/verification/start/send-otp", {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            redirect: "follow",
+            referrer: "no-referrer",
+            body: JSON.stringify({
+              countryCode: twilioVerification[0],
+              phoneNumber: twilioVerification[1] + twilioVerification[2]
+            })
+          }).then(res => {
+            if (res.status === 400) {
+              this.props.setresendOtp(false);
+              this.props.setTimer(Date.now() + 30000);
+
+              alert("Invalid Number");
+            } else {
+              res.json().then(res => {
+                console.log(res);
+                window.localStorage.setItem("newUser", res);
+              });
+            }
+          });
+        });
+    }
+  }
+
   next = values => {
     this.props.setisLoading(true);
-    const {  token } = this.props;
+    const { token } = this.props;
     const { phone } = this.state.values;
     const twilioVerification = phone.split(" ");
     console.log(twilioVerification, token);
-    
+
     // verify-otp
     fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
       method: "POST",
@@ -136,14 +191,13 @@ class WizardBase extends React.Component {
         phoneNumber: twilioVerification[1] + twilioVerification[2]
       })
     }).then(res => {
-    this.props.setisLoading(false);
+      this.props.setisLoading(false);
       if (res.status === 400) {
         alert("Invalid Code");
       } else {
-      
         this.props.firebase
           .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
-                    .then(authUser => {
+          .then(authUser => {
             const uid = authUser.user.uid;
             this.props.firebase.fsdb
               .collection("form-inquiry")
@@ -152,20 +206,23 @@ class WizardBase extends React.Component {
                 "bookingStatus.phoneVerfication": true,
                 "bookingStatus.status": "Confirmed",
                 "customerDetails.uid": uid
-              })
-              this.props.firebase.fsdb
+              });
+            this.props.firebase.fsdb
               .collection("userCollection")
               .doc(uid)
-              .set({
-                name: this.state.values.name,
-                email: this.state.values.email,
-                phone: this.state.values.phone,
-                uid: uid,
-                userrole: "customer"
-              },{merge: true})
+              .set(
+                {
+                  name: this.state.values.name,
+                  email: this.state.values.email,
+                  phone: this.state.values.phone,
+                  uid: uid,
+                  userrole: "customer"
+                },
+                { merge: true }
+              )
               .then(() => {
-                  console.log(this.state);
-                  
+                console.log(this.state);
+                
                 fetch(
                   "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
                   {
@@ -214,10 +271,13 @@ class WizardBase extends React.Component {
                       }
                     })
                   }
-                ).then(res => {
-                  window.localStorage.removeItem("dbDocID");
+                )
+                .then(()=>{
                   window.localStorage.removeItem("contWithOutLogin");
+                  window.localStorage.removeItem("dbDocID");
                   window.localStorage.removeItem("newUser");
+                })
+                .then(res => {
                   this.props.history.push(
                     `${ROUTES.BOOKING_VERIFICATION}/opt-successfully-verified`
                   );

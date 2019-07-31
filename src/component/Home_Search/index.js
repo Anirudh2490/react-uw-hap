@@ -306,6 +306,8 @@ class HomeSearchBase extends Component {
       })
       .then(()=>{
         // this.props.history.push(`/${this.state.service.value}`)
+        window.localStorage.removeItem("contWithOutLogin");
+        window.localStorage.removeItem("newUser");
         this.props.history.push(`${ROUTES.BOOK_AN_APPOINTMENT}/${this.state.service.value}`)
 
       })

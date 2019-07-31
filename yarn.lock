@@ -10197,6 +10197,11 @@ react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-final-form-html5-validation@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-final-form-html5-validation/-/react-final-form-html5-validation-1.0.3.tgz#b04b8025510bd8d751ea2ff58b90c7b7a7358a96"
+  integrity sha512-gNJ8xO/qcIRZYzWglPT7/KC1EDpsfMw+h/tKvcqYntcELN3TWga7yiyda0yLQnx19RNyDlU97wUDraX2Sar/bg==
+
 react-final-form@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-6.3.0.tgz#b85ae123a3796b3e0c8f56033c8a5037f4497e76"

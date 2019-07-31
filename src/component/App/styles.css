@@ -81,7 +81,7 @@
     position: relative;
 }
 
-.jKjcUs form {
+.jKjcUs form, .jaVuRX form {
     text-align: center;
     max-width: 51% !important;
     background: #588285;
@@ -97,6 +97,7 @@
 .idJHIA {
     width: 97% !important;
 }
+
 .cCecMw form {
     text-align: center;
     max-width: 51% !important;
@@ -108,6 +109,11 @@
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     border-radius: 3px;
     position: relative;
+}
+
+.cCecMw h1, .cCecMw a, .cCecMw p, .jKjcUs h1, .jaVuRX h1, .jaVuRX h1 {
+    color: #0f2137 !important;
+    text-align: center;
 }
 
 .jKjcUs button[type='submit'] {
@@ -171,7 +177,8 @@
     border: none !important;
 }
 
-.jKjcUs form > div > input, .jKjcUs form > div > select, .jKjcUs form > div > textarea{
+.jKjcUs form > div > input, .jKjcUs form > div > select, .jKjcUs form > div > textarea,
+.jaVuRX form > div > input, .jaVuRX form > div > select, .jaVuRX form > div > textarea {
     width: 100%;
     height: 60px !important;
     border-radius: 10px !important;
@@ -212,7 +219,7 @@
     font-weight: 600 !important;
 }
 
-.jKjcUs form > div > label {
+.jKjcUs form > div > label, .jaVuRX form > div > label{
     color: #333 !important;
     vertical-align: middle !important;
     width: 110px !important; 
@@ -307,8 +314,23 @@
     margin: 21px;
 }
 
-
-
+.react-tel-input .country-list {
+    list-style: none;
+    position: absolute;
+    z-index: 15;
+    padding: 0;
+    margin: 10px 0 10px -1px;
+    box-shadow: 1px 2px 10px rgba(0,0,0,0.35);
+    background-color: white;
+    width: 300px;
+    max-height: 200px;
+    overflow-y: scroll;
+    border-radius: 0 0 3px 3px;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
 .kFiBZm {
     color: #ffffff;
@@ -545,7 +567,7 @@ section#service_section {
         height: 70px !important;
     }
 
-    .jKjcUs form {
+    .jKjcUs form, .jaVuRX form{
         max-width: 95% !important;
     }
 

@@ -75,10 +75,6 @@ const WizardFormBase = props => {
             />
           </div>
           <h1>Great, you are looking for an appointment for {service}</h1>
-          <a href="#">Free video consultation on confirmed appointment</a>
-          <p>
-            We can honor the appointment upto one hour after inquiry time.
-          </p>
         </div>
         <div>
           <Modal
@@ -222,8 +218,9 @@ const WizardFormBase = props => {
             ) : (
               <Fragment>
                 {" "}
-                <h4>What is your phone number</h4>
-                <label>We will need send an OTP to verify you</label>
+                <h4 style={{ color: "white" }}>
+                  What is your phone number
+                </h4>
                 <div style={{ margin: "25px 10px" }}>
                   <ReactPhoneInput
                     defaultCountry="de"
@@ -236,6 +233,7 @@ const WizardFormBase = props => {
                     onChange={updateNumber}
                   />
                 </div>
+                <label>We will need send an OTP to verify you</label>
               </Fragment>
             )}
           </Wizard.Page>
@@ -290,6 +288,8 @@ const WizardFormBase = props => {
             </div>
           </Wizard.Page>
         </Wizard>
+        <a href="#">Free video consultation on confirmed appointment</a>
+        <p>We can honor the appointment upto one hour after inquiry time.</p>
       </Styles>
       {/* <TestimonialSection /> */}
     </div>

@@ -72,7 +72,7 @@ export default styled.div`
       text-align: center;
       display: block;
       position: absolute;
-      background: url('https://media.giphy.com/media/130AxGoOaR6t0I/giphy.gif')
+      background: url("https://media.giphy.com/media/130AxGoOaR6t0I/giphy.gif")
         center center;
       background-size: fill;
       font-size: 2em;
@@ -89,6 +89,8 @@ export default styled.div`
       line-height: 2em;
       margin: 5px;
       position: relative;
+      flex-direction: column;
+      align-items: center;
       & > label {
         color: #333;
         width: 110px;
@@ -100,13 +102,14 @@ export default styled.div`
       & > select,
       & > textarea {
         flex: 1;
-        padding: 3px 5px;
+        padding: 20px 5px;
         font-size: 1em;
         margin-left: 15px;
         border: 1px solid #ccc;
         border-radius: 3px;
+        height: 20px;
       }
-      & > input[type='checkbox'] {
+      & > input[type="checkbox"] {
         margin-top: 7px;
       }
       & > div {
@@ -151,10 +154,21 @@ export default styled.div`
   }
   button {
     margin: 0 10px;
-    &[type='submit'] {
-      ${btnPrimary};
+    &[type="submit"] {
+      white-space: nowrap;
+      display: inline-block;
+      height: 53px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      background-image: none !important;
+      padding: 5px 15px;
+      background-color: #ff6767 !important;
+      font-size: 16px;
+      color: white !important;
+      border: none !important;
     }
-    &[type='button'] {
+    &[type="button"] {
       ${btnDefault};
     }
-  }`
+  }
+`;

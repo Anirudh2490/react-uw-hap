@@ -4,6 +4,11 @@ import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
+// import Slider from "rc-slider";
+// // import Tooltip from "rc-tooltip";
+// import "rc-slider/assets/index.css";
+// import "rc-tooltip/assets/bootstrap.css";
+import { Slider } from '../../elements/Slider';
 import * as ROUTES from "../../constants/routes";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -11,6 +16,9 @@ import * as ROUTES from "../../constants/routes";
 
 import "./styles.css";
 import { VetBlock } from "../Vet_Block";
+
+// const createSliderWithTooltip = Slider.createSliderWithTooltip;
+// const Range = createSliderWithTooltip(Slider);
 
 const Error = ({ name }) => (
   <Field
@@ -30,13 +38,19 @@ const onSelectStyle = {
 
 const petAge = [
   {
-    age: "0 to 1.5"
+    age: "DOG"
   },
   {
-    age: "1.5 to 6"
+    age: "CAT"
   },
   {
-    age: "older than 6"
+    age: "RABBIT"
+  },
+  {
+    age: "BIRD"
+  },
+  {
+    age: "OTHER"
   }
 ];
 
@@ -45,6 +59,7 @@ const WizardFormBase = props => {
   const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
   const [petage, setPetAge] = useState("");
+  const [petType, setPetType] = useState("");
   const [styleID, setStyleID] = useState("");
   const [selectedPet, setPet] = useState("");
   const [selectedPetID, setSelectedPetID] = useState("");
@@ -57,6 +72,12 @@ const WizardFormBase = props => {
 
   function petAgeUpdate(event, id) {
     setPetAge(event);
+    setStyleID(id);
+  }
+  
+  function petTypeUpdate(event, id) {
+    console.log(selectedPet);
+    setPetType(event);
     setStyleID(id);
   }
 
@@ -117,7 +138,7 @@ const WizardFormBase = props => {
         // onSubmit={onSubmit}
       >
         <Wizard.Page>
-          <h1 style={{ color: "white" }}>Select from old Pets</h1>
+          <h2 style={{ color: "white" }}>Select from old Pets</h2>
           {selectedPet ? (
             <div>
               <ul>
@@ -188,39 +209,35 @@ const WizardFormBase = props => {
           </div>
           <div>
             <label>How old is your pet?</label>
-            <div className="options-container">
-              <ul className="options-list">
-                {petAge &&
-                  petAge.map((item, id) => {
-                    return (
-                      <li
-                        id={id}
-                        style={petage === item.age ? onSelectStyle : null}
-                        onClick={() => petAgeUpdate(item.age, id)}
-                        className="options-list-item"
-                      >
-                        <label>
-                          <div className="item-container">
-                            <p>{item.age}</p>
-                          </div>
-                        </label>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
+            <Slider
+              min={0}
+              max={20}
+              defaultValue={3}
+              marks={{ 0: 0, 5: 5, 10: 10, 15: 15, 20: "20+" }}
+            />
             <Error name="email" />
           </div>
           <div>
             <label>Type</label>
-            <Field name="type" component="select">
-              <option>Choose Animal</option>
-              <option value="dog">Dog</option>
-              <option value="cat">🍄 Cat</option>
-              <option value="rabbit">🧀 Rabbit</option>
-              <option value="bird">🐓 Bird</option>
-              <option value="other">🍍 Other</option>
-            </Field>
+            <ul className="options-list">
+              {petAge &&
+                petAge.map((item, id) => {
+                  return (
+                    <li
+                      id={id}
+                      style={petType === item.age ? onSelectStyle : null}
+                      onClick={() => petTypeUpdate(item.age, id)}
+                      className="options-list-item"
+                    >
+                      <label>
+                        <div className="item-container">
+                          <p>{item.age}</p>
+                        </div>
+                      </label>
+                    </li>
+                  );
+                })}
+            </ul>
             <Error name="type" />
           </div>
           <div>

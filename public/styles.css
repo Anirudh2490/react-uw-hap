@@ -1492,6 +1492,7 @@
      display: -webkit-flex;
      display: -ms-flexbox;
      display: flex;
+     flex-wrap: wrap;
      margin-bottom: 40px;
      -webkit-box-pack: justify;
      -webkit-justify-content: space-between;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -20,14 +20,62 @@ const HeadingWrapper = styled('p')(
   themed('Heading')
 );
 
-const Heading = ({ content, ...props }) => (
-  <HeadingWrapper {...props}>{content}</HeadingWrapper>
-);
+export const DescriptionSection = ({ description }) => {
+  const [isWrap, setWrap] = useState(description.props.content.length > 150);
+
+  const minimizedDescription = {
+    ...description,
+    props: {
+      ...description.props,
+      content: description.props.content.substring(0, 150)
+    }
+  };
+
+  const handleClick = () => {
+    setWrap(!isWrap);
+  };
+  return (
+    <>
+      {isWrap ? (
+        <div>
+          {minimizedDescription}
+          <span onClick={handleClick}>...</span>
+        </div>
+      ) : (
+        description
+      )}
+    </>
+  );
+};
+
+const Heading = ({ content, charsLimit, ...props }) => {
+  const [isWrap, setWrap] = useState(content.length > charsLimit);
+
+  const minimizedContent = content.substring(0, charsLimit);
+
+  const handleClick = () => {
+    setWrap(!isWrap);
+  };
+  console.log(content);
+  return (
+    <HeadingWrapper {...props}>
+      {charsLimit && isWrap ? (
+        <div>
+          {minimizedContent}
+          <span onClick={handleClick}>...</span>
+        </div>
+      ) : (
+        content
+      )}
+    </HeadingWrapper>
+  );
+};
 
 export default Heading;
 
 Heading.propTypes = {
   content: PropTypes.string,
+  charsLimit: PropTypes.number,
   as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
   mt: PropTypes.oneOfType([
     PropTypes.string,

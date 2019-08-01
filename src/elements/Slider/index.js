@@ -5,8 +5,6 @@ import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap.css";
 import "./index.css";
 
-const createSliderWithTooltip = RcSlider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(RcSlider.Range);
 const Handle = RcSlider.Handle;
 
 const handle = props => {

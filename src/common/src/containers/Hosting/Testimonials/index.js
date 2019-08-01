@@ -29,7 +29,7 @@ const TestimonialSection = ({
   //Carousel Options
   const carouselOptions = {
     type: 'carousel',
-    autoplay: 4000,
+    autoplay: 5000,
     perView: 2,
     gap: 30,
     animationDuration: 800,
@@ -82,7 +82,7 @@ const TestimonialSection = ({
       },
     },
   };
-
+  console.log(TESTIMONIALS);
   return (
     <TestimonialSecWrapper id="testimonial_section">
       <Container fullWidth noGutter>
@@ -106,21 +106,25 @@ const TestimonialSection = ({
           }
         >
           <>
-            {TESTIMONIALS? TESTIMONIALS.map((slideItem, index) => (
+            {TESTIMONIALS ? TESTIMONIALS.map((slideItem, index) => (
               <GlideSlide key={`testimonial-slide-${index}`}>
                 <TestimonialItem className="testimonial_item">
-                  <Text content={slideItem.review} {...reviewStyle} />
                   <Box {...TestimonialMeta}>
-                    <Box>
                     <ImageWrapper>
                       <Image
                         src={slideItem.avatar}
                         alt={`reviewer-image-${index}`}
                       />
                     </ImageWrapper>
-                    </Box>
+                    <Text content={slideItem.review} {...reviewStyle} />
+                  </Box>
+                  <Box {...TestimonialMeta}>
                     <Box>
-                      <Heading content={slideItem.name} {...nameStyle} />
+                      <Heading
+                        content={slideItem.name}
+                        charsLimit={150}
+                        {...nameStyle}
+                      />
                       <Text
                         content={slideItem.designation}
                         {...designationStyle}
@@ -175,7 +179,7 @@ TestimonialSection.defaultProps = {
     fontWeight: '300',
     color: '#343d48',
     lineHeight: '1.74',
-    mb: ['30px', '30px', '30px', '40px', '55px'],
+    m: ['10px 0px', '10px 0px', '10px 0px', '20px 0px', '25px 0px'],
   },
   TestimonialMeta: {
     flexBox: true,

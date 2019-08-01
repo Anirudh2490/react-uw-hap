@@ -291,10 +291,15 @@ const WizardFormBase = props => {
         <a href="#">Free video consultation on confirmed appointment</a>
         <p>We can honor the appointment upto one hour after inquiry time.</p>
       </Styles>
-      {/* <TestimonialSection /> */}
     </div>
   );
 };
 const WizardForm = withFirebase(WizardFormBase);
+const WizardFormWithTestimonial = () => (
+  <>
+    <WizardForm />
+    <TestimonialSection />
+  </>
+);
 
-export default WizardForm;
+export default WizardFormWithTestimonial;

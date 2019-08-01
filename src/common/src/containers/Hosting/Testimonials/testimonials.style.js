@@ -80,17 +80,13 @@ const TestimonialSecWrapper = styled.section`
 
 export const TestimonialItem = styled.div`
   border: 1px solid #f2f4f7;
-  padding: 40px;
+  padding: 20px;
   border-radius: 5px;
   background-color: #fff;
   transition: 0.425s ease;
 
   &:hover {
     box-shadow: 0px 20px 40px -20px rgba(39, 79, 117, 0.25);
-  }
-
-  @media (max-width: 1300px) {
-    padding: 30px;
   }
 `;
 

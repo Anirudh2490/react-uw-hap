@@ -161,6 +161,13 @@ contentful
 // 3. 3V7MlNUOcgoPXjbBpFCELI
 // 4. 4qYmaxLjU8EAagYdrhWey4
 
+const TestimonialsEnties = [
+  "1moz7Lh5pi8Hz2AH0tpv18",
+  "HueRzeMvF0MhmCOmMF4mg",
+  "3V7MlNUOcgoPXjbBpFCELI",
+  "4qYmaxLjU8EAagYdrhWey4",
+];
+
 contentful
   .getSingleEnty("1moz7Lh5pi8Hz2AH0tpv18")
   .then(response => {

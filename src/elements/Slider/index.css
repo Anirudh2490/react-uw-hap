@@ -1,0 +1,47 @@
+.rc-slider-rail {
+    height: 6px;
+}
+.rc-slider-track {
+    height: 6px;
+    background-color: #ff6767;
+}
+.rc-slider-handle {
+    border: solid 3px  #ff6767;
+    width: 18px;
+    height: 18px;
+    margin-left: -10px;
+    margin-top: -6px;
+}
+.rc-slider-handle:hover {
+    border: solid 3px  #ff6767;
+    background-color: #ff6767;
+}
+.rc-slider-handle:focus {
+    border: solid 3px  #ff6767;
+    background-color: #ff6767;
+    box-shadow: 0 0 5px #fff;
+}
+.rc-slider-handle:active {
+    border: solid 3px  #ff6767;
+    background-color: #ff6767;
+    box-shadow: 0 0 5px #fff;
+}
+.rc-slider-mark-text-active {
+    color: #fff;
+}
+.rc-slider-mark-text {
+    font-size: 16px;
+    font-weight: 600;
+}
+.rc-slider-dot {
+    bottom: -4px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid #e9e9e9;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.rc-slider-dot-active {
+    border-color: #ff6767;
+} 

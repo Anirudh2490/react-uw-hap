@@ -89,6 +89,7 @@ export const SearchWrapper = styled.div`
   }
   .domain_search_select {
     min-width: 165px;
+    height: 100%;
     @media (max-width: 575px) {
       height: 52px;
       margin-bottom: 20px;

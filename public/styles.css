@@ -1492,6 +1492,7 @@
      display: -webkit-flex;
      display: -ms-flexbox;
      display: flex;
+     flex-wrap: wrap;
      margin-bottom: 40px;
      -webkit-box-pack: justify;
      -webkit-justify-content: space-between;
@@ -2353,9 +2354,7 @@
    }
    
    .column {
-     padding-top: 10px;
-     padding-right: 10px;
-     padding-bottom: 10px;
+    padding: 5px;
    }
    
    .html-embed-9 {

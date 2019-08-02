@@ -26,8 +26,6 @@ class WizardBase extends React.Component {
           .doc(window.localStorage.getItem("dbDocID"))
           .get()
           .then(doc => {
-            console.log(doc.data().customerDetails.phone);
-
             this.setState(
               {
                 values: {
@@ -42,12 +40,14 @@ class WizardBase extends React.Component {
                 }
               },
               () => {
-                this.props.setPetAge(doc.data().petDetails.petdate);
+                this.props.setPetAge(parseInt(doc.data().petDetails.petdate));
+                this.props.petTypeUpdate(doc.data().petDetails.type);
                 const { petList } = this.state;
                 this.props.setClientName(doc.data().customerDetails.name);
                 //search phone number in database
                 if (
-                  window.localStorage.getItem("contWithOutLogin") === "true"
+                  window.localStorage.getItem("contWithOutLogin") === "true" ||
+                  this.props.firebase.auth.currentUser === null
                 ) {
                   this.setState(state => ({
                     page: Math.min(
@@ -56,52 +56,51 @@ class WizardBase extends React.Component {
                     )
                   }));
                 } else {
-                  this.props.firebase.fsdb
-                    .collection("form-inquiry")
-                    .where(
-                      "customerDetails.phone",
-                      "==",
-                      `${this.state.values.phone}`
-                    )
-                    .get()
-                    .then(querySnapshot => {
-                      console.log(querySnapshot);
-
-                      if (querySnapshot.empty) {
-                        this.setState(state => ({
-                          page: Math.min(
-                            state.page + 1,
-                            this.props.children.length - 1
-                          )
-                        }));
-                      } else {
-                        console.log(querySnapshot);
-
-                        querySnapshot.forEach(doc => {
-                          petList.push({
-                            petId: doc.id,
-                            petDoc: doc.data().petDetails
+                  if (this.props.firebase.auth.currentUser !== null) {
+                    this.props.firebase.fsdb
+                      .collection(
+                        `userCollection/${
+                          this.props.firebase.auth.currentUser.uid
+                        }/pets`
+                      )
+                      .get()
+                      .then(querySnapshot => {
+                        console.log("Api Called", querySnapshot);
+                        if (querySnapshot.empty) {
+                          this.setState(state => ({
+                            page: Math.min(
+                              state.page + 1,
+                              this.props.children.length - 1
+                            )
+                          }));
+                        } else {
+                          querySnapshot.forEach(doc => {
+                            petList.push({
+                              petId: doc.id,
+                              petDoc: doc.data().petDetails
+                            });
                           });
-                        });
-                        this.setState(
-                          {
-                            petList
-                          },
-                          () => {
-                            // console.log(petList);
-                            if (petList.length === 1) {
-                              this.setState(state => ({
-                                page: Math.min(
-                                  state.page + 1,
-                                  this.props.children.length - 1
-                                )
-                              }));
+                          this.setState(
+                            {
+                              petList
+                            },
+                            () => {
+                              console.log(this.state.petList);
+
+                              if (petList.length === 0) {
+                                this.setState(state => ({
+                                  page: Math.min(
+                                    state.page + 1,
+                                    this.props.children.length - 1
+                                  )
+                                }));
+                              }
+                              this.props.setPet(petList);
                             }
-                            this.props.setPet(petList);
-                          }
-                        );
-                      }
-                    });
+                          );
+                        }
+                      });
+                  }
                 }
               }
             );
@@ -114,8 +113,6 @@ class WizardBase extends React.Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    console.log(nextprops);
-
     if (nextprops.validNum === true) {
       this.props.firebase.fsdb
         .collection("form-inquiry")
@@ -124,6 +121,7 @@ class WizardBase extends React.Component {
           "customerDetails.phone": `${this.props.number}`
         })
         .then(() => {
+          console.log("Api Called");
           this.props.setvalidNum(false);
           this.props.closeModal();
         });
@@ -131,8 +129,10 @@ class WizardBase extends React.Component {
 
     if (nextprops.selectedPetID !== "") {
       this.props.firebase.fsdb
-        .collection("form-inquiry")
-        .doc(nextprops.selectedPetID)
+        .collection(
+          `userCollection/${this.props.firebase.auth.currentUser.uid}/pets`
+        )
+        .doc(`${nextprops.selectedPetID}`)
         .get()
         .then(doc => {
           this.setState(
@@ -142,22 +142,17 @@ class WizardBase extends React.Component {
                 type: doc.data().petDetails.type,
                 gender: doc.data().petDetails.gender,
                 petdate: doc.data().petDetails.petdate,
-                notes: doc.data().petDetails.notes,
-                phone: doc.data().customerDetails.phone,
-                name: doc.data().customerDetails.name,
-                email: doc.data().customerDetails.email,
-                zipcode: doc.data().customerDetails.zipcode,
-                service: doc.data().customerDetails.service,
-                isVetAssigned: doc.data().vetDetails.isVetAssigned,
-                Date: doc.data().sessionDetails.Date,
-                session: doc.data().sessionDetails.Date
               }
             },
             () => {
-              this.props.setPetAge(doc.data().petDetails.petdate);
+              this.props.setPetAge(parseInt(doc.data().petDetails.petdate));
+              this.props.petTypeUpdate(doc.data().petDetails.type);
               this.setState(
                 state => ({
-                  page: Math.min(state.page + 1, this.props.children.length - 1)
+                  page: Math.min(
+                    state.page + 1,
+                    this.props.children.length - 1
+                  )
                 }),
                 () => {
                   this.props.setSelectedPetID("");
@@ -177,6 +172,7 @@ class WizardBase extends React.Component {
         },
         () => {
           this.props.setPetAge("");
+          this.props.petTypeUpdate("");
           this.props.setSelectedPetID("");
           this.props.triggerAddNewPetEvent("");
           this.setState(state => ({
@@ -188,34 +184,43 @@ class WizardBase extends React.Component {
   }
 
   onSubmit = values => {
+    console.log(this.props.petage);
+
     if (values.petname === undefined || values.petname === "") {
       this.props.setPetNameError(true);
-    } else if (this.props.petage === undefined || this.props.petage === "") {
+    } else if (
+      this.props.petage === undefined ||
+      this.props.petage === "" ||
+      this.props.petage.toString() === "NaN"
+    ) {
       this.props.setPetAgeError(true);
-    } else if (values.type === undefined || values.type === "") {
+    } else if (this.props.type === undefined || this.props.type === "") {
       this.props.setTypeError(true);
     } else if (values.gender === undefined || values.gender === "") {
       this.props.setGenderError(true);
     } else if (values.notes === undefined || values.notes === "") {
       this.props.setNotesError(true);
     } else {
+      this.props.setisLoading(true);
       var phone;
       this.props.firebase.fsdb
         .collection("form-inquiry")
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
+          console.log("Api Called");
           phone = doc.data().customerDetails.phone;
         })
         .then(() => {
+          console.log("Api Called");
           const twilioVerification = phone.split(" ");
           this.props.firebase.fsdb
             .collection("form-inquiry")
             .doc(window.localStorage.getItem("dbDocID"))
             .update({
               "petDetails.petdate": `${this.props.petage}`,
-              "petDetails.petname": `${values["petname"]}`,
-              "petDetails.type": `${values["type"]}`,
+              "petDetails.petname": `${values["petname"].toLowerCase()}`,
+              "petDetails.type": `${this.props.type}`,
               "petDetails.gender": `${values["gender"]}`,
               "petDetails.notes": `${values["notes"]}`
             })
@@ -242,6 +247,7 @@ class WizardBase extends React.Component {
                     })
                   }
                 ).then(res => {
+                  console.log("Api Called");
                   if (res.status === 400) {
                     this.props.setisLoading(false);
                     this.props.openModal(true);
@@ -278,6 +284,7 @@ class WizardBase extends React.Component {
                         })
                           // })
                           .then(() => {
+                            console.log("Api Called");
                             this.props.history.push(
                               ROUTES.BOOKING_VERIFICATION
                             );
@@ -285,144 +292,175 @@ class WizardBase extends React.Component {
                       });
                   }
                 });
+              } else if (
+                window.localStorage.getItem("contWithOutLogin") === "true"
+              ) {
+                fetch("https://hug-a-pet.herokuapp.com/send/mail", {
+                  method: "POST",
+                  mode: "cors",
+                  cache: "no-cache",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  redirect: "follow",
+                  referrer: "no-referrer",
+                  body: JSON.stringify({
+                    emailReceiver: this.state.values.email,
+                    emailSubject:
+                      "Hi " +
+                      this.state.values.name +
+                      " Thankyou for registering at Hug a Pet!",
+                    emailContent:
+                      "Hi " +
+                      this.state.values.name +
+                      "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
+                  })
+                })
+                  // })
+                  .then(() => {
+                    this.props.history.push(ROUTES.BOOKING_VERIFICATION);
+                  });
               } else {
                 if (this.props.firebase.auth.currentUser !== null) {
                   this.props.firebase.fsdb
-                    .collection("form-inquiry")
-                    .doc(window.localStorage.getItem("dbDocID"))
+                    .collection(
+                      `userCollection/${
+                        this.props.firebase.auth.currentUser.uid
+                      }/pets`
+                    )
+                    .where(
+                      "petDetails.petname",
+                      "==",
+                      `${values["petname"].toLowerCase()}`
+                    )
                     .get()
-                    .then(doc => {
-                      console.log(doc);
-                      var userData = doc.data();
-                      console.log("My data", userData);
-                      return userData;
-                    })
-                    .then(userData => {
-                      if (userData.bookingStatus.status === "Confirmed") {
-                        console.log("email sent out");
-
-                        fetch(
-                          "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
-                          {
-                            method: "POST",
-                            mode: "cors",
-                            cache: "no-cache",
-                            credentials: "same-origin",
-                            headers: {
-                              "Content-Type": "application/json"
-                            },
-                            redirect: "follow",
-                            referrer: "no-referrer",
-                            body: JSON.stringify({
-                              emailReceiver: userData.customerDetails.email,
-                              emailSubject:
-                                "Hi " +
-                                userData.customerDetails.name +
-                                " Thankyou for registering at Hug a Pet!",
-                              emailContent: {
-                                customerDetails: {
-                                  name: userData.customerDetails.name,
-                                  zipcode: userData.customerDetails.zipcode,
-                                  phone: userData.customerDetails.phone,
-                                  email: userData.customerDetails.email,
-                                  service: userData.customerDetails.service
-                                },
-                                vetDetails: {
-                                  isVetAssigned: false,
-                                  vetName: ""
-                                },
-                                sessionDetails: {
-                                  Date: userData.sessionDetails.Date,
-                                  session: userData.sessionDetails.session
-                                },
-                                petDetails: {
-                                  petdate: userData.petDetails.petdate,
-                                  petname: userData.petDetails.petname,
-                                  type: userData.petDetails.type,
-                                  gender: userData.petDetails.gender,
-                                  notes: userData.petDetails.notes
-                                },
-                                bookingStatus: {
-                                  phoneVerfication: false,
-                                  status: "Not confirmed"
-                                }
-                              }
-                            })
-                          }
-                        ).then(res => {
-                          res
-                            .json()
-                            .then(res => {
-                              console.log(res);
-                            })
-
-                            .then(() => {
-                              //APPI CALL FOR TWILIO Email
-                              fetch(
-                                "https://hug-a-pet.herokuapp.com/send/mail",
-                                {
-                                  method: "POST",
-                                  mode: "cors",
-                                  cache: "no-cache",
-                                  credentials: "same-origin",
-                                  headers: {
-                                    "Content-Type": "application/json"
-                                  },
-                                  redirect: "follow",
-                                  referrer: "no-referrer",
-                                  body: JSON.stringify({
-                                    emailReceiver:
-                                      userData.customerDetails.email,
-                                    emailSubject:
-                                      "Hi " +
-                                      userData.customerDetails.name +
-                                      " Thankyou for registering at Hug a Pet!",
-                                    emailContent:
-                                      "Hi " +
-                                      userData.customerDetails.name +
-                                      "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                                  })
-                                }
-                              )
-                                // })
-                                .then(() => {
-                                  window.localStorage.removeItem("dbDocID");
-                                  window.localStorage.removeItem(
-                                    "contWithOutLogin"
-                                  );
-                                  window.localStorage.removeItem("newUser");
-                                  this.props.history.push(
-                                    `${
-                                      ROUTES.BOOKING_VERIFICATION
-                                    }/opt-successfully-verified`
-                                  );
-                                });
-                            });
-                        });
+                    .then(querySnapshot => {
+                      if (querySnapshot.empty) {
+                        this.props.firebase.fsdb
+                          .collection(
+                            `userCollection/${
+                              this.props.firebase.auth.currentUser.uid
+                            }/pets`
+                          )
+                          .add({
+                            petDetails: {
+                              petdate: `${this.props.petage}`,
+                              petname: values["petname"].toLowerCase(),
+                              type: `${this.props.type}`,
+                              gender: `${values["gender"]}`,
+                              notes: `${values["notes"]}`
+                            }
+                          });
                       }
+                      this.props.firebase.fsdb
+                        .collection("form-inquiry")
+                        .doc(window.localStorage.getItem("dbDocID"))
+                        .get()
+                        .then(doc => {
+                          console.log("Api Called");
+                          var userData = doc.data();
+                          return userData;
+                        })
+                        .then(userData => {
+                          console.log("email sent out");
+                          fetch(
+                            "https://hug-a-pet.herokuapp.com/admin/admin-verification-mail",
+                            {
+                              method: "POST",
+                              mode: "cors",
+                              cache: "no-cache",
+                              credentials: "same-origin",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              redirect: "follow",
+                              referrer: "no-referrer",
+                              body: JSON.stringify({
+                                emailReceiver: userData.customerDetails.email,
+                                emailSubject:
+                                  "Hi " +
+                                  userData.customerDetails.name +
+                                  " Thankyou for registering at Hug a Pet!",
+                                emailContent: {
+                                  customerDetails: {
+                                    name: userData.customerDetails.name,
+                                    zipcode: userData.customerDetails.zipcode,
+                                    phone: userData.customerDetails.phone,
+                                    email: userData.customerDetails.email,
+                                    service: userData.customerDetails.service
+                                  },
+                                  vetDetails: {
+                                    isVetAssigned: false,
+                                    vetName: ""
+                                  },
+                                  sessionDetails: {
+                                    Date: userData.sessionDetails.Date,
+                                    session: userData.sessionDetails.session
+                                  },
+                                  petDetails: {
+                                    petdate: userData.petDetails.petdate,
+                                    petname: userData.petDetails.petname,
+                                    type: userData.petDetails.type,
+                                    gender: userData.petDetails.gender,
+                                    notes: userData.petDetails.notes
+                                  },
+                                  bookingStatus: {
+                                    phoneVerfication: true,
+                                    status: "Confirmed"
+                                  }
+                                }
+                              })
+                            }
+                          ).then(res => {
+                                //APPI CALL FOR TWILIO Email
+                                fetch(
+                                  "https://hug-a-pet.herokuapp.com/send/mail",
+                                  {
+                                    method: "POST",
+                                    mode: "cors",
+                                    cache: "no-cache",
+                                    credentials: "same-origin",
+                                    headers: {
+                                      "Content-Type": "application/json"
+                                    },
+                                    redirect: "follow",
+                                    referrer: "no-referrer",
+                                    body: JSON.stringify({
+                                      emailReceiver:
+                                        userData.customerDetails.email,
+                                      emailSubject:
+                                        "Hi " +
+                                        userData.customerDetails.name +
+                                        " Thankyou for registering at Hug a Pet!",
+                                      emailContent:
+                                        "Hi " +
+                                        userData.customerDetails.name +
+                                        "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
+                                    })
+                                  }
+                                )
+                                  // })
+                                  .then(() => {
+                                    window.localStorage.removeItem("dbDocID");
+                                    window.localStorage.removeItem(
+                                      "contWithOutLogin"
+                                    );
+                                    window.localStorage.removeItem("newUser");
+                                    this.props.history.push(
+                                      `${
+                                        ROUTES.BOOKING_VERIFICATION
+                                      }/opt-successfully-verified`
+                                    );
+                                  });
+                          });
+                        });
+                    })
+                    .catch(rej => {
+                      console.log(rej);
                     });
                 }
               }
-
-              //APPI CALL FOR TWILIO MSG
-              // fetch("https://hug-a-pet.herokuapp.com/api/messages", {
-              //   method: "POST",
-              //   mode: "cors",
-              //   cache: "no-cache",
-              //   credentials: "same-origin",
-              //   headers: {
-              //     "Content-Type": "application/json"
-              //   },
-              //   redirect: "follow",
-              //   referrer: "no-referrer",
-              //   body: JSON.stringify({
-              //     to: values.phone,
-              //     body: `Hi ${
-              //       values.name
-              //     }! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
-              //   })
-              // });
-              // .then(() => {
             })
             .catch(rej => {
               this.props.setisLoading(false);
@@ -430,21 +468,55 @@ class WizardBase extends React.Component {
             });
         });
     }
+
+    //APPI CALL FOR TWILIO MSG
+    // fetch("https://hug-a-pet.herokuapp.com/api/messages", {
+    //   method: "POST",
+    //   mode: "cors",
+    //   cache: "no-cache",
+    //   credentials: "same-origin",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   redirect: "follow",
+    //   referrer: "no-referrer",
+    //   body: JSON.stringify({
+    //     to: values.phone,
+    //     body: `Hi ${
+    //       values.name
+    //     }! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case`
+    //   })
+    // });
+    // .then(() => {
   };
 
   next = (e, values) => {
     e.preventDefault();
     this.setState(
-      state => ({
-        page: Math.min(state.page + 1, this.props.children.length - 1),
-        values
-      }),
+      {
+        values: {}
+      },
       () => {
         this.props.setPetAge("");
+        this.props.petTypeUpdate("");
         this.props.setSelectedPetID("");
         this.props.triggerAddNewPetEvent("");
+        this.setState(state => ({
+          page: Math.min(state.page + 1, this.props.children.length - 1)
+        }));
       }
     );
+    // this.setState(
+    //   state => ({
+    //     page: Math.min(state.page + 1, this.props.children.length - 1),
+    //     values
+    //   }),
+    //   () => {
+    //     this.props.setPetAge("");
+    //     this.props.setSelectedPetID("");
+    //     this.props.triggerAddNewPetEvent("");
+    //   }
+    // );
   };
 
   previous = (event, values) => {
@@ -456,43 +528,58 @@ class WizardBase extends React.Component {
       .update({
         "petDetails.petdate": `${this.props.petage}`,
         "petDetails.petname": `${values["petname"]}`,
-        "petDetails.type": `${values["type"]}`,
+        "petDetails.type": `${this.props.type}`,
         "petDetails.gender": `${values["gender"]}`,
         "petDetails.notes": `${values["notes"]}`
       })
-      .then(res => {
-        console.log(res);
+    //   .then(res => {
+    //     console.log(res);
+    console.log(this.state.page);
 
-        if (this.props.firebase.auth.currentUser !== null) {
-          this.setState(
-            state => ({
-              page: Math.max(state.page - 1, 0)
-            }),
-            () => {
-              this.props.setPetAge("");
-              this.props.setSelectedPetID("");
-              this.props.triggerAddNewPetEvent("");
-            }
+    if (this.state.page === 0) {
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .doc(window.localStorage.getItem("dbDocID"))
+        .get()
+        .then(doc => {
+          console.log("Api Called");
+          this.props.history.push(
+            `${ROUTES.BOOK_AN_APPOINTMENT}/${
+              doc.data().customerDetails.service
+            }`,
+            [{ pageNumber: 2 }]
           );
-        } else {
-          this.props.firebase.fsdb
-            .collection("form-inquiry")
-            .doc(window.localStorage.getItem("dbDocID"))
-            .get()
-            .then(doc => {
-              this.props.history.push(
-                `${ROUTES.BOOK_AN_APPOINTMENT}/${
-                  doc.data().customerDetails.service
-                }`,
-                [{ pageNumber: 2 }]
-              );
-            });
+        });
+    } else if (this.props.firebase.auth.currentUser !== null) {
+      this.setState(
+        state => ({
+          page: Math.max(state.page - 1, 0)
+        }),
+        () => {
+          this.props.setPetAge("");
+          this.props.setSelectedPetID("");
+          this.props.triggerAddNewPetEvent("");
         }
-      })
-      .catch(rej => {
-        console.log(rej);
-        alert(rej);
-      });
+      );
+    } else {
+      this.props.firebase.fsdb
+        .collection("form-inquiry")
+        .doc(window.localStorage.getItem("dbDocID"))
+        .get()
+        .then(doc => {
+          this.props.history.push(
+            `${ROUTES.BOOK_AN_APPOINTMENT}/${
+              doc.data().customerDetails.service
+            }`,
+            [{ pageNumber: 2 }]
+          );
+        });
+    }
+    // })
+    // .catch(rej => {
+    //   console.log(rej);
+    //   alert(rej);
+    // });
 
     // const validData =
     //   this.props.petage === "" ||
@@ -610,15 +697,13 @@ class WizardBase extends React.Component {
           >
             {activePage}
             <div className="buttons">
-              {page > 0 && (
-                <button
-                  type="button"
-                  onClick={event => this.previous(event, values)}
-                >
-                  « Previous
-                </button>
-              )}
-              {/* {!isLastPage && <button type="submit">Next »</button>} */}
+              <button
+                type="button"
+                onClick={event => this.previous(event, values)}
+              >
+                « Previous
+              </button>
+              {!isLastPage && <button type="submit">Add a new Pet »</button>}
               {isLastPage && (
                 <button
                   type="submit"

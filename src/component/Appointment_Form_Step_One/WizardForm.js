@@ -288,7 +288,7 @@ import DatePicker from "react-datepicker";
 import "./index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Countdown from "react-countdown-now";
-
+import Stepper from "react-stepper-horizontal"; 
 
 // firebase={props.firebase}
 // setDate={setDate}
@@ -469,9 +469,22 @@ class WizardFormBase extends React.Component {
     <div id="wizard-step-one">
       <Styles>
         <div style={{ textAlign: "center" }}>
+        <div className="stepper">
+            <Stepper
+              steps={[
+                { title: "CUSTOMER DETAILS" },
+                { title: "PET INFO" },
+                { title: "CONFIRM BOOKING" }
+              ]}
+              activeStep={0}
+              className="stepper"
+            />
+          </div>
           <h1>Great, you are looking for an appointment for {this.state.service}</h1>
           <a href="#">Free video consultation on confirmed appointment</a>
-          <p>We can honor the appointment upto one hour after inquiry time.</p>
+          <p>
+            We can honor the appointment upto one hour after inquiry time.
+          </p>
         </div>
         <h2>Step 2 of 4</h2>
         <Wizard
@@ -508,8 +521,7 @@ class WizardFormBase extends React.Component {
               </div>
             ) : (
               <Fragment>
-                <h4>What is your phone number</h4>
-                <label>We will need send an OTP to verify you</label>
+                <h4 style={{ color: "white" }}>What is your phone number</h4>
                 <div style={{ margin: "25px 10px" }}>
                   <ReactPhoneInput
                     defaultCountry="de"
@@ -523,6 +535,7 @@ class WizardFormBase extends React.Component {
                     onChange={this.updateNumber}
                   />
                 </div>
+                <label>We will need send an OTP to verify you</label>
               </Fragment>
             )}
           </Wizard.Page>
@@ -624,7 +637,7 @@ class WizardFormBase extends React.Component {
                 placeholder="Email"
                 validate={this.required}
               />
-              {this.state.emailError ? <p>Required</p>: null}
+              {this.state.emailError ? <p style={{color: "white", margin: "0 10px 0 10px"}}>Required</p>: null}
             </div>
             <div>
               <label>Name</label>
@@ -636,7 +649,7 @@ class WizardFormBase extends React.Component {
                 placeholder="Name"
                 validate={this.required}
               />
-              {this.state.nameError? <p>Required</p>: null}
+              {this.state.nameError? <p style={{color: "white", margin: "0 10px 0 10px"}}>Required</p>: null}
             </div>
             <div>
               <label>Date</label>
@@ -653,16 +666,18 @@ class WizardFormBase extends React.Component {
               <label>Session</label>
               <Field name="session"
               onFocus={()=>this.sessionFocus()}              
-              required component="select">
+              component="select">
                 <option value="">Choose time</option>
                 <option value="Morning">Morning</option>
                 <option value="Afternoon">Afternoon</option>
                 <option value="Evening">Evening</option>
               </Field>
-              {this.state.sessionError ? <p>Required</p>: null}
+              {this.state.sessionError ? <p style={{color: "white", margin: "0 10px 0 10px"}}>Required</p>: null}
             </div>
           </Wizard.Page>
         </Wizard>
+        <a href="#">Free video consultation on confirmed appointment</a>
+        <p>We can honor the appointment upto one hour after inquiry time.</p>
       </Styles>
     </div>
   )}

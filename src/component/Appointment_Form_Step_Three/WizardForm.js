@@ -4,7 +4,7 @@ import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import Countdown from "react-countdown-now";
-
+import Stepper from "react-stepper-horizontal";
 
 const Error = ({ name }) => (
   <Field
@@ -24,7 +24,7 @@ const WizardFormBase = props => {
   const [date, setDate] = useState(new Date());
   const [token, setToken] = useState("");
   const [isLoading, setisLoading] = useState(false);
-  const [resendOtp, setresendOtp] = useState("");
+  const [resendOtp, setresendOtp] = useState(false);
   const [timer, setTimer] = useState(Date.now() + 10000);
 
   function updateOtp(e) {
@@ -43,9 +43,19 @@ const WizardFormBase = props => {
   return (
     <div id="wizard-step-three">
       <Styles>
+      <div className="stepper">
+        <Stepper
+          steps={[
+            { title: "CUSTOMER DETAILS" },
+            { title: "PET INFO" },
+            { title: "CONFIRM BOOKING" }
+          ]}
+          activeStep={2}
+          className="stepper"
+        />
+      </div>
         <h1>We are assigning a vet to your case</h1>
         <h2>We have sent an OTP to your phone number</h2>
-        <h2>Step 4 of 4</h2>
         <Wizard
           initialValues={{ employed: true, stooge: "larry", date: new Date() }}
           firebase={props.firebase}
@@ -92,6 +102,7 @@ const WizardFormBase = props => {
                     onChange={e => {
                       updateOtp(e);
                     }}
+                    required
                     type="text"
                     placeholder="otp code"
                     value={token}

@@ -287,24 +287,30 @@ import ReactPhoneInput from "react-phone-input-2";
 import "react-phone-input-2/dist/style.css";
 import { withFirebase } from "../Firebase";
 import Modal from "react-awesome-modal";
-import * as ROUTES from "../../constants/routes";
-
+import { Slider } from "../../elements/Slider";
 import "./styles.css";
 import { VetBlock } from "../Vet_Block";
-
+import Stepper from "react-stepper-horizontal";
 const onSelectStyle = {
   backgroundColor: "#ff6767"
 };
 
 const petage = [
   {
-    age: "0 to 1.5"
+    age: "DOG"
   },
   {
-    age: "1.5 to 6"
+    age: "CAT"
   },
   {
-    age: "older than 6"
+    age: "RABBIT"
+  },
+  {
+    age: "BIRD"
+  },
+  ,
+  {
+    age: "OTHER"
   }
 ];
 
@@ -322,6 +328,7 @@ const INITIAL_STATE = {
   typeError: "",
   genderError: "",
   notesError: "",
+  petType: "",
   visible: "",
   number: "",
   validNum: ""
@@ -345,13 +352,23 @@ class WizardFormBase extends React.Component {
     });
   };
 
-  setPetAgeError = e => {
-    console.log("uPDATE age");
+  petNameFocus = () =>{
+    this.setState({
+      petNameError: ""
+    });
+  }
 
+  setPetAgeError = e => {
     this.setState({
       petAgeError: e
     });
   };
+
+  petAgeFocus = () =>{
+    this.setState({
+      petAgeError: ""
+    });
+  }
 
   setTypeError = e => {
     this.setState({
@@ -364,12 +381,24 @@ class WizardFormBase extends React.Component {
       genderError: e
     });
   };
+  
+  genderFocus = ()=>{
+    this.setState({
+      genderError: ""
+    });
+  }
 
   setNotesError = e => {
     this.setState({
       notesError: e
     });
   };
+
+  notesFocus = ()=>{
+    this.setState({
+      notesError: ""
+    });
+  }
 
   setClientName = e => {
     this.setState({
@@ -422,9 +451,8 @@ class WizardFormBase extends React.Component {
     this.setDate(event);
   };
 
-  petAgeUpdate = (event, id) => {
+  petAgeUpdate = (event) => {
     this.setPetAge(event);
-    this.setStyleID(id);
   };
 
   setStyleID = e => {
@@ -461,26 +489,42 @@ class WizardFormBase extends React.Component {
     });
   };
 
+  petTypeUpdate = (e) =>{
+    this.setTypeError(false)
+    this.setState({
+      petType: e
+    })
+  }
+
   petSelectionChanged = event => {
     this.setSelectedPetID(event);
   };
 
   render() {
-    console.log(this.state);
+    console.log(this.state.petType);
 
     return (
       <div id="wizard-step-two">
         <Styles>
+        <div className="stepper">
+        <Stepper
+          steps={[
+            { title: "CUSTOMER DETAILS" },
+            { title: "PET INFO" },
+            { title: "CONFIRM BOOKING" }
+          ]}
+          activeStep={1}
+        />
+      </div>
           <div>
             <h1>We are pleased to meet you {this.state.clientName}</h1>
           </div>
-          <h2>Step 3 of 4</h2>
           <Modal
             visible={this.state.visible}
             width="400"
             height="300"
             effect="fadeInUp"
-            onClickAway={e => this.closeModal(e)}
+            onClickAway={e => this.closeModal(false)}
           >
             <h4>The Number that you entered is invalid</h4>
             <label>Please enter valid number to proceed</label>
@@ -521,6 +565,8 @@ class WizardFormBase extends React.Component {
             selectedPetID={this.state.selectedPetID}
             validNum={this.state.validNum}
             setvalidNum={this.setvalidNum}
+            type={this.state.petType}
+            petTypeUpdate={this.petTypeUpdate}
             isLoading={this.state.isLoading}
             setNotesError={this.setNotesError}
             setisLoading={this.setisLoading}
@@ -531,7 +577,7 @@ class WizardFormBase extends React.Component {
             // onSubmit={onSubmit}
           >
             <Wizard.Page>
-              <h1 style={{ color: "white" }}>Select from old Pets</h1>
+              <h2 style={{ color: "white" }}>Select from old Pets</h2>
               {this.state.selectedPet ? (
                 <div>
                   <ul>
@@ -560,7 +606,11 @@ class WizardFormBase extends React.Component {
                           );
                         }
                       })}
-                    <li
+                  </ul>
+                </div>
+              ) : null}
+              {/* <ul>
+              <li
                       className="options-list-item"
                       onClick={() => this.addNewPet(true)}
                     >
@@ -570,9 +620,7 @@ class WizardFormBase extends React.Component {
                         </div>
                       </label>
                     </li>
-                  </ul>
-                </div>
-              ) : null}
+              </ul> */}
             </Wizard.Page>
             <Wizard.Page>
               {this.state.isLoading ? (
@@ -592,7 +640,7 @@ class WizardFormBase extends React.Component {
                       name="petname"
                       component="input"
                       type="text"
-                      onFocus={() => this.setPetNameError(false)}
+                      onFocus={() => this.petNameFocus(false)}
                       placeholder="Tom"
                       // validate={required}
                     />
@@ -600,23 +648,29 @@ class WizardFormBase extends React.Component {
                   </div>
                   <div>
                     <label>How old is your pet?</label>
-                    <div className="options-container">
-                      <ul
-                        className="options-list"
-                      >
-                        {petage.map((item, id) => {
+                    <Slider
+                      min={0}
+                      onChange={e => this.petAgeUpdate(e)}
+                      max={20}
+                      value={this.state.petage}
+                      onAfterChange={() => this.petAgeFocus(false)}
+                      defaultValue={3}
+                      marks={{ 0: 0, 5: 5, 10: 10, 15: 15, 20: "20+" }}
+                    />
+                    {this.state.petAgeError ? <p>Required</p> : null}
+                  </div>
+                  <div >
+                    <label>Type</label>
+                    <ul className="options-list">
+                      {petage &&
+                        petage.map((item, id) => {
                           return (
                             <li
                               id={id}
                               style={
-                                this.state.petage === item.age
-                                  ? onSelectStyle
-                                  : null
+                                this.state.petType === item.age ? onSelectStyle : null
                               }
-                              onClick={() => {
-                                this.petAgeUpdate(item.age, id)
-                                this.setPetAgeError(false)
-                              }}
+                              onClick={() => this.petTypeUpdate(item.age)}
                               className="options-list-item"
                             >
                               <label>
@@ -627,34 +681,17 @@ class WizardFormBase extends React.Component {
                             </li>
                           );
                         })}
-                      </ul>
-                    </div>
-                    {this.state.petAgeError ? <p>Required</p> : null}
-                  </div>
-                  <div>
-                    <label>Type</label>
-                    <Field
-                      name="type"
-                      onFocus={() => this.setTypeError(false)}
-                      component="select"
-                    >
-                      <option value="">Choose Animal</option>
-                      <option value="dog">Dog</option>
-                      <option value="cat">🍄 Cat</option>
-                      <option value="rabbit">🧀 Rabbit</option>
-                      <option value="bird">🐓 Bird</option>
-                      <option value="other">🍍 Other</option>
-                    </Field>
+                    </ul>
                     {this.state.typeError ? <p>Required</p> : null}
                   </div>
                   <div>
                     <label>Gender</label>
                     <Field
                       name="gender"
-                      onFocus={() => this.setGenderError(false)}
+                      onFocus={() => this.genderFocus(false)}
                       component="select"
                     >
-                      <option value="">Choose time</option>
+                      <option value="">Choose Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </Field>
@@ -667,7 +704,7 @@ class WizardFormBase extends React.Component {
                     <Field
                       name="notes"
                       type="text"
-                      onFocus={() => this.setNotesError(false)}
+                      onFocus={() => this.notesFocus(false)}
                       placeholder="My dog is a Golden retriever..."
                       component="input"
                     />

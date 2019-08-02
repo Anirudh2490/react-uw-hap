@@ -38,11 +38,9 @@ export default styled.div`
   font-family: sans-serif;
   h1 {
     text-align: center;
-    color: #222;
   }
   h2 {
     text-align: center;
-    color: #222;
   }
   & > div {
     text-align: center;

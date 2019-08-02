@@ -128,6 +128,7 @@ class WizardBase extends React.Component {
   componentWillReceiveProps(nextProps) {
     var phone;
     if (nextProps.resendOtp === true) {
+      this.props.setresendOtp(false);
       this.props.firebase.fsdb
         .collection("form-inquiry")
         .doc(window.localStorage.getItem("dbDocID"))
@@ -155,9 +156,9 @@ class WizardBase extends React.Component {
             if (res.status === 400) {
               this.props.setresendOtp(false);
               this.props.setTimer(Date.now() + 30000);
-
               alert("Invalid Number");
             } else {
+              this.props.setresendOtp(false);
               res.json().then(res => {
                 console.log(res);
                 window.localStorage.setItem("newUser", res);
@@ -169,6 +170,7 @@ class WizardBase extends React.Component {
   }
 
   next = values => {
+    this.props.setresendOtp(false);
     this.props.setisLoading(true);
     const { token } = this.props;
     const { phone } = this.state.values;
@@ -265,8 +267,8 @@ class WizardBase extends React.Component {
                           notes: values.notes
                         },
                         bookingStatus: {
-                          phoneVerfication: false,
-                          status: "Not confirmed"
+                          phoneVerfication: true,
+                          status: "Confirmed"
                         }
                       }
                     })
@@ -319,12 +321,11 @@ class WizardBase extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ handleSubmit, submitting, values }) => (
-          <form className="wizard-form">
+          <form onSubmit={e => this.handleSubmit(e, values)} className="wizard-form">
             {activePage}
             <div className="buttons">
               <button
                 type="submit"
-                onClick={e => this.handleSubmit(e, values)}
                 disabled={submitting}
               >
                 Verify OTP

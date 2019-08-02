@@ -64,24 +64,45 @@ class App extends Component {
                   <Navbar />
                 </DrawerProvider>
               </Sticky>
-              <Route path={ROUTE.LANDING} exact component={Landing} />
-              <Route path={`${ROUTE.ADMIN}/:docid`} exact component={AppointmentDetails} />
-              <Route path={ROUTE.VIDEO_COMPONENT} component={VideoComponent} />
-              <Route path={ROUTE.SIGNIN_OPTIONS} component={SignInOptPage} />
-              <Route path={ROUTE.ADMIN}  exact component={Admin} />
-              <Route path={ROUTE.ADMIN_SIGNIN} component={Admin_SignIn} />
-              <Route path={ROUTE.SIGNIN} component={SignIn} />
-              <Route path={ROUTE.VET_PAGE} component={VetPage} />
-              <Route
-                exact
-                path={ROUTE.BOOKING_VERIFICATION}
-                component={WizardForm4}
-              />
-              <Route
-                exact
-                path={`${ROUTE.BOOKING_VERIFICATION}/opt-successfully-verified`}
-                component={WizardForm5}
-              />
+              <div className="content">
+                <Route path={ROUTE.LANDING} exact component={Landing} />
+                <Route
+                  path={`${ROUTE.ADMIN}/:docid`}
+                  exact
+                  component={AppointmentDetails}
+                />
+                <Route
+                  path={ROUTE.VIDEO_COMPONENT}
+                  component={VideoComponent}
+                />
+                <Route
+                  path={ROUTE.SIGNIN_OPTIONS}
+                  component={SignInOptPage}
+                />
+                <Route path={ROUTE.ADMIN} exact component={Admin} />
+                <Route path={ROUTE.ADMIN_SIGNIN} component={Admin_SignIn} />
+                <Route path={ROUTE.SIGNIN} component={SignIn} />
+                <Route path={ROUTE.VET_PAGE} component={VetPage} />
+                <Route
+                  exact
+                  path={ROUTE.BOOKING_VERIFICATION}
+                  component={WizardForm4}
+                />
+                <Route
+                  exact
+                  path={`${
+                    ROUTE.BOOKING_VERIFICATION
+                  }/opt-successfully-verified`}
+                  component={WizardForm5}
+                />
+
+                <Route
+                  exact
+                  path={`${
+                    ROUTE.BOOKING_VERIFICATION
+                  }/opt-successfully-verified/success`}
+                  component={WizardForm3}
+                />
               
               <Route
                 exact
@@ -89,32 +110,36 @@ class App extends Component {
                 component={WizardForm3}
               />
 
-
-              <Route path={ROUTE.VET} component={Vet} />
-              <Route path={ROUTE.VET_SIGNIN} component={Vet_Sign_In} />
-              <Route path={ROUTE.VET_SIGNUP} component={Vet_Sign_Up} />
-              <Route path={ROUTE.SIGNUP} component={SignUp} />
-              <Route path={ROUTE.DASHBOARD} exact component={CustomerPageAuth} />
-              <Route
-                path={ROUTE.BOOK_AN_APPOINTMENT}
-                component={BookAnAppointment}
-              />
-              <Route
-                path={ROUTE.ACCOUNT_SETTINGS}
-                exact
-                component={AccountSettings}
-              />
-              <Route
-                path={ROUTE.FORGET_PASSWORD}
-                exact
-                component={ForgotPassword}
-              />
-              <Route path={ROUTE.ABOUT} component={ChatBot}/>
-              {/* <Route path={ROUTE.BLOG} />
+<Route path={ROUTE.VET} component={Vet} />
+                <Route path={ROUTE.VET_SIGNIN} component={Vet_Sign_In} />
+                <Route path={ROUTE.VET_SIGNUP} component={Vet_Sign_Up} />
+                <Route path={ROUTE.SIGNUP} component={SignUp} />
+                <Route
+                  path={ROUTE.DASHBOARD}
+                  exact
+                  component={CustomerPageAuth}
+                />
+                <Route
+                  path={ROUTE.BOOK_AN_APPOINTMENT}
+                  component={BookAnAppointment}
+                />
+                <Route
+                  path={ROUTE.ACCOUNT_SETTINGS}
+                  exact
+                  component={AccountSettings}
+                />
+                <Route
+                  path={ROUTE.FORGET_PASSWORD}
+                  exact
+                  component={ForgotPassword}
+                />
+                <Route path={ROUTE.ABOUT} component={ChatBot} />
+                {/* <Route path={ROUTE.BLOG} />
               <Route path={ROUTE.FAQ} />
               <Route path={ROUTE.FORVETS} />
               <Route path={ROUTE.SERVICES} /> */}
-              <Footer />
+               <Footer />
+              </div>
             </ContentWrapper>
           </ParallaxProvider>
         </ThemeProvider>

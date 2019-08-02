@@ -6,7 +6,7 @@ const FooterWrapper = styled.footer`
   background-color: #f9fbfd;
   overflow: hidden;
   @media (min-width: 576px) {
-    padding-top: 130px;
+    padding-top: 20px;
     &:before {
       content: '';
       position: absolute;
@@ -27,14 +27,11 @@ const FooterWrapper = styled.footer`
   .footer_container {
     background-repeat: no-repeat;
     background-position: center 50px;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     position: relative;
     @media (min-width: 576px) {
       background-image: url(${FooterImage});
-    }
-    @media (max-width: 990px) {
-      padding-bottom: 40px;
     }
     @media (max-width: 767px) {
       padding-bottom: 0px;

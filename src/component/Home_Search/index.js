@@ -364,7 +364,7 @@ class HomeSearchBase extends Component {
 
     return (
       <Box {...this.props.searchArea}>
-        <SearchWrapper>
+        <SearchWrapper className="home-search-bar">
           <Input
             inputType="number"
             placeholder="Zip Code"
@@ -378,7 +378,6 @@ class HomeSearchBase extends Component {
             value={this.state.phone}
             onChange={this.onChangePhone}
           /> */}
-          <div style={{marginTop: "10px"}}>
           <Select
             options={this.props.DOMAIN_NAMES}
             placeholder="Service"
@@ -386,7 +385,6 @@ class HomeSearchBase extends Component {
             className="domain_search_select"
             aria-label="domain_search_input"
           />
-          </div>
           <Button
             {...this.props.button}
             onClick={()=>{ 

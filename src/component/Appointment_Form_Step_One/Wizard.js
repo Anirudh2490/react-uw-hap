@@ -13,7 +13,7 @@ class WizardBase extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (window.localStorage.getItem("dbDocID") === null) {
       this.props.history.push("/");
     } else {
@@ -50,10 +50,8 @@ class WizardBase extends React.Component {
         .catch(error => {
           console.log(error);
         });
-    }
-  }
+    } 
 
-  componentWillReceiveProps(nextProps, previousProps) {
     var userDoc;
     if (this.props.firebase.auth.currentUser !== null) {
       this.props.firebase.fsdb
@@ -65,6 +63,8 @@ class WizardBase extends React.Component {
         )
         .get()
         .then(querySnapshot => {
+          console.log("api called");
+          
           querySnapshot.forEach(doc => {
             if (doc.data().customerDetails.phone !== "") {
               userDoc = doc.data();
@@ -79,24 +79,30 @@ class WizardBase extends React.Component {
               "customerDetails.uid": this.props.firebase.auth.currentUser.uid
             })
             .then(() => {
-              this.setState(
-                {
-                  values: {
-                    email: userDoc.customerDetails.email,
-                    name: userDoc.customerDetails.name,
-                    zipcode: userDoc.customerDetails.zipcode,
-                    uid: this.props.firebase.auth.currentUser.uid
-                  }
-                },
-                () => {
+          console.log("api called");
+              // this.setState(
+              //   {
+              //     values: {
+              //       email: userDoc.customerDetails.email,
+              //       name: userDoc.customerDetails.name,
+              //       zipcode: userDoc.customerDetails.zipcode,
+              //       uid: this.props.firebase.auth.currentUser.uid
+              //     }
+              //   },
+              //   () => {
                    this.props.setNum(userDoc.customerDetails.phone);
                    this.props.setisLoading(false);
                    this.props.setIsDisabled(true);
                 }
               );
             });
-        });
     }
+   
+  }
+
+  componentWillReceiveProps(nextProps, previousProps) {
+   
+  
     if (nextProps.withOutLogin === true) {
       window.localStorage.setItem("contWithOutLogin", true);
       this.setState(

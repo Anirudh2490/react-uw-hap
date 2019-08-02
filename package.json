@@ -30,6 +30,7 @@
     "react-otp-timer": "^0.1.0",
     "react-particles-js": "^2.6.0",
     "react-phone-input-2": "^2.9.4",
+    "react-places-autocomplete": "^7.2.1",
     "react-read-more-less": "^0.1.6",
     "react-redux": "^7.1.0",
     "react-reveal": "^1.2.2",

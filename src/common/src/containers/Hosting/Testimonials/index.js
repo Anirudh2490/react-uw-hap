@@ -82,7 +82,6 @@ const TestimonialSection = ({
       },
     },
   };
-  console.log(TESTIMONIALS);
   return (
     <TestimonialSecWrapper id="testimonial_section">
       <Container fullWidth noGutter>

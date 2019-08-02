@@ -11,12 +11,12 @@
     padding: 100px 0px;
 }
 
-.isBPPJ h2, .isBPPJ h4  {
+.khgZNC h2, .khgZNC h4  {
     text-align: center;
     color: white;
 }
 
-.isBPPJ form {
+.khgZNC form {
     text-align: center;
     max-width: 51% !important;
     background: #588285;
@@ -33,7 +33,7 @@
     /* .marquee-wrapper {
         zoom: 35%;
     } */
-    .isBPPJ form {
+    .khgZNC form {
         max-width: 100% !important;
     }
 }

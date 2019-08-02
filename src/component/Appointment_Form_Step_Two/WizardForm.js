@@ -578,37 +578,27 @@ class WizardFormBase extends React.Component {
           >
             <Wizard.Page>
               <h2 style={{ color: "white" }}>Select from old Pets</h2>
-              {this.state.selectedPet ? (
-                <div>
-                  <ul>
-                    {this.state.selectedPet &&
-                      this.state.selectedPet.map(doc => {
-                        if (doc.petDoc.petname !== "") {
+              <ul className="options-list">
+                      {petage &&
+                        petage.map((item, id) => {
                           return (
                             <li
-                              id={doc.petId}
+                              id={id}
                               style={
-                                this.state.selectedPetID === doc.petId
-                                  ? onSelectStyle
-                                  : null
+                                this.state.petType === item.age ? onSelectStyle : null
                               }
-                              onClick={() => {
-                                this.petSelectionChanged(doc.petId);
-                              }}
+                              onClick={() => this.petTypeUpdate(item.age)}
                               className="options-list-item"
                             >
                               <label>
                                 <div className="item-container">
-                                  <p>{doc.petDoc.petname}</p>
+                                  <p>{item.age}</p>
                                 </div>
                               </label>
                             </li>
                           );
-                        }
-                      })}
-                  </ul>
-                </div>
-              ) : null}
+                        })}
+                    </ul>
               {/* <ul>
               <li
                       className="options-list-item"
@@ -710,6 +700,7 @@ class WizardFormBase extends React.Component {
                     />
                     {this.state.notesError ? <p>Required</p> : null}
                   </div>
+                  <button onClick={(e)=> {e.preventDefault(); this.openModal(true)}} >Open Modal</button>
                 </Fragment>
               )}
             </Wizard.Page>

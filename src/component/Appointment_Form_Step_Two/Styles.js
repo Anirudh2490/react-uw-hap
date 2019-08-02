@@ -87,16 +87,20 @@ export default styled.div`
       display: flex;
       flex-flow: row nowrap;
       line-height: 2em;
-      margin: 5px;
+      margin: 20px 5px;
       position: relative;
       flex-direction: column;
       align-items: center;
       & > label {
-        color: #333;
-        width: 110px;
+        margin: 0px;
         min-width: 60px;
-        font-size: 1em;
         line-height: 32px;
+        vertical-align: middle;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 32px;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
       }
       & > input,
       & > select,
@@ -104,7 +108,6 @@ export default styled.div`
         flex: 1;
         padding: 20px 5px;
         font-size: 1em;
-        margin-left: 15px;
         border: 1px solid #ccc;
         border-radius: 3px;
         height: 20px;
@@ -113,7 +116,6 @@ export default styled.div`
         margin-top: 7px;
       }
       & > div {
-        margin-left: 16px;
         & > label {
           display: block;
           & > input {
@@ -136,6 +138,16 @@ export default styled.div`
       flex-flow: row nowrap;
       justify-content: center;
       margin-top: 15px;
+    }
+    .genders {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
     }
     .error {
       display: flex;
@@ -169,6 +181,18 @@ export default styled.div`
     }
     &[type="button"] {
       ${btnDefault};
+    }
+  }
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 30px;
+      margin: 0px 15px;
+    }
+    h2 {
+      font-size: 25px;
+    }
+    form {
+      padding: 10px;
     }
   }
 `;

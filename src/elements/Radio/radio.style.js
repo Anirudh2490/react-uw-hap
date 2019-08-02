@@ -65,8 +65,9 @@ const RadioBoxStyle = styled.div`
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
+      background: #ddd;
       border-radius: 50%;
       border: 1px solid ${themeGet('colors.borderColor', '#dadada')};
       position: relative;

@@ -7,9 +7,14 @@
     display: flex;
     margin-bottom: 40px;
     -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
+    -webkit-justify-content: space-around;
     -ms-flex-pack: justify;
-    justify-content: space-between;
+    justify-content: space-around;
+}
+@media (max-width: 768px) {
+    .div-block-33 {
+        width: 100% !important;
+    }
 }
 
 .heading-5.heading-vorteile.arzt-name {
@@ -37,8 +42,8 @@
     }
     .aerzte-karte {
         display: inline-block;
-        width: 87%;
-        margin: 20px 0;
+        width: 120px;
+        margin: 5px;
     }
     .div-block-10.vorteile.arzt.sgbshtbg {
     height: 148px !important;

@@ -8,7 +8,6 @@
     color: #000000 !important;
 }
 
- 
 #faq_section .reusecore__button {
     background-color: #ffffff;
     color: #028489 !important;
@@ -45,11 +44,6 @@
     color:  #ffffff !important;
     background-color: #028489 !important;
     border-color: #028489 !important;
-}
-
-.stepper {
-    margin: 0px auto;
-    max-width: 1400px;
 }
 
 /* .reusecore__button {
@@ -111,7 +105,7 @@
     position: relative;
 }
 
-.cCecMw h1, .cCecMw a, .cCecMw p, .jKjcUs h1, .jaVuRX h1, .jaVuRX h1 {
+.cCecMw h1, .cCecMw p, .jKjcUs h1, .jaVuRX h1, .jaVuRX h1 {
     color: #0f2137 !important;
     text-align: center;
 }
@@ -219,7 +213,7 @@
     font-weight: 600 !important;
 }
 
-.jKjcUs form > div > label, .jaVuRX form > div > label{
+/* .jKjcUs form > div > label, .jaVuRX form > div > label{
     color: #333 !important;
     vertical-align: middle !important;
     width: 110px !important; 
@@ -229,7 +223,7 @@
     font-weight: bold !important;
     font-size: 18px !important;
     line-height: 32px !important;
-} 
+}  */
 
 .drcvxM form > div > label {
     color: #333 !important;
@@ -568,7 +562,7 @@ section#service_section {
     }
 
     .jKjcUs form, .jaVuRX form{
-        max-width: 95% !important;
+        max-width: 100% !important;
     }
 
     .modal-name div:nth-child(1){

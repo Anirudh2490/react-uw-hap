@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from "react";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
-import Stepper from "react-stepper-horizontal";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import Modal from "react-awesome-modal";
@@ -14,6 +13,7 @@ import DatePicker from "react-datepicker";
 import "./index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import TestimonialSection from "../../common/src/containers/Hosting/Testimonials";
+import Stepper from "../../elements/Stepper";
 const Error = ({ name }) => (
   <Field
     name={name}
@@ -63,17 +63,14 @@ const WizardFormBase = props => {
     <div id="wizard-step-one">
       <Styles>
         <div style={{ textAlign: "center" }}>
-          <div className="stepper">
-            <Stepper
-              steps={[
-                { title: "CUSTOMER DETAILS" },
-                { title: "PET INFO" },
-                { title: "CONFIRM BOOKING" }
-              ]}
-              activeStep={0}
-              className="stepper"
-            />
-          </div>
+          <Stepper
+            steps={[
+              { title: "CUSTOMER DETAILS" },
+              { title: "PET INFO" },
+              { title: "CONFIRM BOOKING" }
+            ]}
+            activeStep={0}
+          />
           <h1>Great, you are looking for an appointment for {service}</h1>
         </div>
         <div>

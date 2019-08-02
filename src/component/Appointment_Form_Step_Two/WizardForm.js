@@ -1,24 +1,17 @@
 import React, { useState } from "react";
-import Stepper from "react-stepper-horizontal";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
-// import Slider from "rc-slider";
-// // import Tooltip from "rc-tooltip";
-// import "rc-slider/assets/index.css";
-// import "rc-tooltip/assets/bootstrap.css";
+import Radio from "../../elements/Radio";
+import Stepper from "../../elements/Stepper";
 import { Slider } from '../../elements/Slider';
 import * as ROUTES from "../../constants/routes";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 // import moment from "moment";
-
-import "./styles.css";
 import { VetBlock } from "../Vet_Block";
-
-// const createSliderWithTooltip = Slider.createSliderWithTooltip;
-// const Range = createSliderWithTooltip(Slider);
+import "./styles.css";
 
 const Error = ({ name }) => (
   <Field
@@ -36,21 +29,21 @@ const onSelectStyle = {
   backgroundColor: "#ff6767"
 };
 
-const petAge = [
+const petTypesArr = [
   {
-    age: "DOG"
+    type: "DOG"
   },
   {
-    age: "CAT"
+    type: "CAT"
   },
   {
-    age: "RABBIT"
+    type: "RABBIT"
   },
   {
-    age: "BIRD"
+    type: "BIRD"
   },
   {
-    age: "OTHER"
+    type: "OTHER"
   }
 ];
 
@@ -105,16 +98,14 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
-      <div className="stepper">
-        <Stepper
-          steps={[
-            { title: "CUSTOMER DETAILS" },
-            { title: "PET INFO" },
-            { title: "CONFIRM BOOKING" }
-          ]}
-          activeStep={1}
-        />
-      </div>
+      <Stepper
+        steps={[
+          { title: "CUSTOMER DETAILS" },
+          { title: "PET INFO" },
+          { title: "CONFIRM BOOKING" }
+        ]}
+        activeStep={1}
+      />
       <div>
         <h1>We are pleased to meet you {clientName}</h1>
       </div>
@@ -122,7 +113,7 @@ const WizardFormBase = props => {
         // initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
-        petage={petage}
+        // petage={petage}
         selectedPet={selectedPet}
         setPet={setPet}
         addNewPetEvent={addNewPetEvent}
@@ -141,7 +132,7 @@ const WizardFormBase = props => {
           <h2 style={{ color: "white" }}>Select from old Pets</h2>
           {selectedPet ? (
             <div>
-              <ul>
+              <ul className="options-list">
                 {selectedPet &&
                   selectedPet.map(doc => {
                     console.log(doc);
@@ -212,7 +203,7 @@ const WizardFormBase = props => {
             <Slider
               min={0}
               max={20}
-              defaultValue={3}
+              defaultValue={5}
               marks={{ 0: 0, 5: 5, 10: 10, 15: 15, 20: "20+" }}
             />
             <Error name="email" />
@@ -220,18 +211,18 @@ const WizardFormBase = props => {
           <div>
             <label>Type</label>
             <ul className="options-list">
-              {petAge &&
-                petAge.map((item, id) => {
+              {petTypesArr &&
+                petTypesArr.map((item, id) => {
                   return (
                     <li
                       id={id}
-                      style={petType === item.age ? onSelectStyle : null}
-                      onClick={() => petTypeUpdate(item.age, id)}
+                      style={petType === item.type ? onSelectStyle : null}
+                      onClick={() => petTypeUpdate(item.type, id)}
                       className="options-list-item"
                     >
                       <label>
                         <div className="item-container">
-                          <p>{item.age}</p>
+                          <p>{item.type}</p>
                         </div>
                       </label>
                     </li>
@@ -242,23 +233,24 @@ const WizardFormBase = props => {
           </div>
           <div>
             <label>Gender</label>
-            <Field name="gender" component="select">
-              <option>Choose time</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </Field>
-            <Error name="gender" />
+            <div className="genders">
+              <Radio
+                className="genres__radio"
+                labelPosition="left"
+                labelText="MALE"
+                value="male"
+                isChecked
+              />
+              <Radio
+                className="genres__radio"
+                labelText="FEMALE"
+                value="female"
+              />
+            </div>
           </div>
-          <label>
-            Tell us more about your pet. Her breed, health issues etc.
-          </label>
           <div>
-            <Field
-              name="notes"
-              type="text"
-              placeholder="My dog is a Golden retriever..."
-              component="input"
-            />
+            <label>Previous health conditions</label>
+            <Field name="notes" type="text" component="input" />
           </div>
         </Wizard.Page>
       </Wizard>

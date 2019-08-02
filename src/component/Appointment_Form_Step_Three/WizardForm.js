@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Stepper from "react-stepper-horizontal";
 import Styles from "./Styles";
 import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
+import Stepper from "../../elements/Stepper";
 
 const Error = ({ name }) => (
   <Field
@@ -29,19 +29,15 @@ const WizardFormBase = props => {
   
   return (
     <Styles>
-      <div className="stepper">
-        <Stepper
-          steps={[
-            { title: "CUSTOMER DETAILS" },
-            { title: "PET INFO" },
-            { title: "CONFIRM BOOKING" }
-          ]}
-          activeStep={2}
-          className="stepper"
-        />
-      </div>
+      <Stepper
+        steps={[
+          { title: "CUSTOMER DETAILS" },
+          { title: "PET INFO" },
+          { title: "CONFIRM BOOKING" }
+        ]}
+        activeStep={2}
+      />
       <h1>We are assigning a vet to your case</h1>
-      <h2>We have sent an OTP to your phone number</h2>
       <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
@@ -57,6 +53,7 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
+          <h3>We have sent an OTP to your phone number</h3>
           <div>
             <label>OTP CODE</label>
             <Field

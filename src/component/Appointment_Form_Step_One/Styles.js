@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from "styled-components";
 
 const btn = (light, dark) => css`
   white-space: nowrap;
@@ -25,24 +25,26 @@ const btn = (light, dark) => css`
     opacity: 0.6;
     cursor: not-allowed;
   }
-`
+`;
 
 const btnDefault = css`
-  ${btn('#ffffff', '#d5d5d5')} color: #555;
-`
+  ${btn("#ffffff", "#d5d5d5")} color: #555;
+`;
 
-const btnPrimary = btn('#4f93ce', '#285f8f')
-const btnDanger = btn('#e27c79', '#c9302c')
+const btnPrimary = btn("#4f93ce", "#285f8f");
+const btnDanger = btn("#e27c79", "#c9302c");
 
 export default styled.div`
   font-family: sans-serif;
+
   h1 {
     text-align: center;
     color: #222;
   }
-  h2 {
+  h3 {
     text-align: center;
-    color: #222;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
   }
   & > div {
     text-align: center;
@@ -56,6 +58,7 @@ export default styled.div`
   p {
     max-width: 500px;
     margin: 10px auto;
+    text-align: center;
     & > a {
       display: inline;
     }
@@ -72,7 +75,7 @@ export default styled.div`
       text-align: center;
       display: block;
       position: absolute;
-      background: url('https://media.giphy.com/media/130AxGoOaR6t0I/giphy.gif')
+      background: url("https://media.giphy.com/media/130AxGoOaR6t0I/giphy.gif")
         center center;
       background-size: fill;
       font-size: 2em;
@@ -85,16 +88,19 @@ export default styled.div`
     }
     & > div {
       display: flex;
-      flex-flow: row nowrap;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
       line-height: 2em;
       margin: 5px;
       position: relative;
       & > label {
-        color: #333;
+        color: #fff;
         width: 110px;
         min-width: 60px;
         font-size: 1em;
         line-height: 32px;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
       }
       & > input,
       & > select,
@@ -102,21 +108,12 @@ export default styled.div`
         flex: 1;
         padding: 3px 5px;
         font-size: 1em;
-        margin-left: 15px;
         border: 1px solid #ccc;
         border-radius: 3px;
+        min-width: 180px;
       }
-      & > input[type='checkbox'] {
+      & > input[type="checkbox"] {
         margin-top: 7px;
-      }
-      & > div {
-        margin-left: 16px;
-        & > label {
-          display: block;
-          & > input {
-            margin-right: 3px;
-          }
-        }
       }
       & > span {
         line-height: 32px;
@@ -133,6 +130,17 @@ export default styled.div`
       flex-flow: row nowrap;
       justify-content: center;
       margin-top: 15px;
+    }
+    .react-datepicker-wrapper {
+    margin: 0px;
+    flex: 1;
+    font-size: 1em;
+    min-width: 180px;
+    .react-datepicker__input-container {
+      position: relative;
+      display: inline-block;
+      min-width: 180px;
+      width: 100%;
     }
     .error {
       display: flex;
@@ -151,10 +159,30 @@ export default styled.div`
   }
   button {
     margin: 0 10px;
-    &[type='submit'] {
-      ${btnPrimary};
+    &[type="submit"] {
+      white-space: nowrap;
+      display: inline-block;
+      height: 53px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      background-image: none !important;
+      padding: 5px 15px;
+      background-color: #ff6767 !important;
+      font-size: 16px;
+      color: white !important;
+      border: none !important;
     }
-    &[type='button'] {
+    &[type="button"] {
       ${btnDefault};
     }
-  }`
+  }
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 30px;
+      margin: 0px 15px;
+    }
+    h2 {
+      font-size: 25px;
+    }
+  }
+`;

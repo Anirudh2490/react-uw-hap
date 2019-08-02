@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import BannerBG from '../../../assets/image/hosting/banner-bg.jpg';
+import BannerBG from '../../../assets/image/hosting/banner-homepage.jpeg';
 
 const BannerWrapper = styled.section`
   padding-top: 210px;
   padding-bottom: 160px;
-  background-image: url(${BannerBG});
+  background: rgba(0, 0, 0, 0.65) url(${BannerBG});
+  background-blend-mode: darken;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -156,12 +157,12 @@ export const List = styled.ul`
     display: inline-block;
     font-size: 17px;
     font-weight: 400;
-    color: #0f2137;
+    color: #ffffff;
     padding: 8px 12px;
 
     a {
       font-size: 15px;
-      color: #87909b;
+      color: #ffffff;
       display: block;
       &:hover {
         color: #eb4d4b;

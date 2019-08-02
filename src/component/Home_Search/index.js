@@ -21,12 +21,20 @@ import ReactPhoneInput from 'react-phone-input-2'
 // import 'react-phone-input-2/dist/style.css'
 import './styles.css'
 
+
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
+
+
 const INITIAL_STATE = {
   name: "",
   phone: "",
   zipcode: "",
   service: "",
   code: "",
+  address: '',
   error: "",
 }
 
@@ -87,6 +95,21 @@ class HomeSearchBase extends Component {
       service: event,
     })
   }
+
+
+  handleChange = address => {
+    this.setState({ address });
+  };
+
+
+  handleSelect = address => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        this.setState({address})
+      })
+      .catch(error => console.error('Error', error));
+  };
 
   // onChangeOTP = event => {
   //   this.setState(
@@ -242,7 +265,7 @@ class HomeSearchBase extends Component {
       {
         customerDetails: {
           name: ``,
-          zipcode: `${this.state.zipcode}`,
+          address: `${this.state.address}`,
           phone: ``,
           email: "",
           service: `${this.state.service.value}`,
@@ -357,22 +380,63 @@ class HomeSearchBase extends Component {
   }
 
   render() {
-    const { zipcode , service } = this.state;
+    const { address , service } = this.state;
     const isInvalid =
-    zipcode === '' ||
+    address === '' ||
     service === '';
 
     return (
       <Box {...this.props.searchArea}>
         <SearchWrapper className="home-search-bar">
-          <Input
+          {/* <Input
             inputType="number"
             placeholder="Zip Code"
             onChange={this.onChangeZipCode}
             iconPosition="right"
             className="domain_search_input"
             aria-label="domain_search_input"
-          />
+          /> */}
+
+<PlacesAutocomplete
+        value={this.state.address}
+        onChange={this.handleChange}
+        onSelect={this.handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+
+
           {/* <ReactPhoneInput
             defaultCountry="de"
             value={this.state.phone}

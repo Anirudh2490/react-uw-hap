@@ -42,6 +42,7 @@ const FeatureSection = ({
   featureItemHeading,
   featureItemDes,
 }) => {
+  console.log("111", FEATURES_DATA);
   return (
     <Box {...sectionWrapper}>
       <Container>

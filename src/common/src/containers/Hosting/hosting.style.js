@@ -275,8 +275,8 @@ export const ContentWrapper = styled.div`
         }
 
         img {
-          width: 80px;
-          height: 70px;
+          width: auto;
+          max-height: 90px;
         }
       }
     }
@@ -319,6 +319,15 @@ export const FeatureItem = styled(FeatureBlock)`
       rgb(255, 78, 80) 100%
     );
     transition: 0.35s ease-in-out;
+  }
+  #service_section > div > div.sc-bdVaJa.hdLVxH > div:nth-child(2) > div > div.title > h2
+  .title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    & > div {
+    margin-right: 20px;
+    }
   }
 
   & > div {
@@ -367,7 +376,6 @@ export const FeatureItem = styled(FeatureBlock)`
   }
 
   .icon__wrapper {
-    margin-bottom: 40px;
     @media (max-width: 768px) and (min-width: 768px) {
       margin-bottom: 30px;
     }

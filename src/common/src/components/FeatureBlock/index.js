@@ -46,12 +46,13 @@ const FeatureBlock = ({
       {...wrapperStyle}
       {...props}
     >
-      {Icon}
-
-      {title || description || button ? (
+      <div className="title">
+        {Icon}
+        {title}
+      </div>
+      {description || button ? (
         <Fragment>
           <ContentWrapper className="content__wrapper" {...contentStyle}>
-            {title}
             {description && <DescriptionSection description={description} />}
             {button && (
               <ButtonWrapper className="button__wrapper" {...btnWrapperStyle}>

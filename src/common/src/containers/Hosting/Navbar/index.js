@@ -71,7 +71,7 @@ const NavbarBase = ({
                     >
                       <Button
                         {...button}
-                        title="Jetzt anrufen"
+                        title="030 233 277 42"
                         icon={TelIcon}
                       />
                     </a>
@@ -95,7 +95,7 @@ const NavbarBase = ({
               />
               <Link href="tel:030 233 277 42">
                 <a className="navbar_drawer_button">
-                  <Button {...button} title="Jetzt anrufen" icon={TelIcon} />
+                  <Button {...button} title="030 233 277 42" icon={TelIcon} />
                 </a>
               </Link>
             </Drawer>

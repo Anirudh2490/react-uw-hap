@@ -11,10 +11,12 @@
 /* Button on NavBar */
 #root > div > div.sticky-outer-wrapper > div > nav > div > div > div > a > button {
     min-height: 45px;
-    width: 165px;
+    width: max-content;
     background-color: #fa5858;
     border-radius: 10px;
     font-size: 17px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
 }
 
 #faq_section .reusecore__button {

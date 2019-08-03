@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import Box from "../../elements/Box"
 import {
   SearchWrapper,
-  List,
 } from "../../common/src/containers/Hosting/Banner/banner.style"
 import { withFirebase } from "../Firebase"
 import Link from "next/link"
@@ -396,19 +395,6 @@ class HomeSearchBase extends Component {
             className="domain_search_button"
           />
         </SearchWrapper>
-        <List>
-          {this.props.DOMAIN_PRICE.map((item, index) => (
-            <li key={`domain-list-${index}`}>
-              {item.url ? (
-                <Link href={item.url}>
-                  <a>{item.content}</a>
-                </Link>
-              ) : (
-                <>{item.content}</>
-              )}
-            </li>
-          ))}
-        </List>
     <p id="recaptcha-container" style={{textAlign: "center"}}></p>
 
       </Box>

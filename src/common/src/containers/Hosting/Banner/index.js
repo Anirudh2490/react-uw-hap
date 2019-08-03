@@ -4,7 +4,7 @@ import Box from "../../../../../elements/Box"
 import Text from "../../../../../elements/Text"
 import Heading from "../../../../../elements/Heading"
 import Container from "../../../components/UI/Container"
-import ParticlesComponent from "../../Hosting/Particle";
+// import ParticlesComponent from "../../Hosting/Particle";
 import HomeSearch from '../../../../../component/Home_Search'
 import BannerWrapper, {
   DiscountWrapper,
@@ -27,7 +27,7 @@ const BannerSection = ({
   // console.log(data);
   return (
     <BannerWrapper id="banner_section">
-      <ParticlesComponent />
+      {/* <ParticlesComponent /> */}
       <Container className="banner_container">
         <Box {...row}>
           <Box {...textArea}>

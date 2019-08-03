@@ -19,10 +19,6 @@ const ButtonStyle = styled.button`
   font-weight: ${themeGet('fontWeights.4', '500')};
   text-decoration: none;
   text-transform: capitalize;
-  padding-top: ${themeGet('space.2', '8')}px;
-  padding-bottom: ${themeGet('space.2', '8')}px;
-  padding-left: ${themeGet('space.4', '15')}px;
-  padding-right: ${themeGet('space.4', '15')}px;
   border: 0;
   transition: all 0.3s ease;
   span.btn-text {

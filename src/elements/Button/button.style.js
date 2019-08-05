@@ -19,10 +19,6 @@ const ButtonStyle = styled.button`
   font-weight: ${themeGet('fontWeights.4', '500')};
   text-decoration: none;
   text-transform: capitalize;
-  padding-top: ${themeGet('space.2', '8')}px;
-  padding-bottom: ${themeGet('space.2', '8')}px;
-  padding-left: ${themeGet('space.4', '15')}px;
-  padding-right: ${themeGet('space.4', '15')}px;
   border: 0;
   transition: all 0.3s ease;
   span.btn-text {
@@ -35,16 +31,13 @@ const ButtonStyle = styled.button`
       display: flex !important;
     }
   }
-
   &:focus {
     outline: none;
   }
-
   /* Material style goes here */
   &.is-material {
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
   }
-
   /* When button on loading stage */
   &.is-loading {
     .btn-text {
@@ -52,7 +45,6 @@ const ButtonStyle = styled.button`
       padding-right: ${themeGet('space.2', '8')}px;
     }
   }
-
   /* Style system support */
   ${alignItems}
   ${boxShadow}

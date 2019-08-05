@@ -1,284 +1,3 @@
-// import React, { useState, Fragment } from "react";
-// import Styles from "./Styles";
-// import { Field } from "react-final-form-html5-validation";
-// import Wizard from "./Wizard";
-// import ReactPhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/dist/style.css";
-// import { withFirebase } from "../Firebase";
-// import Modal from "react-awesome-modal";
-// import * as ROUTES from "../../constants/routes";
-
-// import "./styles.css";
-// import { VetBlock } from "../Vet_Block";
-
-// const onSelectStyle = {
-//   backgroundColor: "#ff6767"
-// };
-
-// const petAge = [
-//   {
-//     age: "0 to 1.5"
-//   },
-//   {
-//     age: "1.5 to 6"
-//   },
-//   {
-//     age: "older than 6"
-//   }
-// ];
-
-// const WizardFormBase = props => {
-//   const [emailError, setEmailError] = useState("");
-//   const [docID, setdocID] = useState("");
-//   const [date, setDate] = useState(new Date());
-//   const [petage, setPetAge] = useState("");
-//   const [styleID, setStyleID] = useState("");
-//   const [selectedPet, setPet] = useState("");
-//   const [selectedPetID, setSelectedPetID] = useState("");
-//   const [addNewPetEvent, triggerAddNewPetEvent] = useState("");
-//   const [clientName, setClientName] = useState("");
-//   const [isLoading, setisLoading] = useState(false);
-//   const [visible, setVisibilty] = useState("");
-//   const [number, setNumber] = useState("");
-//   const [validNum, setvalidNum] = useState(false);
-
-//   function openModal() {
-//     setVisibilty(true);
-//   }
-
-//   function submitNumber() {
-//     setvalidNum(true);
-//     setVisibilty(false);
-//   }
-
-//   function closeModal() {
-//     setVisibilty(false);
-//   }
-
-//   function updateNumber(e) {
-//     setNumber(e);
-//   }
-
-//   function dateUpdate(event) {
-//     setDate(event);
-//   }
-
-//   function petAgeUpdate(event, id) {
-//     setPetAge(event);
-//     setStyleID(id);
-//   }
-
-//   function addNewPet(event) {
-//     triggerAddNewPetEvent(event);
-//   }
-
-//   // function petAgeUpdate(event) {
-//   //   console.log(event);
-//   //   // setPet(event.target.value)
-//   // }
-
-//   function petSelectionChanged(event) {
-//     console.log(event);
-
-//     setSelectedPetID(event);
-//   }
-
-//   function errorHandler() {
-//     setEmailError(
-//       <p>
-//         Email already exists please <a href={ROUTES.SIGNIN}>signin</a>
-//       </p>
-//     );
-//   }
-//   return (
-//     <div id="wizard-step-two">
-//       <Styles>
-//         <div>
-//           <h1>We are pleased to meet you {clientName}</h1>
-//         </div>
-//         <h2>Step 3 of 4</h2>
-//         <Modal
-//           visible={visible}
-//           width="400"
-//           height="300"
-//           effect="fadeInUp"
-//           onClickAway={() => closeModal()}
-//         >
-//           <h4>The Number that you entered is invalid</h4>
-//           <label>Please enter valid number to proceed</label>
-//           <div style={{ margin: "25px 10px" }}>
-//             <ReactPhoneInput
-//               defaultCountry="de"
-//               value={number}
-//               inputExtraProps={{
-//                 name: "phone",
-//                 required: true,
-//                 autoFocus: true
-//               }}
-//               onChange={updateNumber}
-//             />
-//           </div>
-//           <a onClick={() => submitNumber()}>Update</a>
-//         </Modal>
-//         <Wizard
-//           // initialValues={{ employed: true, stooge: "larry", date: new Date() }}
-//           firebase={props.firebase}
-//           date={date}
-//           petage={petage}
-//           selectedPet={selectedPet}
-//           setPet={setPet}
-//           addNewPetEvent={addNewPetEvent}
-//           setPetAge={setPetAge}
-//           validNum={validNum}
-//           closeModal={closeModal}
-//           openModal={openModal}
-//           setStyleID={setStyleID}
-//           setClientName={setClientName}
-//           triggerAddNewPetEvent={triggerAddNewPetEvent}
-//           setSelectedPetID={setSelectedPetID}
-//           selectedPetID={selectedPetID}
-//           validNum={validNum}
-//           setvalidNum={setvalidNum}
-//           isLoading={isLoading}
-//           setisLoading={setisLoading}
-//           number={number}
-//           emailPrompt={errorHandler}
-//           setdocID={setdocID}
-//           setNum={setNumber}
-//           setDate={setDate}
-//           // onSubmit={onSubmit}
-//         >
-//           <Wizard.Page>
-//             <h1 style={{ color: "white" }}>Select from old Pets</h1>
-//             {selectedPet ? (
-//               <div>
-//                 <ul>
-//                   {selectedPet &&
-//                     selectedPet.map(doc => {
-//                       if (doc.petDoc.petname !== "") {
-//                         return (
-//                           <li
-//                             id={doc.petId}
-//                             style={
-//                               selectedPetID === doc.petId ? onSelectStyle : null
-//                             }
-//                             onClick={() => {
-//                               petSelectionChanged(doc.petId);
-//                             }}
-//                             className="options-list-item"
-//                           >
-//                             <label>
-//                               <div className="item-container">
-//                                 <p>{doc.petDoc.petname}</p>
-//                               </div>
-//                             </label>
-//                           </li>
-//                         );
-//                       }
-//                     })}
-//                   <li
-//                     className="options-list-item"
-//                     onClick={() => addNewPet(true)}
-//                   >
-//                     <label>
-//                       <div className="item-container">
-//                         <p>Add a new Pet</p>
-//                       </div>
-//                     </label>
-//                   </li>
-//                 </ul>
-//               </div>
-//             ) : null}
-//           </Wizard.Page>
-//           <Wizard.Page>
-//             {isLoading ? (
-//               <div style={{ height: "200px" }}>
-//                 <div style={{ display: "inline-block", margin: "auto" }}>
-//                   <div className="loader" />
-//                   <div>
-//                     <p>Almost Done</p>
-//                   </div>
-//                 </div>
-//               </div>
-//             ) : (
-//               <Fragment>
-//                 <div>
-//                   <label>Name of Pet</label>
-//                   <Field
-//                     name="petname"
-//                     component="input"
-//                     type="text"
-//                     placeholder="Tom"
-//                     // validate={required}
-//                   />
-//                 </div>
-//                 <div>
-//                   <label>How old is your pet?</label>
-//                   <div className="options-container">
-//                     <ul className="options-list">
-//                       {petAge &&
-//                         petAge.map((item, id) => {
-//                           return (
-//                             <li
-//                               id={id}
-//                               style={petage === item.age ? onSelectStyle : null}
-//                               onClick={() => petAgeUpdate(item.age, id)}
-//                               className="options-list-item"
-//                             >
-//                               <label>
-//                                 <div className="item-container">
-//                                   <p>{item.age}</p>
-//                                 </div>
-//                               </label>
-//                             </li>
-//                           );
-//                         })}
-//                     </ul>
-//                   </div>
-//                 </div>
-//                 <div>
-//                   <label>Type</label>
-//                   <Field name="type" component="select">
-//                     <option>Choose Animal</option>
-//                     <option value="dog">Dog</option>
-//                     <option value="cat">🍄 Cat</option>
-//                     <option value="rabbit">🧀 Rabbit</option>
-//                     <option value="bird">🐓 Bird</option>
-//                     <option value="other">🍍 Other</option>
-//                   </Field>
-//                 </div>
-//                 <div>
-//                   <label>Gender</label>
-//                   <Field name="gender" component="select">
-//                     <option>Choose time</option>
-//                     <option value="male">Male</option>
-//                     <option value="female">Female</option>
-//                   </Field>
-//                 </div>
-//                 <div>
-//                   <label>
-//                     Tell us more about your pet. Her breed, health issues etc.
-//                   </label>
-//                   <Field
-//                     name="notes"
-//                     type="text"
-//                     placeholder="My dog is a Golden retriever..."
-//                     component="input"
-//                   />
-//                 </div>
-//               </Fragment>
-//             )}
-//           </Wizard.Page>
-//         </Wizard>
-//         <VetBlock />
-//       </Styles>
-//     </div>
-//   );
-// };
-// const WizardForm2 = withFirebase(WizardFormBase);
-
-// export default WizardForm2;
-
 import React, { useState, Fragment } from "react";
 import Styles from "./Styles";
 import { Field } from "react-final-form-html5-validation";
@@ -290,12 +9,13 @@ import Modal from "react-awesome-modal";
 import { Slider } from "../../elements/Slider";
 import "./styles.css";
 import { VetBlock } from "../Vet_Block";
-import Stepper from "react-stepper-horizontal";
+import Radio from "../../elements/Radio";
+import Stepper from "../../elements/Stepper";
 const onSelectStyle = {
   backgroundColor: "#ff6767"
 };
 
-const petage = [
+const petage = [ 
   {
     age: "DOG"
   },
@@ -326,6 +46,7 @@ const INITIAL_STATE = {
   petNameError: "",
   petAgeError: "",
   typeError: "",
+  genderRadio: "",
   genderError: "",
   notesError: "",
   petType: "",
@@ -423,8 +144,12 @@ class WizardFormBase extends React.Component {
   };
 
   submitNumber = () => {
+    if (this.state.number === "") {
+      alert("Please enter number")
+    }else{
     this.setvalidNum(true);
     this.setVisibilty(false);
+  }
   };
 
   closeModal = e => {
@@ -490,6 +215,7 @@ class WizardFormBase extends React.Component {
   };
 
   petTypeUpdate = (e) =>{
+    console.log(e);
     this.setTypeError(false)
     this.setState({
       petType: e
@@ -500,22 +226,25 @@ class WizardFormBase extends React.Component {
     this.setSelectedPetID(event);
   };
 
-  render() {
-    console.log(this.state.petType);
+  setGenderRadio = (e)=> {
+    this.setState({
+      genderRadio: e
+    })
+  }
 
+  
+  render() {
     return (
       <div id="wizard-step-two">
         <Styles>
-        <div className="stepper">
         <Stepper
-          steps={[
-            { title: "CUSTOMER DETAILS" },
-            { title: "PET INFO" },
-            { title: "CONFIRM BOOKING" }
-          ]}
-          activeStep={1}
-        />
-      </div>
+        steps={[
+          { title: "CUSTOMER DETAILS" },
+          { title: "PET INFO" },
+          { title: "CONFIRM BOOKING" }
+        ]}
+        activeStep={1}
+      />
           <div>
             <h1>We are pleased to meet you {this.state.clientName}</h1>
           </div>
@@ -557,6 +286,8 @@ class WizardFormBase extends React.Component {
             setPetNameError={this.setPetNameError}
             setTypeError={this.setTypeError}
             openModal={this.openModal}
+            gender={this.state.genderRadio}
+            setGenderRadio={this.setGenderRadio}
             setStyleID={this.setStyleID}
             setGenderError={this.setGenderError}
             setClientName={this.setClientName}
@@ -654,7 +385,7 @@ class WizardFormBase extends React.Component {
                       max={20}
                       value={this.state.petage}
                       onAfterChange={() => this.petAgeFocus(false)}
-                      defaultValue={3}
+                      defaultValue={5}
                       marks={{ 0: 0, 5: 5, 10: 10, 15: 15, 20: "20+" }}
                     />
                     {this.state.petAgeError ? <p>Required</p> : null}
@@ -686,7 +417,7 @@ class WizardFormBase extends React.Component {
                   </div>
                   <div>
                     <label>Gender</label>
-                    <Field
+                    {/* <Field
                       name="gender"
                       onFocus={() => this.genderFocus(false)}
                       component="select"
@@ -694,12 +425,33 @@ class WizardFormBase extends React.Component {
                       <option value="">Choose Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-                    </Field>
+                    </Field> */}
+
+                  <div 
+                    onFocus={() => this.genderFocus(false)}
+                   className="genders">
+                    <Radio
+                      className="genres__radio"
+                      labelPosition="left"
+                      labelText="MALE"
+                      onChange={()=>this.setGenderRadio("male")}
+                      checked={this.state.genderRadio === 'male'}
+                      value="male"
+                      isChecked
+                    />
+                    <Radio
+                      className="genres__radio"
+                      labelText="FEMALE"
+                      onChange={()=>this.setGenderRadio("female")}
+                      checked={this.state.genderRadio === 'female'}
+                      value="female"
+                    />
+                      </div>
                     {this.state.genderError ? <p>Required</p> : null}
                   </div>
                   <div>
                     <label>
-                      Tell us more about your pet. Her breed, health issues etc.
+                    Previous health conditions
                     </label>
                     <Field
                       name="notes"

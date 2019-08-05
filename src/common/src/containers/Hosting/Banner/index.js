@@ -4,7 +4,7 @@ import Box from "../../../../../elements/Box"
 import Text from "../../../../../elements/Text"
 import Heading from "../../../../../elements/Heading"
 import Container from "../../../components/UI/Container"
-import ParticlesComponent from "../../Hosting/Particle";
+// import ParticlesComponent from "../../Hosting/Particle";
 import HomeSearch from '../../../../../component/Home_Search'
 import BannerWrapper, {
   DiscountWrapper,
@@ -27,15 +27,15 @@ const BannerSection = ({
   // console.log(data);
   return (
     <BannerWrapper id="banner_section">
-      <ParticlesComponent />
+      {/* <ParticlesComponent /> */}
       <Container className="banner_container">
         <Box {...row}>
           <Box {...textArea}>
             <DiscountWrapper>
-              <DiscountLabel>
+              {/* <DiscountLabel> */}
                 {/* <Text {...discountAmount} content={data.fields.boldColorText} /> */}
                 {/* <Text {...discountText} content="on every confirmed booking" /> */}
-              </DiscountLabel>
+              {/* </DiscountLabel> */}
             </DiscountWrapper>
             <Heading
               {...title}
@@ -88,7 +88,7 @@ BannerSection.defaultProps = {
   title: {
     fontSize: ["26px", "32px", "42px", "46px", "55px"],
     fontWeight: "400",
-    color: "#0f2137",
+    color: "#FFFFFF",
     letterSpacing: "-0.025em",
     mb: ["20px", "25px", "25px", "25px", "25px"],
     lineHeight: "1.31",
@@ -96,7 +96,7 @@ BannerSection.defaultProps = {
   },
   description: {
     fontSize: ["15px", "16px", "16px", "16px", "16px"],
-    color: "#343d48cc",
+    color: "#FFFFFF",
     lineHeight: "1.75",
     mb: "0",
     textAlign: "center",

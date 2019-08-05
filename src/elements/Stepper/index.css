@@ -1,0 +1,15 @@
+.stepper {
+    margin: 0px auto;
+    max-width: 1400px;
+}
+/* lines between steps */
+.stepper > div > div > div > div {
+    border-top-width: 2px !important;
+}
+/* step circles */
+.stepper > div > div > div > div:nth-child(1) {
+    border: 1px solid #028489 !important;
+}
+.stepper > div > div > div > div > a, .stepper > div > div > div > div > span {
+    line-height: 33px !important;
+}

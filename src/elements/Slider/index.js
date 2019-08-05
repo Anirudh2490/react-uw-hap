@@ -5,11 +5,9 @@ import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap.css";
 import "./index.css";
 
- const createSliderWithTooltip = RcSlider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(RcSlider.Range);
 const Handle = RcSlider.Handle;
 
- const handle = props => {
+const handle = props => {
   const { value, dragging, index, ...restProps } = props;
   return (
     <Tooltip
@@ -24,13 +22,13 @@ const Handle = RcSlider.Handle;
   );
 };
 
- export const Slider = ({ min, max, defaultValue, marks, onChange, onAfterChange, value }) => (
+export const Slider = ({ min, max, defaultValue, marks, onChange, value, onAfterChange }) => (
          <RcSlider
            min={min}
+           onChange={onChange}
+           value={value}
            onAfterChange={onAfterChange}
            max={max}
-           value={value}
-           onChange={onChange}
            defaultValue={defaultValue}
            handle={handle}
            marks={marks}

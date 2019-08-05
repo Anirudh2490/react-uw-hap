@@ -9,7 +9,6 @@ const TestimonialSecWrapper = styled.section`
     padding-left: 15px;
     padding-right: 15px;
   }
-
   .glide {
     &:hover {
       .glide__prev--area,
@@ -18,11 +17,9 @@ const TestimonialSecWrapper = styled.section`
       }
     }
   }
-
   .glide__slides {
     padding-top: 10px;
     padding-bottom: 30px;
-
     .glide__slide {
       opacity: 0.5;
       pointer-events: none;
@@ -39,7 +36,6 @@ const TestimonialSecWrapper = styled.section`
       }
     }
   }
-
   .glide__controls {
     position: static;
     .glide__prev--area,
@@ -52,7 +48,6 @@ const TestimonialSecWrapper = styled.section`
       @media (max-width: 990px) {
         display: none;
       }
-
       button {
         font-size: 28px;
       }
@@ -70,7 +65,6 @@ const TestimonialSecWrapper = styled.section`
       }
     }
   }
-
   @media (max-width: 990px) {
     .glide__slide--active .testimonial_item {
       box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.05);
@@ -80,17 +74,12 @@ const TestimonialSecWrapper = styled.section`
 
 export const TestimonialItem = styled.div`
   border: 1px solid #f2f4f7;
-  padding: 40px;
+  padding: 20px;
   border-radius: 5px;
   background-color: #fff;
   transition: 0.425s ease;
-
   &:hover {
     box-shadow: 0px 20px 40px -20px rgba(39, 79, 117, 0.25);
-  }
-
-  @media (max-width: 1300px) {
-    padding: 30px;
   }
 `;
 

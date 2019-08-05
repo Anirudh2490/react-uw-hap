@@ -1,6 +1,7 @@
 import React from "react";
 import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
+import { sendOtp, verifyOtp } from "../../services/otp";
 
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
@@ -9,7 +10,8 @@ class WizardBase extends React.Component {
     super(props);
     this.state = {
       page: 0,
-      values: props.initialValues || {}
+      values: props.initialValues || {},
+      setNumber: true,
     };
   }
 
@@ -33,7 +35,7 @@ class WizardBase extends React.Component {
                 email: doc.data().customerDetails.email,
                 phone: doc.data().customerDetails.phone,
                 name: doc.data().customerDetails.name,
-                zipcode: doc.data().customerDetails.zipcode,
+                address: doc.data().customerDetails.address,
                 session: doc.data().sessionDetails.session,
                 uid: doc.data().customerDetails.uid
               }
@@ -50,8 +52,14 @@ class WizardBase extends React.Component {
         .catch(error => {
           console.log(error);
         });
-    } 
+    }
 
+
+    
+  }
+
+  componentWillReceiveProps(nextProps, previousProps) {
+    if (this.state.setNumber) {
     var userDoc;
     if (this.props.firebase.auth.currentUser !== null) {
       this.props.firebase.fsdb
@@ -63,8 +71,6 @@ class WizardBase extends React.Component {
         )
         .get()
         .then(querySnapshot => {
-          console.log("api called");
-          
           querySnapshot.forEach(doc => {
             if (doc.data().customerDetails.phone !== "") {
               userDoc = doc.data();
@@ -79,30 +85,22 @@ class WizardBase extends React.Component {
               "customerDetails.uid": this.props.firebase.auth.currentUser.uid
             })
             .then(() => {
-          console.log("api called");
-              // this.setState(
-              //   {
-              //     values: {
-              //       email: userDoc.customerDetails.email,
-              //       name: userDoc.customerDetails.name,
-              //       zipcode: userDoc.customerDetails.zipcode,
-              //       uid: this.props.firebase.auth.currentUser.uid
-              //     }
-              //   },
-              //   () => {
-                   this.props.setNum(userDoc.customerDetails.phone);
-                   this.props.setisLoading(false);
-                   this.props.setIsDisabled(true);
-                }
-              );
+              console.log("api called");
+              this.setState(
+                {
+                 setNumber: false,
+                },
+                () => {
+              this.props.setNum(userDoc.customerDetails.phone);
+              this.props.setisLoading(false);
+              this.props.setIsDisabled(true);
+                })
             });
+        });
     }
-   
-  }
 
-  componentWillReceiveProps(nextProps, previousProps) {
-   
-  
+    }
+
     if (nextProps.withOutLogin === true) {
       window.localStorage.setItem("contWithOutLogin", true);
       this.setState(
@@ -119,35 +117,15 @@ class WizardBase extends React.Component {
     }
 
     if (nextProps.resendOtp === true) {
-      console.log("resend otp");
-      const { number, token } = this.props;
-      console.log(token, number);
-      var twilioVerification = number.split(" ");
-      fetch("https://hug-a-pet.herokuapp.com/verification/start/send-otp", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        redirect: "follow",
-        referrer: "no-referrer",
-        body: JSON.stringify({
-          countryCode: twilioVerification[0],
-          phoneNumber: twilioVerification[1] + twilioVerification[2]
-        })
-      }).then(res => {
-        if (res.status === 400) {
-          this.props.setresendOtp(false);
-          alert("Invalid Number");
-        } else {
-          res.json().then(res => {
-            window.localStorage.setItem("newUser", res);
-            this.props.setresendOtp(false);
-          });
-        }
-      });
+      this.props.setresendOtp(false);
+      const { number } = this.props;
+      sendOtp(number)
+      .then(res => {
+          window.localStorage.setItem("newUser", res.data);
+      })
+      .catch((rej)=>{
+        console.log(rej);
+      })
     }
   }
 
@@ -157,11 +135,11 @@ class WizardBase extends React.Component {
       this.props.setEmailError({
         emailError: true
       });
-    }else if (values.name === undefined || values.name ===  "") {
+    } else if (values.name === undefined || values.name === "") {
       this.props.setNameError({
         nameError: true
       });
-    }else if (values.session === undefined || values.session === "") {
+    } else if (values.session === undefined || values.session === "") {
       this.props.setSessionError({
         sessionError: true
       });
@@ -172,21 +150,13 @@ class WizardBase extends React.Component {
         .update({
           "customerDetails.email": values["email"],
           "customerDetails.name": values["name"],
-          "customerDetails.phone": `${this.props.number}`
-        });
-      this.props.firebase.fsdb
-        .collection("form-inquiry")
-        .doc(window.localStorage.getItem("dbDocID"))
-        .update({
+          "customerDetails.phone": `${this.props.number}`,
           "sessionDetails.Date": `${this.props.date}`,
           "sessionDetails.session": `${values["session"]}`,
-          "sessionDetails.videoconsultation": `${values["videoconsultation"]}`
         })
         .then(res => {
-          console.log(this.state.values);
-
           this.props.history.push(
-            `${this.props.match.url}/${this.state.values.zipcode}`
+            `${this.props.match.url}/berlin`
           );
         })
         .catch(rej => {
@@ -203,29 +173,9 @@ class WizardBase extends React.Component {
     var docID;
     if (this.state.page === 1) {
       this.props.setCheckOtp(true);
-
       const { number } = this.props;
-      var twilioVerification = number.split(" ");
-      console.log(twilioVerification[1] + twilioVerification[2]);
-      fetch("https://hug-a-pet.herokuapp.com/verification/start/verify-otp", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        redirect: "follow",
-        referrer: "no-referrer",
-        body: JSON.stringify({
-          token: values.token,
-          phoneNumber: twilioVerification[1] + twilioVerification[2]
-        })
-      }).then(res => {
-        if (res.status === 400) {
-          this.props.setCheckOtp(false);
-          alert("Invalid Code");
-        } else {
+      verifyOtp(number, values.token)
+      .then(res => {
           this.props.firebase
             .doSignInWithCustomToken(window.localStorage.getItem("newUser"))
             .then(authUser => {
@@ -266,18 +216,19 @@ class WizardBase extends React.Component {
                 }
               );
             });
-        }
-      });
+      })
+      .catch(()=>{
+          this.props.setCheckOtp(false);
+          alert("Invalid Code");
+      })
     } else {
       this.props.setisLoading(true);
       console.log("check Initiated");
       const { number } = this.props;
-
       if (!number) {
         this.props.setisLoading(false);
         alert("Please Enter phone number");
-      }
-      if (this.props.firebase.auth.currentUser !== null) {
+      }else if (this.props.firebase.auth.currentUser !== null) {
         this.props.firebase.fsdb
           .collection("form-inquiry")
           .where("customerDetails.phone", "==", `${number}`)
@@ -301,8 +252,6 @@ class WizardBase extends React.Component {
                   .collection("form-inquiry")
                   .doc(window.localStorage.getItem("dbDocID"))
                   .update({
-                    "bookingStatus.phoneVerfication": true,
-                    "bookingStatus.status": "Confirmed",
                     "customerDetails.uid": this.props.firebase.auth.currentUser
                       .uid
                   })
@@ -323,7 +272,7 @@ class WizardBase extends React.Component {
                             this.props.children.length - 1
                           )
                         }));
-                        this.props.setisLoading(false);                      
+                        this.props.setisLoading(false);
                       }
                     );
                   });
@@ -331,7 +280,6 @@ class WizardBase extends React.Component {
             }
           });
       } else {
-        const twilioVerification = number.split(" ");
         this.props.firebase.fsdb
           .collection("form-inquiry")
           .where("customerDetails.phone", "==", `${number}`)
@@ -353,50 +301,25 @@ class WizardBase extends React.Component {
                 console.log(this.props.firebase.auth.currentUser);
               });
               if (this.props.firebase.auth.currentUser === null) {
-                fetch(
-                  "https://hug-a-pet.herokuapp.com/verification/start/send-otp",
-                  {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    redirect: "follow",
-                    referrer: "no-referrer",
-                    body: JSON.stringify({
-                      countryCode: twilioVerification[0],
-                      phoneNumber: twilioVerification[1] + twilioVerification[2]
+                sendOtp(number)
+                  .then(res => {
+                      window.localStorage.setItem("newUser", res.data);
                     })
-                  }
-                ).then(res => {
-                  if (res.status === 400) {
-                    alert("Invalid Number");
-                    this.props.setNum("");
+                  .then(() => {
+                    this.props.setTimer(Date.now() + 30000);
                     this.props.setisLoading(false);
-                    this.props.setresendOtp(false);
-                  } else {
-                    res
-                      .json()
-                      .then(res => {
-                        console.log(res);
-                        window.localStorage.setItem("newUser", res);
-                        this.props.setresendOtp(false);
-                        this.props.setisLoading(false);
-                      })
-                      .then(() => {
-                        this.props.setisLoading(false);
-                        this.props.setTimer(Date.now() + 30000);
-                        this.setState(state => ({
-                          page: Math.min(
-                            state.page + 1,
-                            this.props.children.length - 1
-                          )
-                        }));
-                      });
-                  }
-                });
+                    this.setState(state => ({
+                      page: Math.min(
+                        state.page + 1,
+                        this.props.children.length - 1
+                      )
+                    }));
+                  })
+                  .catch((rej)=>{
+                      alert("Invalid Number");
+                      this.props.setNum("");
+                      this.props.setisLoading(false);
+                  })
               }
             }
           });
@@ -408,12 +331,6 @@ class WizardBase extends React.Component {
     this.setState(state => ({
       page: Math.max(state.page - 2, 0)
     }));
-
-  /**
-   * NOTE: Both validate and handleSubmit switching are implemented
-   * here because 🏁 Redux Final Form does not accept changes to those
-   * functions once the form has been defined.
-   */
 
   validate = values => {
     const activePage = React.Children.toArray(this.props.children)[

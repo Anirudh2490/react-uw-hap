@@ -161,6 +161,13 @@ contentful
 // 3. 3V7MlNUOcgoPXjbBpFCELI
 // 4. 4qYmaxLjU8EAagYdrhWey4
 
+const TestimonialsEnties = [
+  "1moz7Lh5pi8Hz2AH0tpv18",
+  "HueRzeMvF0MhmCOmMF4mg",
+  "3V7MlNUOcgoPXjbBpFCELI",
+  "4qYmaxLjU8EAagYdrhWey4",
+];
+
 contentful
   .getSingleEnty("1moz7Lh5pi8Hz2AH0tpv18")
   .then(response => {
@@ -457,19 +464,19 @@ const MENU_ITEMS = [
 
 const DOMAIN_PRICE = [
   {
-    content: "12 vets in Kreutzberg"
+    content: ""
   },
   {
-    content: "15 vets in Mitte"
+    content: ""
   },
   {
-    content: "9 vets in Charlottenburg"
+    content: ""
   },
   {
-    content: "11 vets in Freidrichshain"
+    content: ""
   },
   {
-    content: "& much more",
+    content: "",
     url: "#"
   }
 ];

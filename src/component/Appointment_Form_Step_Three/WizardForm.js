@@ -4,7 +4,7 @@ import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import Countdown from "react-countdown-now";
-import Stepper from "react-stepper-horizontal";
+import Stepper from "../../elements/Stepper";
 
 const Error = ({ name }) => (
   <Field
@@ -19,8 +19,6 @@ const Error = ({ name }) => (
 const required = value => (value ? undefined : "Required");
 
 const WizardFormBase = props => {
-  // const [emailError, setEmailError] = useState("");
-  // const [docID, setdocID] = useState("");
   const [date, setDate] = useState(new Date());
   const [token, setToken] = useState("");
   const [isLoading, setisLoading] = useState(false);
@@ -43,19 +41,15 @@ const WizardFormBase = props => {
   return (
     <div id="wizard-step-three">
       <Styles>
-      <div className="stepper">
-        <Stepper
-          steps={[
-            { title: "CUSTOMER DETAILS" },
-            { title: "PET INFO" },
-            { title: "CONFIRM BOOKING" }
-          ]}
-          activeStep={2}
-          className="stepper"
-        />
-      </div>
+      <Stepper
+        steps={[
+          { title: "CUSTOMER DETAILS" },
+          { title: "PET INFO" },
+          { title: "CONFIRM BOOKING" }
+        ]}
+        activeStep={2}
+      />
         <h1>We are assigning a vet to your case</h1>
-        <h2>We have sent an OTP to your phone number</h2>
         <Wizard
           initialValues={{ employed: true, stooge: "larry", date: new Date() }}
           firebase={props.firebase}
@@ -89,14 +83,8 @@ const WizardFormBase = props => {
             ) : (
               <Fragment>
                 <div>
+                <h3>We have sent an OTP to your phone number</h3>
                   <label>OTP CODE</label>
-                  {/* <Field
-              name="token"
-              component="input"
-              type="text"
-              placeholder="otp code"
-              validate={required}
-            /> */}
                   <input
                     name="token"
                     onChange={e => {

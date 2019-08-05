@@ -35,9 +35,9 @@ import WizardForm5 from "../Appointment_Form_Step_Four/WizardForm";
 import WizardForm4 from "../Appointment_Form_Step_Three/WizardForm";
 import WizardForm3 from "../Appointment_Form_Success/WizardForm";
 import AppointmentDetails from '../Appointment_Details'
-
 import ChatBot from '../ChatBot/PostBooking'
 import VetPage from "../Vet_Page";
+import ScrollToTop from 'react-router-scroll-top'
 
 const CustomerPageAuth = withAuthenticationCustomer(CustomerPage)
 
@@ -65,6 +65,7 @@ class App extends Component {
                 </DrawerProvider>
               </Sticky>
               <div className="content">
+              <ScrollToTop>
                 <Route path={ROUTE.LANDING} exact component={Landing} />
                 <Route
                   path={`${ROUTE.ADMIN}/:docid`}
@@ -138,8 +139,9 @@ class App extends Component {
               <Route path={ROUTE.FAQ} />
               <Route path={ROUTE.FORVETS} />
               <Route path={ROUTE.SERVICES} /> */}
-               <Footer />
+              </ScrollToTop>
               </div>
+              <Footer />
             </ContentWrapper>
           </ParallaxProvider>
         </ThemeProvider>

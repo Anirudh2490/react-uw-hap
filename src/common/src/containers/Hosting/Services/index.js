@@ -134,6 +134,7 @@ ServicesSection.defaultProps = {
   },
   featureItemHeading: {
     fontSize: ['18px', '20px'],
+    textAlign: 'center',
     fontWeight: '400',
     color: '#34888C',
     lineHeight: '1.5',

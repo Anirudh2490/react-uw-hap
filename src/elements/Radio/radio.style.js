@@ -10,7 +10,6 @@ const RadioBoxStyle = styled.div`
     font-size: ${themeGet('fontSizes.4', '16')}px;
     font-weight: ${themeGet('fontWeights.4', '500')};
   }
-
   /* Switch label style when labelPosition on left */
   &.label_left {
     label {
@@ -21,20 +20,17 @@ const RadioBoxStyle = styled.div`
       }
     }
   }
-
   /* Switch label style when labelPosition on right */
   &.label_right {
     label {
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
-
       .reusecore__field-label {
         margin-left: ${themeGet('space.3', '10')}px;
       }
     }
   }
-
   /* Checkbox default style */
   input[type='radio'] {
     &.radio {
@@ -46,13 +42,11 @@ const RadioBoxStyle = styled.div`
       height: 0;
       overflow: hidden;
       pointer-events: none;
-
       &:focus {
         + div {
           border-color: ${themeGet('colors.primary', '#028489')};
         }
       }
-
       &:checked + div {
         &::after {
           opacity: 1;
@@ -65,8 +59,9 @@ const RadioBoxStyle = styled.div`
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
+      background: #ddd;
       border-radius: 50%;
       border: 1px solid ${themeGet('colors.borderColor', '#dadada')};
       position: relative;
@@ -86,7 +81,6 @@ const RadioBoxStyle = styled.div`
       }
     }
   }
-
   /* support base component props */
   ${base}
 `;

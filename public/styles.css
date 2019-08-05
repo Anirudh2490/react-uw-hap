@@ -1485,6 +1485,7 @@
    .aerzte-karte {
      display: inline-block;
      width: 160px;
+     margin: 10px;  
    }
    
    .div-block-33 {
@@ -1495,7 +1496,7 @@
      flex-wrap: wrap;
      margin-bottom: 40px;
      -webkit-box-pack: justify;
-     -webkit-justify-content: space-between;
+     -webkit-justify-content: space-around;
      -ms-flex-pack: justify;
      justify-content: space-between;
    }
@@ -2355,6 +2356,7 @@
    
    .column {
     padding: 5px;
+    width: 100%;
    }
    
    .html-embed-9 {
@@ -2763,7 +2765,7 @@
      margin-right: auto;
      margin-left: auto;
      background-color: #fff;
-     font-size: 14px;
+     font-size: 17px;
      text-align: left;
    }
    

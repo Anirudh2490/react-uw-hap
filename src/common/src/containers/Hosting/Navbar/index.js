@@ -15,7 +15,10 @@ import { MENU_ITEMS } from "../../../data/Hosting/data";
 import ScrollSpyMenu from "../../../components/ScrollSpyMenu";
 
 import LogoImage from "../../../assets/image/hosting/logo.png";
+import Phone from "../../../assets/icons/telephone_icon.svg";
 import { withFirebase } from "../../../../../component/Firebase";
+
+const TelIcon = <img src={Phone} style={{width: '23px'}} alt=""/>;
 
 const NavbarBase = ({
   navbarStyle,
@@ -54,16 +57,24 @@ const NavbarBase = ({
             <AuthUserContext.Consumer>
               {authUser =>
                 authUser ? (
-                    <a
-                      onClick={firebase.doSignOut}
-                      className="navbar_drawer_button"
-                    >
-                      <Button {...button} title="Sign Out" />
-                    </a>
+                  <a
+                    onClick={firebase.doSignOut}
+                    className="navbar_drawer_button"
+                  >
+                    <Button {...button} title="Sign Out" />
+                  </a>
                 ) : (
                   <Link href="tel:030 233 277 42">
-                    <a href="tel:03023327742" className="navbar_drawer_button">
-                      <Button {...button} title="Jetzt anrufen" />
+                    <a
+                      href="tel:03023327742"
+                      className="navbar_drawer_button"
+                    >
+                      <Button
+                        {...button}
+                        title="030 233 277 42"
+                        icon={TelIcon}
+                        iconPosition="left"
+                      />
                     </a>
                   </Link>
                 )
@@ -85,7 +96,7 @@ const NavbarBase = ({
               />
               <Link href="tel:030 233 277 42">
                 <a className="navbar_drawer_button">
-                  <Button {...button} title="Jetzt anrufen" />
+                  <Button {...button} title="030 233 277 42" icon={TelIcon} />
                 </a>
               </Link>
             </Drawer>

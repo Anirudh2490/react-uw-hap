@@ -4,9 +4,11 @@ import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
-import Stepper from "react-stepper-horizontal";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 import Chat from '../ChatBot/PostBooking';
+import Stepper from "../../elements/Stepper";
 import './index.css';
 
 const Error = ({ name }) => (
@@ -39,18 +41,16 @@ const WizardFormBase = props => {
   }
   return (
     <Styles>
-      <div className="stepper">
-        <Stepper
-          steps={[
-            { title: "CUSTOMER DETAILS" },
-            { title: "PET INFO" },
-            { title: "CONFIRM BOOKING" }
-          ]}
-          activeStep={2}
-        />
-      </div>
-      <h1>Booking Successful</h1>
-      <Wizard 
+      <Stepper
+        steps={[
+          { title: "CUSTOMER DETAILS" },
+          { title: "PET INFO" },
+          { title: "CONFIRM BOOKING" }
+        ]}
+        activeStep={2}
+      />
+      <h1>Your Account has been Verfied</h1>
+      <Wizard
         initialValues={{ employed: true, stooge: "larry", date: new Date() }}
         firebase={props.firebase}
         date={date}
@@ -67,21 +67,18 @@ const WizardFormBase = props => {
             return errors;
           }}
         >
-            <h4 style={{textAlign: "center"}}>Thanks for booking at HUGAPET</h4>
-          <h2>We will soon assign a vet to your case</h2>
-          {/* <div style={{ height: "163px", margin: "0" }}>
-            <Field
-              name="otpnotes"
-              type="text"
-              placeholder="My dog is a Golden retriever..."
-              component="input"
-            />
-          </div> */}
+          <h3 style={{color: "black", border: "none"}}>Thank you for registering at Hug a pet</h3>
+          <h2 style={{color: "black", border: "none"}}>We are assigning a vet to your case</h2>
+          {/* <p>
+            Is there anything else you would like to update about this case,
+            for example, pass some more detailed information to the vet for
+            better understanding about the case.
+          </p> */}
+          <div>
+            <Chat />
+          </div>
         </Wizard.Page>
       </Wizard>
-      <div>
-        <Chat />
-      </div>
     </Styles>
   );
 };

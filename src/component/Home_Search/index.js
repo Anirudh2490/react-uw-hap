@@ -146,7 +146,7 @@ class HomeSearchBase extends Component {
               getSuggestionItemProps,
               loading
             }) => (
-              <div>
+              <div className="domain_search_input">
                 <input
                   {...getInputProps({
                     placeholder: "Search Places ...",
@@ -161,8 +161,17 @@ class HomeSearchBase extends Component {
                       : "suggestion-item";
                     // inline style for demonstration purpose
                     const style = suggestion.active
-                      ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                      : { backgroundColor: "#ffffff", cursor: "pointer" };
+                      ? {
+                          backgroundColor: "#028489",
+                          cursor: "pointer",
+                          color: "#ffffff",
+                          padding: "0px 5px"
+                        }
+                      : {
+                          backgroundColor: "#ffffff",
+                          cursor: "pointer",
+                          padding: "0px 5px"
+                        };
                     return (
                       <div
                         {...getSuggestionItemProps(suggestion, {

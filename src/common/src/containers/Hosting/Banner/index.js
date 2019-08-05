@@ -114,7 +114,7 @@ BannerSection.defaultProps = {
   },
   searchArea: {
     className: "search_area",
-    width: ["100%", "100%", "80%", "100%", "70%"],
+    width: ["100%", "100%", "100%", "100%", "70%"],
     mt: ["45px", "50px", "60px", "60px", "60px"],
   },
   discountAmount: {

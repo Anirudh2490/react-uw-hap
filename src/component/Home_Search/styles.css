@@ -16,6 +16,13 @@
     color: white;
 }
 
+.autocomplete-dropdown-container {
+    position: absolute;
+    z-index: 999;
+    background: #ccc;
+    margin: 5px;
+}
+
 
 .isBPPJ form {
     text-align: center;

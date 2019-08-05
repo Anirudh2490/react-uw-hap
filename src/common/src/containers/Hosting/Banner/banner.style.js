@@ -62,10 +62,11 @@ export const SearchWrapper = styled.div`
     }
     input {
       font-size: 17px;
-      padding-left: 50px;
+      padding-left: 20px;
       padding-right: 30px;
       text-shadow: none;
       border: 1px solid #ebebeb;
+      width: 100%;
       &:focus {
         border-color: #ebebeb;
       }
@@ -81,9 +82,9 @@ export const SearchWrapper = styled.div`
         }
       }
       @media (max-width: 575px) {
+        border-radius: 4px;
         height: 52px;
         padding-left: 20px;
-        margin-bottom: 20px;
       }
     }
   }
@@ -93,6 +94,7 @@ export const SearchWrapper = styled.div`
     @media (max-width: 575px) {
       height: 52px;
       margin-bottom: 20px;
+      margin-top: 20px;
     }
     .select__control,
     .select-field__wrapper {

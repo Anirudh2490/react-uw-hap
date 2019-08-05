@@ -74,6 +74,7 @@ const NavbarBase = ({
                         title="030 233 277 42"
                         icon={TelIcon}
                         iconPosition="left"
+                        className="telephone__button"
                       />
                     </a>
                   </Link>
@@ -96,7 +97,12 @@ const NavbarBase = ({
               />
               <Link href="tel:030 233 277 42">
                 <a className="navbar_drawer_button">
-                  <Button {...button} title="030 233 277 42" icon={TelIcon} />
+                  <Button
+                    {...button}
+                    title="030 233 277 42"
+                    icon={TelIcon}
+                    className="telephone__button"
+                  />
                 </a>
               </Link>
             </Drawer>

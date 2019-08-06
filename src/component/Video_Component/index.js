@@ -4,7 +4,7 @@ import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 
 export default class VideoComponent extends Component {
 	constructor(props) {

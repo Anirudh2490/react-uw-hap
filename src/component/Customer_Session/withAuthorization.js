@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
 import AuthUserContext from './context';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
@@ -14,8 +13,6 @@ const withAuthorization = condition => Component => {
 
         this.listener = this.props.firebase.customerListener(
           authUser => {
-            console.log(authUser);
-            
             if (!condition(authUser)) {
               this.props.history.push(ROUTES.SIGNIN_OPTIONS);
             }

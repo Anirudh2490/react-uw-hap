@@ -1373,3 +1373,8 @@ section#service_section {
 .hosting_navbar .main_menu {
     margin-right: 21px !important;
 }
+
+
+#feature_section .feature__block:hover{
+    background-color: #34888C;
+}

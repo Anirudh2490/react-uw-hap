@@ -3,7 +3,7 @@ import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { sendOtp, verifyOtp } from "../../services/otp";
-import { sendEmail, sendEmailToAdmin } from "../../services/emails";
+import { sendEmailToAdmin } from "../../services/emails";
 
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
@@ -26,14 +26,11 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
-          console.log(doc);
           let userData = doc.data();
-          console.log("My data", userData);
           return userData;
         })
         .then(userData => {
           if (userData.bookingStatus.status === "Confirmed") {
-            console.log("email sent out");
             sendEmailToAdmin(
               userData.customerDetails.email,
               "Hi " +
@@ -197,56 +194,68 @@ class WizardBase extends React.Component {
                       }
                     })
                     .then(() => {
-                      sendEmailToAdmin(
-                        values.email,
-                        "Hi " +
-                          values.name +
-                          " Thankyou for registering at Hug a Pet!",
-                        {
-                          customerDetails: {
-                            name: this.state.values.name,
-                            zipcode: this.state.values.zipcode,
-                            phone: this.state.values.phone,
-                            email: this.state.values.email,
-                            service: this.state.values.service
-                          },
-                          vetDetails: {
-                            isVetAssigned: false,
-                            vetName: ""
-                          },
-                          sessionDetails: {
-                            Date: this.state.values.Date,
-                            session: this.state.values.session
-                          },
-                          petDetails: {
-                            petdate: values.petdate,
-                            petname: values.petname,
-                            type: values.type,
-                            gender: values.gender,
-                            notes: values.notes
-                          },
-                          bookingStatus: {
-                            phoneVerfication: true,
-                            status: "Confirmed"
+                      if (window.localStorage.getItem("contWithOutLogin") === "true") {
+                        sendEmailToAdmin(
+                          values.email,
+                          "Hi " +
+                            values.name +
+                            " Thankyou for registering at Hug a Pet!",
+                          {
+                            customerDetails: {
+                              name: this.state.values.name,
+                              zipcode: this.state.values.zipcode,
+                              phone: this.state.values.phone,
+                              email: this.state.values.email,
+                              service: this.state.values.service
+                            },
+                            vetDetails: {
+                              isVetAssigned: false,
+                              vetName: ""
+                            },
+                            sessionDetails: {
+                              Date: this.state.values.Date,
+                              session: this.state.values.session
+                            },
+                            petDetails: {
+                              petdate: values.petdate,
+                              petname: values.petname,
+                              type: values.type,
+                              gender: values.gender,
+                              notes: values.notes
+                            },
+                            bookingStatus: {
+                              phoneVerfication: true,
+                              status: "Confirmed"
+                            }
                           }
-                        }
-                      )
-                        .then(() => {
-                          window.localStorage.removeItem("contWithOutLogin");
-                          window.localStorage.removeItem("dbDocID");
-                          window.localStorage.removeItem("newUser");
-                          this.props.history.push(
-                            `${
-                              ROUTES.BOOKING_VERIFICATION
-                            }/opt-successfully-verified`
-                          );
-                        })
-                        .catch(rej => {
-                          console.log(rej);
-                          this.props.setresendOtp(false);
-                          this.props.setisLoading(false);   
-                        });
-                    });
+                        )
+                          .then(() => {
+                            window.localStorage.removeItem("contWithOutLogin");
+                            window.localStorage.removeItem("dbDocID");
+                            window.localStorage.removeItem("newUser");
+                            this.props.history.push(
+                              `${
+                                ROUTES.BOOKING_VERIFICATION
+                              }/opt-successfully-verified`
+                            );
+                          })
+                          .catch(rej => {
+                            console.log(rej);
+                            this.props.setresendOtp(false);
+                            this.props.setisLoading(false);   
+                          });
+                      }
+                    })
+                    .then(()=>{
+                      window.localStorage.removeItem("contWithOutLogin");
+                      window.localStorage.removeItem("dbDocID");
+                      window.localStorage.removeItem("newUser");
+                      this.props.history.push(
+                        `${
+                          ROUTES.BOOKING_VERIFICATION
+                        }/opt-successfully-verified`
+                      );
+                    })
                 });
             })
             .catch(rej => {

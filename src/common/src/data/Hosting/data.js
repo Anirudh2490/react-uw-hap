@@ -50,7 +50,7 @@ const contentful = new Contentful();
 // 3. 3V7MlNUOcgoPXjbBpFCELI
 // 4. 4qYmaxLjU8EAagYdrhWey4
 
-let ServicesData, FeatureData, TestimonialData, FAQData;
+let ServicesData, FeatureData, TestimonialData, FAQData = "";
 
 contentful
   .getSingleEnty("5yzRgQj6JNmTvbQHbTEhek")
@@ -115,8 +115,6 @@ contentful
   .getSingleEnty("5AvHwtNclSNaBXcyEonUqH")
   .then(response => {
     ServicesData = response;
-    console.log(ServicesData);
-    
     // Service Section Content
     SERVICES_DATA = [
       {
@@ -161,12 +159,12 @@ contentful
 // 3. 3V7MlNUOcgoPXjbBpFCELI
 // 4. 4qYmaxLjU8EAagYdrhWey4
 
-const TestimonialsEnties = [
-  "1moz7Lh5pi8Hz2AH0tpv18",
-  "HueRzeMvF0MhmCOmMF4mg",
-  "3V7MlNUOcgoPXjbBpFCELI",
-  "4qYmaxLjU8EAagYdrhWey4",
-];
+// const TestimonialsEnties = [
+//   "1moz7Lh5pi8Hz2AH0tpv18",
+//   "HueRzeMvF0MhmCOmMF4mg",
+//   "3V7MlNUOcgoPXjbBpFCELI",
+//   "4qYmaxLjU8EAagYdrhWey4",
+// ];
 
 contentful
   .getSingleEnty("1moz7Lh5pi8Hz2AH0tpv18")

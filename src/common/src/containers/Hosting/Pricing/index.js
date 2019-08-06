@@ -7,7 +7,6 @@ import Box from '../../../../../elements/Box';
 import Text from '../../../../../elements/Text';
 import Heading from '../../../../../elements/Heading';
 import Button from '../../../../../elements/Button';
-import Switch from '../../../../../elements/Switch';
 import Container from '../../../components/UI/Container';
 import GlideCarousel from '../../../components/GlideCarousel';
 import GlideSlide from '../../../components/GlideCarousel/glideSlide';
@@ -23,7 +22,6 @@ import PricingTable, {
   PricingButton,
   PricingList,
   ListItem,
-  SwitchWrapper,
 } from './pricing.style';
 
 import { checkmark } from 'react-icons-kit/icomoon/checkmark';
@@ -47,19 +45,19 @@ const PricingSection = ({
     data: MONTHLY_PRICING_TABLE,
   });
 
-  const [loading, setLoading] = useState(false);
+  const [setLoading] = useState(false);
   useEffect(() => {
     setTimeout(function() {
       setLoading(true);
     }, 500);
   });
 
-  const dataHandle = () => {
-    setState({
-      ...state,
-      toggle: !state.toggle,
-    });
-  };
+  // const dataHandle = () => {
+  //   setState({
+  //     ...state,
+  //     toggle: !state.toggle,
+  //   });
+  // };
 
   const pricingCarouselOptions = {
     type: 'slider',

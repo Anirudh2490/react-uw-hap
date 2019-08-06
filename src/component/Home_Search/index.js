@@ -46,8 +46,6 @@ class HomeSearchBase extends Component {
   };
 
   onChangePhone = event => {
-    console.log(this.state.phone);
-
     this.setState({
       phone: event
     });

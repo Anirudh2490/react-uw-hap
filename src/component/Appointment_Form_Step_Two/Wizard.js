@@ -3,7 +3,7 @@ import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { sendOtp } from "../../services/otp";
-import { sendEmail, sendEmailToAdmin } from "../../services/emails";
+import { sendEmailToAdmin } from "../../services/emails";
 
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
@@ -23,7 +23,11 @@ class WizardBase extends React.Component {
     if (window.localStorage.getItem("dbDocID") === null) {
       this.props.history.push("/");
     } else {
-      if (this.state.values === "") {
+      if (this.props.firebase.auth.currentUser === null) {
+        this.setState({
+          page: 1
+        });
+      }
         this.props.firebase.fsdb
           .collection("form-inquiry")
           .doc(window.localStorage.getItem("dbDocID"))
@@ -43,7 +47,6 @@ class WizardBase extends React.Component {
                 }
               },
               () => {
-                console.log(doc.data().petDetails.type);
                 this.props.setPetAge(parseInt(doc.data().petDetails.petdate));
                 this.props.petTypeUpdate(doc.data().petDetails.type);
                 const { petList } = this.state;
@@ -70,7 +73,6 @@ class WizardBase extends React.Component {
                       )
                       .get()
                       .then(querySnapshot => {
-                        console.log("Api Called", querySnapshot);
                         if (querySnapshot.empty) {
                           this.setState(state => ({
                             page: Math.min(
@@ -90,8 +92,6 @@ class WizardBase extends React.Component {
                               petList
                             },
                             () => {
-                              console.log(this.state.petList);
-
                               if (petList.length === 0) {
                                 this.setState(state => ({
                                   page: Math.min(
@@ -113,7 +113,6 @@ class WizardBase extends React.Component {
           .catch(error => {
             console.log(error);
           });
-      }
     }
   }
 
@@ -126,7 +125,6 @@ class WizardBase extends React.Component {
           "customerDetails.phone": `${this.props.number}`
         })
         .then(() => {
-          console.log("Api Called");
           this.props.setvalidNum(false);
           this.props.closeModal();
         });
@@ -174,7 +172,7 @@ class WizardBase extends React.Component {
           values: {}
         },
         () => {
-          this.props.setPetAge("");
+          this.props.setPetAge(5);
           this.props.petTypeUpdate("");
           this.props.setSelectedPetID("");
           this.props.triggerAddNewPetEvent("");
@@ -229,26 +227,55 @@ class WizardBase extends React.Component {
               ) {
                 sendOtp(phone)
                   .then(res => {
-                    console.log("code sent", res);
                     window.localStorage.setItem("newUser", res.data);
                   })
                   .then(() => {
-                    sendEmail(
-                      this.state.values.email,
-                      "Hi " +
-                        this.state.values.name +
-                        " Thankyou for registering at Hug a Pet!",
-                      "Hi " +
-                        this.state.values.name +
-                        "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                    )
-                      .then(() => {
-                        console.log("Api Called");
-                        this.props.history.push(ROUTES.BOOKING_VERIFICATION);
-                      })
-                      .catch(rej => {
-                        console.log(rej);
-                      });
+                    var userData;
+                        this.props.firebase.fsdb
+                          .collection("form-inquiry")
+                          .doc(window.localStorage.getItem("dbDocID"))
+                          .get()
+                          .then(doc => {
+                            userData = doc.data();
+                            sendEmailToAdmin(
+                              userData.customerDetails.email,
+                              userData.customerDetails.name,
+                              {
+                                customerDetails: {
+                                  name: userData.customerDetails.name,
+                                  zipcode: userData.customerDetails.zipcode,
+                                  phone: userData.customerDetails.phone,
+                                  email: userData.customerDetails.email,
+                                  service: userData.customerDetails.service
+                                },
+                                vetDetails: {
+                                  isVetAssigned: false,
+                                  vetName: ""
+                                },
+                                sessionDetails: {
+                                  Date: userData.sessionDetails.Date,
+                                  session: userData.sessionDetails.session
+                                },
+                                petDetails: {
+                                  petdate: userData.petDetails.petdate,
+                                  petname: userData.petDetails.petname,
+                                  type: userData.petDetails.type,
+                                  gender: userData.petDetails.gender,
+                                  notes: userData.petDetails.notes
+                                },
+                                bookingStatus: {
+                                  phoneVerfication: true,
+                                  status: "Confirmed"
+                                }
+                              }
+                            )
+                          })
+                          .then(() => {
+                            this.props.history.push(ROUTES.BOOKING_VERIFICATION);
+                          })
+                          .catch(rej => {
+                            console.log(rej);
+                          });
                   })
                   .catch(() => {
                     this.props.setisLoading(false);
@@ -257,22 +284,7 @@ class WizardBase extends React.Component {
               } else if (
                 window.localStorage.getItem("contWithOutLogin") === "true"
               ) {
-                sendEmail(
-                  this.state.values.email,
-                  "Hi " +
-                    this.state.values.name +
-                    " Thankyou for registering at Hug a Pet!",
-                  "Hi " +
-                    this.state.values.name +
-                    "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                )
-                  .then(() => {
-                    console.log("Api Called");
                     this.props.history.push(ROUTES.BOOKING_VERIFICATION);
-                  })
-                  .catch(rej => {
-                    console.log(rej);
-                  });
               } else if (this.props.firebase.auth.currentUser !== null) {
                 this.props.firebase.fsdb
                   .collection("form-inquiry")
@@ -353,26 +365,16 @@ class WizardBase extends React.Component {
                                 }
                               }
                             ).then(() => {
-                              sendEmail(
-                                userData.customerDetails.email,
-                                "Hi " +
-                                  userData.customerDetails.name +
-                                  " Thankyou for registering at Hug a Pet!",
-                                "Hi " +
-                                  userData.customerDetails.name +
-                                  "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
-                              ).then(() => {
-                                window.localStorage.removeItem("dbDocID");
-                                window.localStorage.removeItem(
-                                  "contWithOutLogin"
-                                );
-                                window.localStorage.removeItem("newUser");
-                                this.props.history.push(
-                                  `${
-                                    ROUTES.BOOKING_VERIFICATION
-                                  }/opt-successfully-verified`
-                                );
-                              });
+                              window.localStorage.removeItem("dbDocID");
+                              window.localStorage.removeItem(
+                                "contWithOutLogin"
+                              );
+                              window.localStorage.removeItem("newUser");
+                              this.props.history.push(
+                                `${
+                                  ROUTES.BOOKING_VERIFICATION
+                                }/opt-successfully-verified`
+                              );
                             });
                           });
                       });
@@ -414,8 +416,7 @@ class WizardBase extends React.Component {
         values: {}
       },
       () => {
-        console.log(this.state);
-        this.props.setPetAge("");
+        this.props.setPetAge(5);
         this.props.petTypeUpdate("");
         this.props.setSelectedPetID("");
         this.props.triggerAddNewPetEvent("");
@@ -459,7 +460,7 @@ class WizardBase extends React.Component {
           page: Math.max(state.page - 1, 0)
         }),
         () => {
-          this.props.setPetAge("");
+          this.props.setPetAge(5);
           this.props.setSelectedPetID("");
           this.props.triggerAddNewPetEvent("");
         }

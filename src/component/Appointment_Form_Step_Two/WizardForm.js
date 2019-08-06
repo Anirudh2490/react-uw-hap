@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import Styles from "./Styles";
 import { Field } from "react-final-form-html5-validation";
 import Wizard from "./Wizard";
@@ -44,6 +44,7 @@ const INITIAL_STATE = {
   clientName: "",
   isLoading: "",
   petNameError: "",
+  petage:5,
   petAgeError: "",
   typeError: "",
   genderRadio: "",
@@ -215,7 +216,6 @@ class WizardFormBase extends React.Component {
   };
 
   petTypeUpdate = (e) =>{
-    console.log(e);
     this.setTypeError(false)
     this.setState({
       petType: e
@@ -385,7 +385,6 @@ class WizardFormBase extends React.Component {
                       max={20}
                       value={this.state.petage}
                       onAfterChange={() => this.petAgeFocus(false)}
-                      defaultValue={5}
                       marks={{ 0: 0, 5: 5, 10: 10, 15: 15, 20: "20+" }}
                     />
                     {this.state.petAgeError ? <p>Required</p> : null}

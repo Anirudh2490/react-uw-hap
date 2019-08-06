@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import Fade from 'react-reveal/Fade';
 import Box from '../../../../../elements/Box';
 import Text from '../../../../../elements/Text';
 import Heading from '../../../../../elements/Heading';
@@ -14,7 +13,6 @@ import ShapeThree from '../../../assets/image/hosting/shape-3.svg';
 import ShapeFour from '../../../assets/image/hosting/shape-4.svg';
 import ShapeFive from '../../../assets/image/hosting/shape-5.svg';
 
-import ReadMoreAndLess from 'react-read-more-less';
  
 // class ReadMoreAndLessText extends Component {
 //     render() {

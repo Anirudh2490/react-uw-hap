@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import Box from "../../../../../elements/Box"
 import Text from "../../../../../elements/Text"
@@ -8,7 +8,6 @@ import Container from "../../../components/UI/Container"
 import HomeSearch from '../../../../../component/Home_Search'
 import BannerWrapper, {
   DiscountWrapper,
-  DiscountLabel,
 } from "./banner.style"
 import { search } from "react-icons-kit/feather/search"
 import { DOMAIN_NAMES, DOMAIN_PRICE } from "../../../data/Hosting/data"

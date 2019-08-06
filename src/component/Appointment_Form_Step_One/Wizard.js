@@ -85,7 +85,6 @@ class WizardBase extends React.Component {
               "customerDetails.uid": this.props.firebase.auth.currentUser.uid
             })
             .then(() => {
-              console.log("api called");
               this.setState(
                 {
                  setNumber: false,
@@ -130,7 +129,6 @@ class WizardBase extends React.Component {
   }
 
   onSubmit = values => {
-    console.log("form submitted");
     if (values.email === undefined || values.email === "") {
       this.props.setEmailError({
         emailError: true
@@ -160,7 +158,6 @@ class WizardBase extends React.Component {
           );
         })
         .catch(rej => {
-          this.props.setdateAvail(false);
           console.log(rej);
           alert(rej);
         });
@@ -223,7 +220,6 @@ class WizardBase extends React.Component {
       })
     } else {
       this.props.setisLoading(true);
-      console.log("check Initiated");
       const { number } = this.props;
       if (!number) {
         this.props.setisLoading(false);
@@ -294,11 +290,9 @@ class WizardBase extends React.Component {
               }));
             } else {
               querySnapshot.forEach(doc => {
-                console.log(doc.data());
                 userDoc = doc.data();
                 docID = doc.id;
                 window.localStorage.setItem("user", doc.id);
-                console.log(this.props.firebase.auth.currentUser);
               });
               if (this.props.firebase.auth.currentUser === null) {
                 sendOtp(number)
@@ -341,7 +335,7 @@ class WizardBase extends React.Component {
 
   handleSubmit = (e, values) => {
     e.preventDefault();
-    const { children, onSubmit } = this.props;
+    const { children } = this.props;
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
     if (isLastPage) {

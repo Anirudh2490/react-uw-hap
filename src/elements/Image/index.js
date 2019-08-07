@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { LazyLoadComponent } from "react-lazy-load-image-component";
 import { base, themed } from '../base';
 
 const ImageWrapper = styled('img')(
@@ -14,7 +15,9 @@ const ImageWrapper = styled('img')(
 );
 
 const Image = ({ src, alt, ...props }) => (
-  <ImageWrapper src={src} alt={alt} {...props} />
+  <LazyLoadComponent>
+    <ImageWrapper src={src} alt={alt} {...props} />
+  </LazyLoadComponent>
 );
 
 export default Image;

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import NavbarWrapper from "../../../../../elements/Navbar";
 import Drawer from "../../../../../elements/Drawer";
 import Button from "../../../../../elements/Button";
@@ -9,16 +10,15 @@ import Box from "../../../../../elements/Box";
 import HamburgMenu from "../../../components/HamburgMenu";
 import Container from "../../../components/UI/Container";
 import { DrawerContext } from "../../../contexts/DrawerContext";
-import "./index.css";
 import { AuthUserContext } from "../../../../../component/Session/";
 import { MENU_ITEMS } from "../../../data/Hosting/data";
 import ScrollSpyMenu from "../../../components/ScrollSpyMenu";
-
 import LogoImage from "../../../assets/image/hosting/logo.png";
 import Phone from "../../../assets/icons/telephone_icon.svg";
 import { withFirebase } from "../../../../../component/Firebase";
+import "./index.css";
 
-const TelIcon = <img src={Phone} style={{width: '23px'}} alt=""/>;
+const TelIcon = <LazyLoadImage src={Phone} style={{width: '23px'}} alt=""/>;
 
 const NavbarBase = ({
   navbarStyle,

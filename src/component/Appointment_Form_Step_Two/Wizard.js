@@ -243,7 +243,7 @@ class WizardBase extends React.Component {
                               {
                                 customerDetails: {
                                   name: userData.customerDetails.name,
-                                  zipcode: userData.customerDetails.zipcode,
+                                  address: userData.customerDetails.address,
                                   phone: userData.customerDetails.phone,
                                   email: userData.customerDetails.email,
                                   service: userData.customerDetails.service
@@ -339,7 +339,7 @@ class WizardBase extends React.Component {
                               {
                                 customerDetails: {
                                   name: userData.customerDetails.name,
-                                  zipcode: userData.customerDetails.zipcode,
+                                  address: userData.customerDetails.address,
                                   phone: userData.customerDetails.phone,
                                   email: userData.customerDetails.email,
                                   service: userData.customerDetails.service

@@ -203,7 +203,7 @@ class WizardBase extends React.Component {
                           {
                             customerDetails: {
                               name: this.state.values.name,
-                              zipcode: this.state.values.zipcode,
+                              address: this.state.values.address,
                               phone: this.state.values.phone,
                               email: this.state.values.email,
                               service: this.state.values.service

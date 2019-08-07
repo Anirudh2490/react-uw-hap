@@ -5,15 +5,14 @@ import App from "./component/App";
 import * as serviceWorker from "./serviceWorker";
 import { CreateStore } from "./store";
 import Firebase, { FirebaseContext } from "./component/Firebase";
-import { Provider } from "react-redux"
-import ContentFul, {ContentFulContext} from './component/ContentFul'
+import { Provider } from "react-redux";
+import ContentFul, { ContentFulContext } from "./component/ContentFul";
+
 
 ReactDOM.render(
   <FirebaseContext.Provider value={new Firebase()}>
     <ContentFulContext.Provider value={new ContentFul()}>
-    <Provider store={CreateStore}>
-     {App()}
-    </Provider>
+      <Provider store={CreateStore}>{App()}</Provider>
     </ContentFulContext.Provider>
   </FirebaseContext.Provider>,
   document.getElementById("root")

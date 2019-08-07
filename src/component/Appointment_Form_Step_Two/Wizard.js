@@ -490,7 +490,7 @@ class WizardBase extends React.Component {
 
   handleSubmit = (e, values) => {
     e.preventDefault();
-    const { children, onSubmit } = this.props;
+    const { children } = this.props;
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
     if (isLastPage) {

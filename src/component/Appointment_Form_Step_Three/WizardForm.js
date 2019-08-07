@@ -1,22 +1,9 @@
 import React, { useState, Fragment } from "react";
 import Styles from "./Styles";
-import { Field } from "react-final-form";
 import Wizard from "./Wizard";
 import { withFirebase } from "../Firebase";
 import Countdown from "react-countdown-now";
 import Stepper from "../../elements/Stepper";
-
-// const Error = ({ name }) => (
-//   <Field
-//     name={name}
-//     subscribe={{ touched: true, error: true }}
-//     render={({ meta: { touched, error } }) =>
-//       touched && error ? <span>{error}</span> : null
-//     }
-//   />
-// );
-
-// const required = value => (value ? undefined : "Required");
 
 const WizardFormBase = props => {
   const [date, setDate] = useState(new Date());

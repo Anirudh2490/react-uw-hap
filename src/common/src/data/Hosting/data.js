@@ -1,15 +1,3 @@
-// import {
-//   IconOne,
-//   IconTwo,
-//   IconThree,
-//   IconFour,
-//   IconFive,
-//   IconSix,
-//   AuthorOne,
-//   AuthorTwo,
-//   AuthorThree
-// } from "./images";
-
 import Contentful from "../../../../component/ContentFul";
 
 let FEATURES_DATA, SERVICES_DATA, FAQ_DATA;
@@ -115,6 +103,7 @@ contentful
   .getSingleEnty("5AvHwtNclSNaBXcyEonUqH")
   .then(response => {
     ServicesData = response;
+    
     // Service Section Content
     SERVICES_DATA = [
       {

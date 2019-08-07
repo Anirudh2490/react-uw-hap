@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import Box from '../../../../../elements/Box';
 import Text from '../../../../../elements/Text';
 import Heading from '../../../../../elements/Heading';
@@ -12,23 +13,6 @@ import ShapeTwo from '../../../assets/image/hosting/shape-2.svg';
 import ShapeThree from '../../../assets/image/hosting/shape-3.svg';
 import ShapeFour from '../../../assets/image/hosting/shape-4.svg';
 import ShapeFive from '../../../assets/image/hosting/shape-5.svg';
-
- 
-// class ReadMoreAndLessText extends Component {
-//     render() {
-//         return (
-//             <ReadMoreAndLess
-//                 ref={this.ReadMore}
-//                 className="read-more-content"
-//                 charLimit={150}
-//                 readMoreText="Read more"
-//                 readLessText="Read less"
-//             >
-//                 {Paragraph}
-//             </ReadMoreAndLess>
-//         );
-//     }
-// }
 
 const FeatureSection = ({
   sectionWrapper,
@@ -75,27 +59,27 @@ const FeatureSection = ({
                     icon={<i className={featureItem.icon} />}
                     additionalContent={
                       <>
-                        <img
+                        <LazyLoadImage
                           className="hover-shape-1 hover-shape"
                           src={ShapeOne}
                           alt="Shape One"
                         />
-                        <img
+                        <LazyLoadImage
                           className="hover-shape-2 hover-shape"
                           src={ShapeTwo}
                           alt="Shape Two"
                         />
-                        <img
+                        <LazyLoadImage
                           className="hover-shape-3 hover-shape"
                           src={ShapeThree}
                           alt="Shape Three"
                         />
-                        <img
+                        <LazyLoadImage
                           className="hover-shape-4 hover-shape"
                           src={ShapeFour}
                           alt="Shape Four"
                         />
-                        <img
+                        <LazyLoadImage
                           className="hover-shape-5 hover-shape"
                           src={ShapeFive}
                           alt="Shape Five"
@@ -128,27 +112,27 @@ const FeatureSection = ({
                   icon={<i className={featureItem.icon} />}
                   additionalContent={
                     <>
-                      <img
+                      <LazyLoadImage
                         className="hover-shape-1 hover-shape"
                         src={ShapeOne}
                         alt="Shape One"
                       />
-                      <img
+                      <LazyLoadImage
                         className="hover-shape-2 hover-shape"
                         src={ShapeTwo}
                         alt="Shape Two"
                       />
-                      <img
+                      <LazyLoadImage
                         className="hover-shape-3 hover-shape"
                         src={ShapeThree}
                         alt="Shape Three"
                       />
-                      <img
+                      <LazyLoadImage
                         className="hover-shape-4 hover-shape"
                         src={ShapeFour}
                         alt="Shape Four"
                       />
-                      <img
+                      <LazyLoadImage
                         className="hover-shape-5 hover-shape"
                         src={ShapeFive}
                         alt="Shape Five"

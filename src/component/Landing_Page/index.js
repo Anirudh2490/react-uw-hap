@@ -1,27 +1,15 @@
 import React, { Fragment, Component } from "react";
 import FeatureSection from "../../common/src/containers/Hosting/Features";
-// import InfoSection from "../../common/src/containers/Hosting/Info";
-import VetsSection from "../../common/src/containers/Hosting/Domain";
-import BlogSection from "../../common/src/containers/Hosting/Payment";
-import AboutTeam from "../../common/src/containers/Hosting/Guarantee";
 import ServicesSection from "../../common/src/containers/Hosting/Services";
 import BannerSection from "../../common/src/containers/Hosting/Banner";
-import PricingSection from "../../common/src/containers/Hosting/Pricing";
 import TestimonialSection from "../../common/src/containers/Hosting/Testimonials";
-import ContactSection from "../../common/src/containers/Hosting/Contact";
 import FaqSection from "../../common/src/containers/Hosting/Faq";
 import { withContentFul } from "../ContentFul";
 
 let BannerData,
-  //  ServicesData,
-  // FeatureData,
-  //  AboutTeamData,
-  //  TestimonialData,
-  // FAQData,
   AboutSectionData,
   BlogData,
   VetsSectionData;
-//  ContactData;
 
 class LandingBase extends Component {
   constructor(props) {

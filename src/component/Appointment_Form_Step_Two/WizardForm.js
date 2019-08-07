@@ -28,7 +28,6 @@ const petage = [
   {
     age: "BIRD"
   },
-  ,
   {
     age: "OTHER"
   }
@@ -280,7 +279,6 @@ class WizardFormBase extends React.Component {
             setPet={this.setPet}
             addNewPetEvent={this.state.addNewPetEvent}
             setPetAge={this.setPetAge}
-            validNum={this.state.validNum}
             closeModal={this.closeModal}
             setPetAgeError={this.setPetAgeError}
             setPetNameError={this.setPetNameError}

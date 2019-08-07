@@ -12,7 +12,7 @@ const withAuthorization = condition => Component => {
         this._initFirebase = true;
 
         this.listener = this.props.firebase.customerListener(
-          authUser => {
+          authUser => {       
             if (!condition(authUser)) {
               this.props.history.push(ROUTES.SIGNIN_OPTIONS);
             }

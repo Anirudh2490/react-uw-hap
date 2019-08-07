@@ -134,8 +134,7 @@ export default class VideoComponent extends Component {
 			}
 			this.detachParticipantTracks(room.localParticipant);
 			room.participants.forEach(this.detachParticipantTracks);
-			this.state.activeRoom = null;
-			this.setState({ hasJoinedRoom: false, localMediaAvailable: false });
+			this.setState({ hasJoinedRoom: false, localMediaAvailable: false, activeRoom: null });
 		});
 	}
 

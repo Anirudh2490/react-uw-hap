@@ -60,7 +60,6 @@ class AppointmentDetailsBase extends Component {
   vetAssignment = (e, event) => {
     var videoCode = makeid(5);
     e.preventDefault();
-    console.log(event);
     this.props.firebase.fsdb
       .collection("form-inquiry")
       .doc(this.props.match.params.docid)
@@ -114,7 +113,6 @@ class AppointmentDetailsBase extends Component {
           })
         })
           .then(response => {
-            console.log(response.json());
             //APPI CALL FOR TWILIO Email
             fetch("https://hug-a-pet.herokuapp.com/admin/mail", {
               method: "POST",

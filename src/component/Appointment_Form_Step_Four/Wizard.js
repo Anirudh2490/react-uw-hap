@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
-import * as ROUTES from "../../constants/routes";
+
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
 

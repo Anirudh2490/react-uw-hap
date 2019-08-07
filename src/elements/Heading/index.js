@@ -56,7 +56,6 @@ const Heading = ({ content, charsLimit, ...props }) => {
   const handleClick = () => {
     setWrap(!isWrap);
   };
-  console.log(content);
   return (
     <HeadingWrapper {...props}>
       {charsLimit && isWrap ? (

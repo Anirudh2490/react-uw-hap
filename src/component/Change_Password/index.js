@@ -40,7 +40,6 @@ class ChangePasswordComponent extends React.Component{
         }
 
         render(){
-            console.log(this.props);            
             return(
                 <div>
                     <ChangePasswordForm state={this.state} change={this.handlePass} submit={this.submitPass}/>

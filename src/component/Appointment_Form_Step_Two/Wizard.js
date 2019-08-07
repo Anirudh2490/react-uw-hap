@@ -43,7 +43,6 @@ class WizardBase extends React.Component {
                 }
               },
               () => {
-                console.log(doc.data().petDetails.type);
                 this.props.setPetAge(parseInt(doc.data().petDetails.petdate));
                 this.props.petTypeUpdate(doc.data().petDetails.type);
                 const { petList } = this.state;
@@ -70,7 +69,6 @@ class WizardBase extends React.Component {
                       )
                       .get()
                       .then(querySnapshot => {
-                        console.log("Api Called", querySnapshot);
                         if (querySnapshot.empty) {
                           this.setState(state => ({
                             page: Math.min(
@@ -90,8 +88,6 @@ class WizardBase extends React.Component {
                               petList
                             },
                             () => {
-                              console.log(this.state.petList);
-
                               if (petList.length === 0) {
                                 this.setState(state => ({
                                   page: Math.min(
@@ -126,7 +122,6 @@ class WizardBase extends React.Component {
           "customerDetails.phone": `${this.props.number}`
         })
         .then(() => {
-          console.log("Api Called");
           this.props.setvalidNum(false);
           this.props.closeModal();
         });
@@ -229,7 +224,6 @@ class WizardBase extends React.Component {
               ) {
                 sendOtp(phone)
                   .then(res => {
-                    console.log("code sent", res);
                     window.localStorage.setItem("newUser", res.data);
                   })
                   .then(() => {
@@ -243,7 +237,6 @@ class WizardBase extends React.Component {
                         "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
                     )
                       .then(() => {
-                        console.log("Api Called");
                         this.props.history.push(ROUTES.BOOKING_VERIFICATION);
                       })
                       .catch(rej => {
@@ -267,7 +260,6 @@ class WizardBase extends React.Component {
                     "! thankyou for registering at Hug a Pet, you will be notified once a vet is assigned to your case."
                 )
                   .then(() => {
-                    console.log("Api Called");
                     this.props.history.push(ROUTES.BOOKING_VERIFICATION);
                   })
                   .catch(rej => {
@@ -414,7 +406,6 @@ class WizardBase extends React.Component {
         values: {}
       },
       () => {
-        console.log(this.state);
         this.props.setPetAge("");
         this.props.petTypeUpdate("");
         this.props.setSelectedPetID("");
@@ -489,7 +480,7 @@ class WizardBase extends React.Component {
 
   handleSubmit = (e, values) => {
     e.preventDefault();
-    const { children, onSubmit } = this.props;
+    const { children } = this.props;
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
     if (isLastPage) {

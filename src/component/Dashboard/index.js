@@ -11,8 +11,6 @@ const CustomerPageBase = () => {
 }
 
 const condition = authUser => {
-  console.log(authUser && (authUser.userrole === 'customer' || authUser.userrole === 'admin' ));
-  
   return authUser && (authUser.userrole === 'customer' || authUser.userrole === 'admin' )
 }
 

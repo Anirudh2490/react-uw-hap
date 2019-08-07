@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Styles from "./Styles"
 
 const WizardForm3 = props => {

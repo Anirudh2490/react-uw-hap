@@ -4,7 +4,7 @@ import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 
 export default class VideoComponent extends Component {
 	constructor(props) {
@@ -134,8 +134,7 @@ export default class VideoComponent extends Component {
 			}
 			this.detachParticipantTracks(room.localParticipant);
 			room.participants.forEach(this.detachParticipantTracks);
-			this.state.activeRoom = null;
-			this.setState({ hasJoinedRoom: false, localMediaAvailable: false });
+			this.setState({ hasJoinedRoom: false, localMediaAvailable: false, activeRoom: null });
 		});
 	}
 

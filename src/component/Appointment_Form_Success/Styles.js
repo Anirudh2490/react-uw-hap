@@ -31,7 +31,7 @@ const btnDefault = css`
   ${btn("#ffffff", "#d5d5d5")} color: #555;
 `;
 
-const btnPrimary = btn("#4f93ce", "#285f8f");
+// const btnPrimary = btn("#4f93ce", "#285f8f");
 const btnDanger = btn("#e27c79", "#c9302c");
 
 export default styled.div`

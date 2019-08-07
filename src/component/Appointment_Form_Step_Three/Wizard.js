@@ -3,7 +3,7 @@ import { Form } from "react-final-form";
 import { withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { sendOtp, verifyOtp } from "../../services/otp";
-import { sendEmail, sendEmailToAdmin } from "../../services/emails";
+import { sendEmailToAdmin } from "../../services/emails";
 
 class WizardBase extends React.Component {
   static Page = ({ children }) => children;
@@ -26,14 +26,11 @@ class WizardBase extends React.Component {
         .doc(window.localStorage.getItem("dbDocID"))
         .get()
         .then(doc => {
-          console.log(doc);
           let userData = doc.data();
-          console.log("My data", userData);
           return userData;
         })
         .then(userData => {
           if (userData.bookingStatus.status === "Confirmed") {
-            console.log("email sent out");
             sendEmailToAdmin(
               userData.customerDetails.email,
               "Hi " +
